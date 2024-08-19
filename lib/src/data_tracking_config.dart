@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'constants.dart';
 import 'nb_encode.dart';
@@ -11,12 +12,12 @@ class DataTrackingConfig with NBEncode {
   bool shouldClearLocalDataWhenCollision;
 
   DataTrackingConfig({
-    this.baseUrl = Constants.defaultBaseUrl, // Replace with actual default value
+    String? baseUrl,
     this.dataStorageSize = Constants.defaultDataStorageSize, // Replace with actual default value
     this.dataUploadingBatchSize = Constants.defaultDataBatchSize, // Replace with actual default value
     this.dataUploadingBatchWindow = Constants.defaultBatchWindow, // Replace with actual default value
     this.shouldClearLocalDataWhenCollision = Constants.shouldClearLocalDataWhenCollision,
-  });
+  }): baseUrl = baseUrl ?? Constants.defaultBaseUrl;
 
   factory DataTrackingConfig.fromJson(String jsonString) {
     Map<String, dynamic> json = jsonDecode(jsonString);
