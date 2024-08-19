@@ -1,3 +1,6 @@
+## 1.0.6
+* Fix the default base url issue in DataTrackingConfig
+  
 ## 1.0.5
 * Update Android native framework to 1.0.5 to fix these issue
   * Fix location upload latency issue on Android
