@@ -167,4 +167,8 @@ abstract class NbAssetTrackingFlutterPlatform extends PlatformInterface {
      throw UnimplementedError('isTripInProgress() has not been implemented.');
    }
 
+   Future<String> setupUserId({required String userId}) {
+     throw UnimplementedError('setupUserId() has not been implemented.');
+   }
+
 }

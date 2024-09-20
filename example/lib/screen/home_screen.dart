@@ -57,7 +57,7 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
     assetTracking.getActiveTripId().then((value) {
       _currentTripID = value.data;
     });
-
+    assetTracking.setupUserId(userId: "userId-123");
     assetTracking.addDataListener(this);
     initSharedPreferences();
   }

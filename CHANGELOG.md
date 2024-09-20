@@ -1,3 +1,8 @@
+## 1.1.0
+* Update Android native framework to 1.1.0 to support the new user-agent format
+* Update iOS native framework to 1.1.0 to support the new user-agent format
+* Add the [AssetTracking.setupUserId] method to provide the ability for users to customize the user ID. This ID will be automatically added to the user-agent."
+* 
 ## 1.0.6
 * Fix the default base url issue in DataTrackingConfig
   

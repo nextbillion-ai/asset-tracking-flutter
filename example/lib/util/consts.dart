@@ -1,7 +1,7 @@
 
 import 'dart:io';
 
-const accessKey = "Your-Access-Key";
+const accessKey = "opensesame";//"Your-Access-Key";
 
 const keyOfBoundId = "key_of_bind_id";
 const keyOfFakeGpsFlag = "key_of_fake_gps_flag";
