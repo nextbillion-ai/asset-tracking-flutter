@@ -19,6 +19,13 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             assetTracking.delegate = self
             if let accessKey = call.arguments as? String {
                 assetTracking.initialize(apiKey: accessKey)
+              
+                
+                let libraryBundle = Bundle(for: NbAssetTrackingFlutterPlugin.self)
+                let version = libraryBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "Unknown"
+                let buildNumber = libraryBundle.object(forInfoDictionaryKey: "CFBundleVersion") ?? "Unknown"
+                let crossPlatformInfo: String = "Flutter-\(version)-\(buildNumber)"
+                assetTracking.setCrossPlatformInfo(info: crossPlatformInfo)
                 result(AssetResult(success: true, data: accessKey, msg: "").toJson())
             }else {
                 result(AssetResult(success: false, data: "", msg: "").toJson())
@@ -240,7 +247,14 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             let isInProgress = assetTracking.isTripInProgress()
             result(AssetResult(success: true, data: isInProgress, msg: "").toJson())
            break
-
+          case "setupUserId":
+           if let userId = call.arguments as? String,!userId.isEmpty{
+               assetTracking.setUserId(userId: userId)
+               result(AssetResult(success: true, data:userId, msg: "User id have been set success").toJson())
+           } else {
+               result(AssetResult(success: false, data:"User ID is nil or empty.", msg: "User ID is nil or empty.").toJson())
+           }
+           break
         default:
             result(FlutterMethodNotImplemented)
         }
