@@ -5,13 +5,11 @@ import ai.nextbillion.assettracking.callback.AssetTrackingCallBack
 import ai.nextbillion.assettracking.entity.FakeGpsConfig
 import ai.nextbillion.assettracking.entity.TrackingDisableType
 import ai.nextbillion.assettracking.entity.TripStatus
-import ai.nextbillion.assettracking.extension.log
 import ai.nextbillion.network.AssetApiCallback
 import ai.nextbillion.network.AssetException
-import ai.nextbillion.network.get.Asset
 import ai.nextbillion.network.create.AssetCreationResponse
+import ai.nextbillion.network.get.Asset
 import ai.nextbillion.network.get.GetAssetResponse
-import ai.nextbillion.network.trip.TripProfile
 import ai.nextbillion.network.trip.entity.Trip
 import ai.nextbillion.network.trip.entity.TripSummary
 import android.app.Activity
@@ -26,12 +24,10 @@ class MethodHandler(private val channel: MethodChannel) :
 
     fun addDataListener(activity: Activity) {
         activity.assetTrackingAddCallback(this)
-        System.out.println("check demo addDataListener")
     }
 
     fun removeDataListener(activity: Activity) {
         activity.assetTrackingRemoveCallback(this)
-        System.out.println("check demo removeDataListener")
     }
 
     fun dispatchMethodHandler(
@@ -61,7 +57,13 @@ class MethodHandler(private val channel: MethodChannel) :
             "initialize" -> {
                 val key = call.arguments as String
                 // Initialize with the key if necessary
-                activity.initialize(key);
+                activity.initialize(key)
+                val crossPlatformName = String.format(
+                    "Flutter-%s-%s",
+                    BuildConfig.NBTRACKING_FLUTTER_VERSION,
+                    BuildConfig.GIT_REVISION_SHORT
+                )
+                activity.setCrossPlatformInfo(crossPlatformName)
                 methodResult.success(AssetResult(success = true, "", msg = "").toJson())
             }
             "setKeyOfHeaderField" -> {
@@ -70,7 +72,11 @@ class MethodHandler(private val channel: MethodChannel) :
                 activity.setKeyOfRequestHeader(key);
                 methodResult.success(AssetResult(success = true, "", msg = "").toJson())
             }
-
+            "setupUserId" -> {
+                val userId = call.arguments as String
+                activity.setUserId(userId)
+                methodResult.success(AssetResult(success = true, "", msg = "").toJson())
+            }
             "getAssetId" -> {
                 val assetId = activity.getAssetId()
                 methodResult.success(AssetResult(success = true, assetId, msg = "").toJson())

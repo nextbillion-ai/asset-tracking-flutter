@@ -231,4 +231,9 @@ class MethodChannelNbAssetTrackingFlutter
     return await methodChannel.invokeMethod("isTripInProgress");
   }
 
+  @override
+  Future<String> setupUserId({required String userId}) async {
+    return await methodChannel.invokeMethod("setupUserId", userId);
+  }
+
 }
