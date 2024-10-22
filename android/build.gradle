@@ -49,6 +49,10 @@ android {
         minSdkVersion 21
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     dependencies {
         def nbPluginVersion = "1.0.5"
 
