@@ -6,11 +6,17 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "artifactregistry://asia-maven.pkg.dev/nextbillion/mobile-snapshot-maven"
+        }
+        maven { url 'https://plugins.gradle.org/m2' }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.2.1"
+
     }
 }
 
@@ -18,11 +24,16 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "artifactregistry://asia-maven.pkg.dev/nextbillion/mobile-snapshot-maven"
+        }
+        maven { url 'https://plugins.gradle.org/m2' }
     }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.google.cloud.artifactregistry.gradle-plugin'
 
 android {
     if (project.android.hasProperty("namespace")) {
@@ -52,7 +63,7 @@ android {
     }
 
     dependencies {
-        def nbPluginVersion = "1.1.0"
+        def nbPluginVersion = "1.1.1-SNAPSHOT"
 
         implementation "ai.nextbillion:nb-asset-tracking:$nbPluginVersion"
         implementation 'com.google.code.gson:gson:2.9.0'
