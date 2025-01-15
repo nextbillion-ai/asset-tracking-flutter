@@ -1,3 +1,6 @@
+## 1.2.0
+* Updated iOS native frameworks to v1.2.0 to disable Bitcode support, ensuring compatibility with Xcode 16 for upload.
+
 ## 1.1.0
 * Updated Android native frameworks to v1.1.0 to support the new user-agent format. 
 * Updated iOS native frameworks to v1.1.0 to support the new user-agent format. 
