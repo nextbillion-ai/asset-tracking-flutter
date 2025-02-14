@@ -6,5 +6,4 @@ abstract class OnTrackingDataCallBack {
   void onTrackingStart(String message);
   void onTrackingStop(String message);
   void onTripStatusChanged(String assetId, TripState state);
-
 }

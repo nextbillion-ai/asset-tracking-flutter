@@ -80,7 +80,7 @@ class AssetEnableNotificationConfig extends _DefaultAssetNotificationConfig {
           identifier: identifier,
           title: "",
           content:
-              "Asset tracking is now enabled and your device\'s location will be tracked",
+              "Asset tracking is now enabled and your device's location will be tracked",
         );
 
   Map<String, dynamic> toJson() {

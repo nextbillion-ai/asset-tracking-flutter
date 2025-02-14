@@ -6,7 +6,7 @@ class NativeResultCallback {
   void Function(String)? onLocationFailure;
   void Function(String)? onTrackingStart;
   void Function(String)? onTrackingStop;
-  void Function(String,TripState)? onTripStatusChanged;
+  void Function(String, TripState)? onTripStatusChanged;
 
   NativeResultCallback({
     this.onLocationSuccess,
@@ -14,6 +14,5 @@ class NativeResultCallback {
     this.onTrackingStart,
     this.onTrackingStop,
     this.onTripStatusChanged,
-
   });
 }

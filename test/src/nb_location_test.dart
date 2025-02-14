@@ -72,7 +72,7 @@ void main() {
       });
 
       test('handles integer values in JSON', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "latitude": 45,
           "longitude": -122,

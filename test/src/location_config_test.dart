@@ -109,7 +109,7 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON string', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "trackingMode": "custom",
           "interval": 1000,

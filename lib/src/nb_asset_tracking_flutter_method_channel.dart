@@ -36,29 +36,25 @@ class MethodChannelNbAssetTrackingFlutter
       AssetResult<String> result = AssetResult.fromJson(jsonString);
       NBLocation location = NBLocation.fromJson(result.data);
       _resultCallback?.onLocationSuccess?.call(location);
-
-    }else  if (call.method == 'onLocationFailure') {
+    } else if (call.method == 'onLocationFailure') {
       String jsonString = call.arguments;
       AssetResult<String> result = AssetResult.fromJson(jsonString);
       _resultCallback?.onLocationFailure?.call(result.data);
-
-    }else  if (call.method == 'onTrackingStart') {
+    } else if (call.method == 'onTrackingStart') {
       String jsonString = call.arguments;
       AssetResult<String> result = AssetResult.fromJson(jsonString);
       _resultCallback?.onTrackingStart?.call(result.data);
-    }else  if (call.method == 'onTrackingStop') {
+    } else if (call.method == 'onTrackingStop') {
       String jsonString = call.arguments;
       AssetResult<String> result = AssetResult.fromJson(jsonString);
       _resultCallback?.onTrackingStop?.call(result.data);
-
-    }else if (call.method == 'onTripStatusChanged') {
+    } else if (call.method == 'onTripStatusChanged') {
       String jsonString = call.arguments;
       AssetResult<Map> result = AssetResult.fromJson(jsonString);
       var tripId = result.data['tripId'];
       TripState state = TripStateExtension.fromString(result.data['status']);
       _resultCallback?.onTripStatusChanged?.call(tripId, state);
     }
-
   }
 
   @override
@@ -83,7 +79,8 @@ class MethodChannelNbAssetTrackingFlutter
 
   @override
   Future<String> updateAsset({required AssetProfile assetProfile}) async {
-    return await methodChannel.invokeMethod("updateAsset", assetProfile.encode());
+    return await methodChannel.invokeMethod(
+        "updateAsset", assetProfile.encode());
   }
 
   @override
@@ -92,13 +89,11 @@ class MethodChannelNbAssetTrackingFlutter
   }
 
   @override
-  Future<void> setDefaultConfig({required DefaultConfig config}) async {
-
-  }
+  Future<void> setDefaultConfig({required DefaultConfig config}) async {}
 
   @override
   Future<String> getDefaultConfig() async {
-   return await methodChannel.invokeMethod("getDefaultConfig");
+    return await methodChannel.invokeMethod("getDefaultConfig");
   }
 
   @override
@@ -110,35 +105,35 @@ class MethodChannelNbAssetTrackingFlutter
 
   @override
   Future<String> getAndroidNotificationConfig() async {
-    return  await methodChannel.invokeMethod("getAndroidNotificationConfig");
+    return await methodChannel.invokeMethod("getAndroidNotificationConfig");
   }
 
   @override
   Future<void> setIOSNotificationConfig(
       {required IOSNotificationConfig config}) async {
-    await methodChannel.invokeMethod("setIOSNotificationConfig",config.encode());
+    await methodChannel.invokeMethod(
+        "setIOSNotificationConfig", config.encode());
   }
 
   @override
   Future<String> getIOSNotificationConfig() async {
-    return  await methodChannel.invokeMethod("getIOSNotificationConfig");
+    return await methodChannel.invokeMethod("getIOSNotificationConfig");
   }
 
   @override
-  Future<void> updateLocationConfig(
-      {required LocationConfig config}) async {
-    await methodChannel.invokeMethod("updateLocationConfig",config.encode());
+  Future<void> updateLocationConfig({required LocationConfig config}) async {
+    await methodChannel.invokeMethod("updateLocationConfig", config.encode());
   }
 
   @override
   Future<void> setLocationConfig({required LocationConfig config}) async {
-    await methodChannel.invokeMethod("setLocationConfig",config.encode());
+    await methodChannel.invokeMethod("setLocationConfig", config.encode());
   }
 
   @override
   Future<void> setDataTrackingConfig(
       {required DataTrackingConfig config}) async {
-    await methodChannel.invokeMethod("setDataTrackingConfig",config.encode());
+    await methodChannel.invokeMethod("setDataTrackingConfig", config.encode());
   }
 
   @override
@@ -153,7 +148,7 @@ class MethodChannelNbAssetTrackingFlutter
 
   @override
   Future<void> setFakeGpsConfig({required bool allow}) async {
-    return await methodChannel.invokeMethod("setFakeGpsConfig",allow);
+    return await methodChannel.invokeMethod("setFakeGpsConfig", allow);
   }
 
   @override
@@ -173,12 +168,12 @@ class MethodChannelNbAssetTrackingFlutter
 
   @override
   Future<String> bindAsset({String? customId}) async {
-    return await methodChannel.invokeMethod("bindAsset",customId);
+    return await methodChannel.invokeMethod("bindAsset", customId);
   }
 
   @override
   Future<String> forceBindAsset({String? customId}) async {
-    return await methodChannel.invokeMethod("forceBindAsset",customId);
+    return await methodChannel.invokeMethod("forceBindAsset", customId);
   }
 
   @override
@@ -235,5 +230,4 @@ class MethodChannelNbAssetTrackingFlutter
   Future<String> setupUserId({required String userId}) async {
     return await methodChannel.invokeMethod("setupUserId", userId);
   }
-
 }

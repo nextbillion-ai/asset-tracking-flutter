@@ -11,7 +11,8 @@ class UpdateConfigurationExample extends StatefulWidget {
   const UpdateConfigurationExample({super.key});
 
   @override
-  UpdateConfigurationExampleState createState() => UpdateConfigurationExampleState();
+  UpdateConfigurationExampleState createState() =>
+      UpdateConfigurationExampleState();
 }
 
 class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
@@ -51,11 +52,16 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
             ElevatedButton(
               onPressed: assetId.isNotEmpty
                   ? () async {
-                      var locationConfig = LocationConfig(trackingMode: TrackingMode.custom, smallestDisplacement: 40);
-                      await assetTracking.updateLocationConfig(config: locationConfig);
-                      var locationConfigResult = await assetTracking.getLocationConfig();
+                      var locationConfig = LocationConfig(
+                          trackingMode: TrackingMode.custom,
+                          smallestDisplacement: 40);
+                      await assetTracking.updateLocationConfig(
+                          config: locationConfig);
+                      var locationConfigResult =
+                          await assetTracking.getLocationConfig();
                       setState(() {
-                        configInfo = "locationConfigInfo: ${jsonEncode(locationConfigResult.data)}";
+                        configInfo =
+                            "locationConfigInfo: ${jsonEncode(locationConfigResult.data)}";
                       });
                     }
                   : null,
@@ -64,26 +70,36 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
             ElevatedButton(
               onPressed: assetId.isNotEmpty
                   ? () async {
-                      var androidNotificationConfig =
-                          AndroidNotificationConfig(channelId: "testChannelId", channelName: "newChannelName");
+                      var androidNotificationConfig = AndroidNotificationConfig(
+                          channelId: "testChannelId",
+                          channelName: "newChannelName");
                       var iOSNotificationConfig = IOSNotificationConfig();
                       iOSNotificationConfig.showAssetEnableNotification = false;
                       iOSNotificationConfig.showAssetDisableNotification = true;
-                      var assetEnableConfig = AssetEnableNotificationConfig(identifier: "iosIdentifier");
-                      assetEnableConfig.title = "New asset enable notification title";
-                      iOSNotificationConfig.assetEnableNotificationConfig = assetEnableConfig;
+                      var assetEnableConfig = AssetEnableNotificationConfig(
+                          identifier: "iosIdentifier");
+                      assetEnableConfig.title =
+                          "New asset enable notification title";
+                      iOSNotificationConfig.assetEnableNotificationConfig =
+                          assetEnableConfig;
 
                       if (Platform.isAndroid) {
-                        assetTracking.setAndroidNotificationConfig(config: androidNotificationConfig);
-                        var androidConfig = await assetTracking.getAndroidNotificationConfig();
+                        assetTracking.setAndroidNotificationConfig(
+                            config: androidNotificationConfig);
+                        var androidConfig =
+                            await assetTracking.getAndroidNotificationConfig();
                         setState(() {
-                          configInfo = "notificationConfig: ${jsonEncode(androidConfig.data)}";
+                          configInfo =
+                              "notificationConfig: ${jsonEncode(androidConfig.data)}";
                         });
                       } else {
-                        assetTracking.setIOSNotificationConfig(config: iOSNotificationConfig);
-                        var iosConfig = await assetTracking.getIOSNotificationConfig();
+                        assetTracking.setIOSNotificationConfig(
+                            config: iOSNotificationConfig);
+                        var iosConfig =
+                            await assetTracking.getIOSNotificationConfig();
                         setState(() {
-                          configInfo = "notificationConfig: ${jsonEncode(iosConfig.data)}";
+                          configInfo =
+                              "notificationConfig: ${jsonEncode(iosConfig.data)}";
                         });
                       }
                     }
@@ -94,11 +110,16 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
               onPressed: assetId.isNotEmpty
                   ? () async {
                       var dataTrackingConfig = DataTrackingConfig(
-                          dataUploadingBatchSize: 15, dataUploadingBatchWindow: 30, dataStorageSize: 5000);
-                      await assetTracking.setDataTrackingConfig(config: dataTrackingConfig);
-                      var dataTrackingConfigInfo = await assetTracking.getDataTrackingConfig();
+                          dataUploadingBatchSize: 15,
+                          dataUploadingBatchWindow: 30,
+                          dataStorageSize: 5000);
+                      await assetTracking.setDataTrackingConfig(
+                          config: dataTrackingConfig);
+                      var dataTrackingConfigInfo =
+                          await assetTracking.getDataTrackingConfig();
                       setState(() {
-                        configInfo = "dataTrackingConfigInfo: ${jsonEncode(dataTrackingConfigInfo.data)}";
+                        configInfo =
+                            "dataTrackingConfigInfo: ${jsonEncode(dataTrackingConfigInfo.data)}";
                       });
                     }
                   : null,
@@ -120,7 +141,10 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
 
   void createAndBindAssetId() async {
     AssetProfile profile = AssetProfile(
-        customId: const Uuid().v4().toString(), name: "test asset", description: "asset descriptions", attributes: {});
+        customId: const Uuid().v4().toString(),
+        name: "test asset",
+        description: "asset descriptions",
+        attributes: {});
     AssetResult result = await assetTracking.createAsset(profile: profile);
     if (result.success) {
       String assetID = result.data;

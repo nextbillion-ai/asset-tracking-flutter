@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-typedef InputDialogCallback = void Function(String title, String description, String tripId);
+typedef InputDialogCallback = void Function(
+    String title, String description, String tripId);
 
 void showInputDialog(BuildContext context, InputDialogCallback callback) {
   final formKey = GlobalKey<FormState>();
 
-  final tripIdController = TextEditingController(text: const Uuid().v4().toString());
+  final tripIdController =
+      TextEditingController(text: const Uuid().v4().toString());
   final tripNameController = TextEditingController();
   final tripDescriptionController = TextEditingController();
 
@@ -42,7 +44,8 @@ void showInputDialog(BuildContext context, InputDialogCallback callback) {
                 ),
                 TextFormField(
                   controller: tripIdController,
-                  decoration: const InputDecoration(labelText: 'Custom Trip ID'),
+                  decoration:
+                      const InputDecoration(labelText: 'Custom Trip ID'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a custom trip ID';
@@ -59,7 +62,6 @@ void showInputDialog(BuildContext context, InputDialogCallback callback) {
             child: const Text('Cancel'),
             onPressed: () {
               Navigator.of(context).pop();
-
             },
           ),
           TextButton(
@@ -67,9 +69,9 @@ void showInputDialog(BuildContext context, InputDialogCallback callback) {
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();
-                callback(tripNameController.text, tripDescriptionController.text, tripIdController.text);
+                callback(tripNameController.text,
+                    tripDescriptionController.text, tripIdController.text);
                 Navigator.of(context).pop();
-
               }
             },
           ),
@@ -78,4 +80,3 @@ void showInputDialog(BuildContext context, InputDialogCallback callback) {
     },
   );
 }
-

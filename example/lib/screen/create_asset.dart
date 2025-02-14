@@ -73,7 +73,10 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
     String attribute2 = _assetAttribute2TextController.text;
 
     AssetProfile profile = AssetProfile(
-        customId: customId, name: assetName, description: description, attributes: {attribute1: attribute2});
+        customId: customId,
+        name: assetName,
+        description: description,
+        attributes: {attribute1: attribute2});
     AssetResult result = await assetTracking.createAsset(profile: profile);
     if (result.success) {
       showToast("Create asset successfully with asset id ${result.data}");
@@ -93,15 +96,20 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
     } else {
       if (result.data == "2001") {
         _showDialog(() async {
-          var assetResult = await assetTracking.forceBindAsset(customId: assetId);
+          var assetResult =
+              await assetTracking.forceBindAsset(customId: assetId);
           if (assetResult.success) {
             saveData(assetId);
-            showToast("Force bind new asset successfully with assetId: $assetId");
+            showToast(
+                "Force bind new asset successfully with assetId: $assetId");
             Navigator.pop(context);
           } else {
             showToast("Bind Failed: ${result.msg ?? ""}");
           }
-        }, title: "Bind Failed", msg: "${result.msg}, do you want to clear local data and force bind to new asset id?");
+        },
+            title: "Bind Failed",
+            msg:
+                "${result.msg}, do you want to clear local data and force bind to new asset id?");
       } else {
         showToast("Bind Failed: ${result.msg ?? ""}");
       }
@@ -121,7 +129,8 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
     return uuid.v4();
   }
 
-  Future<void> _showDialog(VoidCallback okPressedCallback, {required String title, required String msg}) async {
+  Future<void> _showDialog(VoidCallback okPressedCallback,
+      {required String title, required String msg}) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -182,7 +191,9 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
                     selectedEnvConfig = value;
                     assetTracking.setDataTrackingConfig(
                         config: DataTrackingConfig(
-                            baseUrl: selectedEnvConfig == EnvConfig.prod ? baseUrlProd : baseUrlStaging));
+                            baseUrl: selectedEnvConfig == EnvConfig.prod
+                                ? baseUrlProd
+                                : baseUrlStaging));
                   });
                 },
                 unselectedColor: Colors.white,
@@ -194,7 +205,8 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
               decoration: const InputDecoration(labelText: 'Custom ID'),
               textInputAction: TextInputAction.next,
               onSubmitted: (_) {
-                _fieldFocusChange(context, _customDFocusNode, _assetNameFocusNode);
+                _fieldFocusChange(
+                    context, _customDFocusNode, _assetNameFocusNode);
               },
             ),
             TextField(
@@ -203,7 +215,8 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
               decoration: const InputDecoration(labelText: 'Asset Name'),
               textInputAction: TextInputAction.next,
               onSubmitted: (_) {
-                _fieldFocusChange(context, _assetNameFocusNode, _assetDescriptionFocusNode);
+                _fieldFocusChange(
+                    context, _assetNameFocusNode, _assetDescriptionFocusNode);
               },
             ),
             TextField(
@@ -212,7 +225,8 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
               decoration: const InputDecoration(labelText: 'Asset Description'),
               textInputAction: TextInputAction.next,
               onSubmitted: (_) {
-                _fieldFocusChange(context, _assetDescriptionFocusNode, _assetAttribute1FocusNode);
+                _fieldFocusChange(context, _assetDescriptionFocusNode,
+                    _assetAttribute1FocusNode);
               },
             ),
             TextField(
@@ -221,7 +235,8 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
               decoration: const InputDecoration(labelText: 'Asset Attribute 1'),
               textInputAction: TextInputAction.next,
               onSubmitted: (_) {
-                _fieldFocusChange(context, _assetAttribute1FocusNode, _assetAttribute2FocusNode);
+                _fieldFocusChange(context, _assetAttribute1FocusNode,
+                    _assetAttribute2FocusNode);
               },
             ),
             TextField(
@@ -230,7 +245,8 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
               decoration: const InputDecoration(labelText: 'Asset Attribute 2'),
               textInputAction: TextInputAction.next,
               onSubmitted: (_) {
-                _fieldFocusChange(context, _assetAttribute2FocusNode, _assetBindIDFocusNode);
+                _fieldFocusChange(
+                    context, _assetAttribute2FocusNode, _assetBindIDFocusNode);
               },
             ),
             const SizedBox(height: 16.0),

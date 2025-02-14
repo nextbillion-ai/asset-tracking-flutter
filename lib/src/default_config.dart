@@ -17,7 +17,6 @@ class DefaultConfig with NBEncode {
     required this.workOnMainThread,
   });
 
-
   factory DefaultConfig.fromJson(String jsonString) {
     Map<String, dynamic> json = jsonDecode(jsonString);
     return DefaultConfig(

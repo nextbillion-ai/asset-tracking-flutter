@@ -12,7 +12,8 @@ class AssetProfileScreen extends StatefulWidget {
   AssetProfileScreenState createState() => AssetProfileScreenState();
 }
 
-class AssetProfileScreenState extends State<AssetProfileScreen> with ToastMixin {
+class AssetProfileScreenState extends State<AssetProfileScreen>
+    with ToastMixin {
   final assetTracking = AssetTracking();
   String assetId = "";
   String assetDetailInfo = "";
@@ -41,9 +42,11 @@ class AssetProfileScreenState extends State<AssetProfileScreen> with ToastMixin 
                           name: "test asset",
                           description: "asset descriptions",
                           attributes: {});
-                      AssetResult result = await assetTracking.createAsset(profile: profile);
+                      AssetResult result =
+                          await assetTracking.createAsset(profile: profile);
                       if (result.success) {
-                        showToast("Create asset successfully with asset id ${result.data}");
+                        showToast(
+                            "Create asset successfully with asset id ${result.data}");
                         setState(() {
                           assetId = result.data;
                         });
@@ -57,9 +60,11 @@ class AssetProfileScreenState extends State<AssetProfileScreen> with ToastMixin 
             ElevatedButton(
               onPressed: assetId.isNotEmpty
                   ? () async {
-                      var assetResult = await assetTracking.bindAsset(customId: assetId);
+                      var assetResult =
+                          await assetTracking.bindAsset(customId: assetId);
                       if (assetResult.success) {
-                        showToast("Bind asset successfully with asset id ${assetResult.data}");
+                        showToast(
+                            "Bind asset successfully with asset id ${assetResult.data}");
                       } else {
                         showToast(assetResult.msg.toString());
                       }
@@ -75,7 +80,8 @@ class AssetProfileScreenState extends State<AssetProfileScreen> with ToastMixin 
                           name: "new name",
                           description: "new description",
                           attributes: {"attribute1": "tester1"});
-                      var assetDetail = await assetTracking.updateAsset(assetProfile: assetProfile);
+                      var assetDetail = await assetTracking.updateAsset(
+                          assetProfile: assetProfile);
                       if (assetDetail.success) {
                         showToast("Update Asset Info successfully");
                       } else {

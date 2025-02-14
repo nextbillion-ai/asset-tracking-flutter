@@ -53,9 +53,11 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
                   onPressed: (bindAsset && !isTracking)
                       ? () async {
                           if (Platform.isAndroid) {
-                            var granted = await checkAndRequestLocationPermission();
+                            var granted =
+                                await checkAndRequestLocationPermission();
                             if (!granted) {
-                              showToast("Please granted location access for this app");
+                              showToast(
+                                  "Please granted location access for this app");
                               return;
                             }
                           }
@@ -73,8 +75,8 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
                   child: ElevatedButton(
                     onPressed: isTracking
                         ? () {
-                      assetTracking.stopTracking();
-                    }
+                            assetTracking.stopTracking();
+                          }
                         : null,
                     child: const Text("Stop Tracking"),
                   ),
@@ -87,7 +89,8 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
             ),
             Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-              child: Text("Asset Tracking status: ${isTracking ? "on" : "off"} "),
+              child:
+                  Text("Asset Tracking status: ${isTracking ? "on" : "off"} "),
             ),
             Text(locationInfo)
           ],
@@ -98,7 +101,10 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
 
   void createAndBindAssetId() async {
     AssetProfile profile = AssetProfile(
-        customId: const Uuid().v4().toString(), name: "test asset", description: "asset descriptions", attributes: {});
+        customId: const Uuid().v4().toString(),
+        name: "test asset",
+        description: "asset descriptions",
+        attributes: {});
     AssetResult result = await assetTracking.createAsset(profile: profile);
     if (result.success) {
       String assetID = result.data;

@@ -12,11 +12,15 @@ class DataTrackingConfig with NBEncode {
 
   DataTrackingConfig({
     String? baseUrl,
-    this.dataStorageSize = Constants.defaultDataStorageSize, // Replace with actual default value
-    this.dataUploadingBatchSize = Constants.defaultDataBatchSize, // Replace with actual default value
-    this.dataUploadingBatchWindow = Constants.defaultBatchWindow, // Replace with actual default value
-    this.shouldClearLocalDataWhenCollision = Constants.shouldClearLocalDataWhenCollision,
-  }): baseUrl = baseUrl ?? Constants.defaultBaseUrl;
+    this.dataStorageSize =
+        Constants.defaultDataStorageSize, // Replace with actual default value
+    this.dataUploadingBatchSize =
+        Constants.defaultDataBatchSize, // Replace with actual default value
+    this.dataUploadingBatchWindow =
+        Constants.defaultBatchWindow, // Replace with actual default value
+    this.shouldClearLocalDataWhenCollision =
+        Constants.shouldClearLocalDataWhenCollision,
+  }) : baseUrl = baseUrl ?? Constants.defaultBaseUrl;
 
   factory DataTrackingConfig.fromJson(String jsonString) {
     Map<String, dynamic> json = jsonDecode(jsonString);
@@ -25,7 +29,8 @@ class DataTrackingConfig with NBEncode {
       dataStorageSize: json['dataStorageSize'] as int,
       dataUploadingBatchSize: json['dataUploadingBatchSize'] as int,
       dataUploadingBatchWindow: json['dataUploadingBatchWindow'] as int,
-      shouldClearLocalDataWhenCollision: json['shouldClearLocalDataWhenCollision'] as bool,
+      shouldClearLocalDataWhenCollision:
+          json['shouldClearLocalDataWhenCollision'] as bool,
     );
   }
 
