@@ -1,3 +1,6 @@
+## 2.0.0
+* Upgraded Android native frameworks to v2.0.0 with AGP 8+ compatibility.
+
 ## 1.2.0
 * Updated iOS native frameworks to v1.2.0 to disable Bitcode support, ensuring compatibility with Xcode 16 for upload.
 
