@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'nb_encode.dart';
@@ -11,15 +10,20 @@ class LowBatteryNotificationConfig with NBEncode {
   final String content;
   final int smallIcon;
 
-  static const LowBatteryNotificationConfig defaultConfig = LowBatteryNotificationConfig();
+  static const LowBatteryNotificationConfig defaultConfig =
+      LowBatteryNotificationConfig();
 
   const LowBatteryNotificationConfig({
     this.threshold = 10.0,
     this.channelId = 'LowBatteryChannelId', // Replace with actual default value
-    this.channelName = 'LowBatteryChannelName', // Replace with actual default value
-    this.title = 'Default Notification Title', // Replace with actual default value
-    this.content = 'Your device’s battery level is low. Please recharge to continue tracking assets',
-    this.smallIcon = 0, // Replace with an appropriate integer or other identifier
+    this.channelName =
+        'LowBatteryChannelName', // Replace with actual default value
+    this.title =
+        'Default Notification Title', // Replace with actual default value
+    this.content =
+        'Your device\'s battery level is low. Please recharge to continue tracking assets',
+    this.smallIcon =
+        0, // Replace with an appropriate integer or other identifier
   });
 
   factory LowBatteryNotificationConfig.fromJson(String jsonString) {
@@ -44,5 +48,4 @@ class LowBatteryNotificationConfig with NBEncode {
       'smallIcon': smallIcon,
     };
   }
-
 }

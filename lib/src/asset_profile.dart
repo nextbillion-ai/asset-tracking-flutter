@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:nb_asset_tracking_flutter/src/nb_encode.dart';
 
 class AssetProfile with NBEncode {
-  String customId;
-  String description;
-  String name;
-  Map<String,String> attributes;
+  final String customId;
+  final String name;
+  final String description;
+  final Map<String, dynamic> attributes;
 
   AssetProfile({
     required this.customId,
@@ -15,14 +15,13 @@ class AssetProfile with NBEncode {
     required this.attributes,
   });
 
-
   factory AssetProfile.fromJson(String jsonString) {
     Map<String, dynamic> json = jsonDecode(jsonString);
     return AssetProfile(
       customId: json['customId'] as String,
-      description: json['description'] as String,
       name: json['name'] as String,
-      attributes: json['attributes'] as Map<String,String>,
+      description: json['description'] as String,
+      attributes: json['attributes'] as Map<String, dynamic>,
     );
   }
 

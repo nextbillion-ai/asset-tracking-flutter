@@ -1,19 +1,17 @@
-
-
 class TripLocation {
   final double lat;
   final double lon;
 
   TripLocation({
-    required this.lat,
-    required this.lon,
+    this.lat = 0.0,
+    this.lon = 0.0,
   });
 
   // Factory constructor to create an instance from JSON
   factory TripLocation.fromJson(Map<String, dynamic> json) {
     return TripLocation(
-      lat: json['lat'] as double,
-      lon: json['lon'] as double,
+      lat: (json['lat'] as num?)?.toDouble() ?? 0.0,
+      lon: (json['lon'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -24,4 +22,15 @@ class TripLocation {
       'lon': lon,
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TripLocation &&
+          runtimeType == other.runtimeType &&
+          lat == other.lat &&
+          lon == other.lon;
+
+  @override
+  int get hashCode => lat.hashCode ^ lon.hashCode;
 }

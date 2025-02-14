@@ -25,16 +25,22 @@ class TrackLocation {
 
   // Factory constructor to create an instance from JSON
   factory TrackLocation.fromJson(Map<String, dynamic> json) {
-    int?  timestamp = json['timestamp'];
+    int? timestamp = json['timestamp'];
+    Map<String, dynamic>? locationJson =
+        json['location'] as Map<String, dynamic>?;
+
     return TrackLocation(
       accuracy: (json['accuracy'] as num?)?.toDouble(),
       altitude: (json['altitude'] as num?)?.toDouble(),
       bearing: (json['bearing'] as num?)?.toDouble(),
-      location: json['location'] != null ? TripLocation.fromJson(json['location']) : null,
+      location:
+          locationJson != null ? TripLocation.fromJson(locationJson) : null,
       metaData: json['meta_data'] as Map<String, dynamic>?,
       speed: (json['speed'] as num?)?.toDouble(),
-      timestamp: timestamp != null ? DateTime.fromMillisecondsSinceEpoch(timestamp * 1000): null,
-      batteryLevel: json['battery_level'],
+      timestamp: timestamp != null
+          ? DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)
+          : null,
+      batteryLevel: json['battery_level'] ?? 0,
       trackingMode: json['tracking_mode'],
     );
   }
