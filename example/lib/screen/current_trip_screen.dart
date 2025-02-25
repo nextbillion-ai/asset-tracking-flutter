@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 
-
 class CurrentTripInfoScreen extends StatefulWidget {
   final String tripId;
 
@@ -22,7 +21,7 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
 
   Future<TripInfo> _fetchTripInfo() async {
     AssetResult result = await AssetTracking().getTrip(tripId: widget.tripId);
-    if(result.success) {
+    if (result.success) {
       return result.data;
     } else {
       throw Exception(result.msg);
@@ -52,32 +51,48 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
-                Text('ID: ${tripInfo.id}', style: const TextStyle(fontSize: 18)),
-                Text('Asset ID: ${tripInfo.assetId}', style: const TextStyle(fontSize: 18)),
-                Text('State: ${tripInfo.state}', style: const TextStyle(fontSize: 18)),
-                Text('Name: ${tripInfo.name}', style: const TextStyle(fontSize: 18)),
+                Text('ID: ${tripInfo.id}',
+                    style: const TextStyle(fontSize: 18)),
+                Text('Asset ID: ${tripInfo.assetId}',
+                    style: const TextStyle(fontSize: 18)),
+                Text('State: ${tripInfo.state}',
+                    style: const TextStyle(fontSize: 18)),
+                Text('Name: ${tripInfo.name}',
+                    style: const TextStyle(fontSize: 18)),
                 if (tripInfo.description != null)
-                  Text('Description: ${tripInfo.description}', style: const TextStyle(fontSize: 18)),
-                Text('Started At: ${tripInfo.startedAt.toLocal().toString()}', style: const TextStyle(fontSize: 18)),
+                  Text('Description: ${tripInfo.description}',
+                      style: const TextStyle(fontSize: 18)),
+                Text('Started At: ${tripInfo.startedAt.toLocal().toString()}',
+                    style: const TextStyle(fontSize: 18)),
                 if (tripInfo.endedAt != null)
-                  Text('Ended At: ${tripInfo.endedAt?.toLocal().toString()}', style: const TextStyle(fontSize: 18)),
-                Text('Created At: ${tripInfo.createdAt.toLocal().toString()}', style: const TextStyle(fontSize: 18)),
+                  Text('Ended At: ${tripInfo.endedAt?.toLocal().toString()}',
+                      style: const TextStyle(fontSize: 18)),
+                Text('Created At: ${tripInfo.createdAt.toLocal().toString()}',
+                    style: const TextStyle(fontSize: 18)),
                 if (tripInfo.updatedAt != null)
-                  Text('Updated At: ${tripInfo.updatedAt?.toLocal().toString()}', style: const TextStyle(fontSize: 18)),
+                  Text(
+                      'Updated At: ${tripInfo.updatedAt?.toLocal().toString()}',
+                      style: const TextStyle(fontSize: 18)),
                 if (tripInfo.stops != null)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Stops:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      ...tripInfo.stops!.map((stop) => Text('Stop: ${stop.name}')),
+                      const Text('Stops:',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      ...tripInfo.stops!
+                          .map((stop) => Text('Stop: ${stop.name}')),
                     ],
                   ),
                 if (tripInfo.route != null)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Route:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      ...tripInfo.route!.map((location) => Text('Location: ${location.location?.lat}, ${location.location?.lon}')),
+                      const Text('Route:',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      ...tripInfo.route!.map((location) => Text(
+                          'Location: ${location.location?.lat}, ${location.location?.lon}')),
                     ],
                   ),
               ],

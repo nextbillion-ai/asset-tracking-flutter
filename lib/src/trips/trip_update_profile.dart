@@ -26,9 +26,17 @@ class TripUpdateProfile with NBEncode {
     return TripUpdateProfile(
       name: json['name'] as String,
       description: json['description'] as String?,
-      attributes: json['attributes'] != null ? Map<String, dynamic>.from(json['attributes']) : null,
-      metaData: json['metaData'] != null ? Map<String, dynamic>.from(json['metaData']) : null,
-      stops: json['stops'] != null ? (json['stops'] as List).map((stop) => TripStop.fromJson(stop)).toList() : null,
+      attributes: json['attributes'] != null
+          ? Map<String, dynamic>.from(json['attributes'])
+          : null,
+      metaData: json['metaData'] != null
+          ? Map<String, dynamic>.from(json['metaData'])
+          : null,
+      stops: json['stops'] != null
+          ? (json['stops'] as List)
+              .map((stop) => TripStop.fromJson(stop))
+              .toList()
+          : null,
     );
   }
 

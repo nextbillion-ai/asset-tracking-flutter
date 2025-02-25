@@ -1,4 +1,3 @@
-
 class TripStop {
   final String name;
   final Map<String, dynamic>? metaData;
@@ -13,7 +12,9 @@ class TripStop {
   factory TripStop.fromJson(Map<String, dynamic> json) {
     return TripStop(
       name: json['name'] as String,
-      metaData: json['metaData'] != null ? Map<String, dynamic>.from(json['metaData']) : null,
+      metaData: json['metaData'] != null
+          ? Map<String, dynamic>.from(json['metaData'])
+          : null,
       geofenceId: json['geofenceId'] as String,
     );
   }

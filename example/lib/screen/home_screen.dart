@@ -22,7 +22,9 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackingDataCallBack {
+class _MyAppState extends State<HomeScreen>
+    with ToastMixin
+    implements OnTrackingDataCallBack {
   bool _isRunning = false;
   bool _isTripRunning = false;
   bool isAllowMockLocation = false;
@@ -43,16 +45,17 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
     Stream<AssetResult> statusStream = assetTracking.isTracking().asStream();
     statusStream.listen((value) {
       _isRunning = value.data;
-      updateTrackingStatus(_isRunning,_isTripRunning);
+      updateTrackingStatus(_isRunning, _isTripRunning);
       if (kDebugMode) {
         print("_isRunning : ${value.data}");
       }
     });
 
-    Stream<AssetResult> tripStatusStream = assetTracking.isTripInProgress().asStream();
+    Stream<AssetResult> tripStatusStream =
+        assetTracking.isTripInProgress().asStream();
     tripStatusStream.listen((value) {
       _isTripRunning = value.data;
-      updateTrackingStatus(_isRunning,_isTripRunning);
+      updateTrackingStatus(_isRunning, _isTripRunning);
     });
     assetTracking.getActiveTripId().then((value) {
       _currentTripID = value.data;
@@ -70,14 +73,18 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
     bool allow = sharedPreferences.getBool(keyOfFakeGpsFlag) ?? result.data;
     assetTracking.setFakeGpsConfig(allow: allow);
 
-    String trackingMode = sharedPreferences.getString(keyOfTrackingMode) ?? TrackingMode.active.name;
+    String trackingMode = sharedPreferences.getString(keyOfTrackingMode) ??
+        TrackingMode.active.name;
     TrackingMode mode = TrackingMode.fromString(trackingMode);
     assetTracking.setLocationConfig(config: LocationConfig.config(mode));
 
     var envConfig = sharedPreferences.getString(keyOfEnvConfig);
     if (envConfig?.isNotEmpty == true) {
       assetTracking.setDataTrackingConfig(
-          config: DataTrackingConfig(baseUrl: EnvConfig.fromString(envConfig!) == EnvConfig.prod ? baseUrlProd : baseUrlStaging));
+          config: DataTrackingConfig(
+              baseUrl: EnvConfig.fromString(envConfig!) == EnvConfig.prod
+                  ? baseUrlProd
+                  : baseUrlStaging));
     }
 
     setState(() {
@@ -109,7 +116,7 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
     super.dispose();
   }
 
-  void updateTrackingStatus(bool isRunning,bool isTripInProgress) {
+  void updateTrackingStatus(bool isRunning, bool isTripInProgress) {
     setState(() {
       _isRunning = isRunning;
       final status = isRunning ? "ON" : "OFF";
@@ -146,24 +153,20 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
     if (locationConfigAvailable()) {
       assetTracking.startTracking();
     }
-
   }
-
-
 
   void startTrip() async {
     showInputDialog(context, (title, description, customId) {
-      var profile = TripProfile(name: 'test trip',description: description, customId: customId);
+      var profile = TripProfile(
+          name: 'test trip', description: description, customId: customId);
       assetTracking.startTrip(profile: profile).then((value) {
         if (value.success) {
           showToast("Trip started");
         } else {
           showToast("Trip start failed: ${value.msg}");
         }
-
       });
     });
-
   }
 
   void endTrip() async {
@@ -173,8 +176,10 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
   void configNotificationConfig() {
     if (Platform.isIOS) {
       var iosNotificationConfig = IOSNotificationConfig();
-      iosNotificationConfig.showAssetEnableNotification = enableTrackingStartedNotification;
-      iosNotificationConfig.showAssetDisableNotification = enableTrackingStopNotification;
+      iosNotificationConfig.showAssetEnableNotification =
+          enableTrackingStartedNotification;
+      iosNotificationConfig.showAssetDisableNotification =
+          enableTrackingStopNotification;
       assetTracking.setIOSNotificationConfig(config: iosNotificationConfig);
     }
   }
@@ -185,17 +190,19 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
       if (customValue == null) {
         Fluttertoast.showToast(
             msg:
-            "Please enter ${selectedIntervalMode == CustomIntervalMode.distanceBased ? "distance interval" : "time interval"}",
+                "Please enter ${selectedIntervalMode == CustomIntervalMode.distanceBased ? "distance interval" : "time interval"}",
             gravity: ToastGravity.CENTER);
         return false;
       }
       var locationConfig = LocationConfig();
       switch (selectedIntervalMode) {
         case CustomIntervalMode.distanceBased:
-          locationConfig = LocationConfig(smallestDisplacement: customValue.toDouble());
+          locationConfig =
+              LocationConfig(smallestDisplacement: customValue.toDouble());
           break;
         case CustomIntervalMode.timeBased:
-          locationConfig = LocationConfig(intervalForAndroid: customValue.toInt() * 1000);
+          locationConfig =
+              LocationConfig(intervalForAndroid: customValue.toInt() * 1000);
           break;
       }
       assetTracking.setLocationConfig(config: locationConfig);
@@ -256,12 +263,14 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   onChanged: _isRunning
                       ? null
                       : (value) {
-                    assetTracking.updateLocationConfig(config: LocationConfig.activeConfig());
-                    setState(() {
-                      selectedOption = value!;
-                    });
-                    sharedPreferences.setString(keyOfTrackingMode, selectedOption.name);
-                  },
+                          assetTracking.updateLocationConfig(
+                              config: LocationConfig.activeConfig());
+                          setState(() {
+                            selectedOption = value!;
+                          });
+                          sharedPreferences.setString(
+                              keyOfTrackingMode, selectedOption.name);
+                        },
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
@@ -277,12 +286,14 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   onChanged: _isRunning
                       ? null
                       : (value) {
-                    assetTracking.updateLocationConfig(config: LocationConfig.balancedConfig());
-                    setState(() {
-                      selectedOption = value!;
-                    });
-                    sharedPreferences.setString(keyOfTrackingMode, selectedOption.name);
-                  },
+                          assetTracking.updateLocationConfig(
+                              config: LocationConfig.balancedConfig());
+                          setState(() {
+                            selectedOption = value!;
+                          });
+                          sharedPreferences.setString(
+                              keyOfTrackingMode, selectedOption.name);
+                        },
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
@@ -298,12 +309,14 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   onChanged: _isRunning
                       ? null
                       : (value) {
-                    assetTracking.updateLocationConfig(config: LocationConfig.passiveConfig());
-                    setState(() {
-                      selectedOption = value!;
-                    });
-                    sharedPreferences.setString(keyOfTrackingMode, selectedOption.name);
-                  },
+                          assetTracking.updateLocationConfig(
+                              config: LocationConfig.passiveConfig());
+                          setState(() {
+                            selectedOption = value!;
+                          });
+                          sharedPreferences.setString(
+                              keyOfTrackingMode, selectedOption.name);
+                        },
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
@@ -319,12 +332,14 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   onChanged: _isRunning
                       ? null
                       : (value) {
-                    assetTracking.updateLocationConfig(config: LocationConfig());
-                    setState(() {
-                      selectedOption = value!;
-                    });
-                    sharedPreferences.setString(keyOfTrackingMode, selectedOption.name);
-                  },
+                          assetTracking.updateLocationConfig(
+                              config: LocationConfig());
+                          setState(() {
+                            selectedOption = value!;
+                          });
+                          sharedPreferences.setString(
+                              keyOfTrackingMode, selectedOption.name);
+                        },
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
@@ -334,36 +349,36 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   children: [
                     Platform.isAndroid
                         ? DropdownButton<CustomIntervalMode>(
-                      value: selectedIntervalMode,
-                      underline: Container(
-                        height: 1,
-                        color: Colors.grey,
-                      ),
-                      items: const [
-                        DropdownMenuItem(
-                          value: CustomIntervalMode.distanceBased,
-                          child: Text(
-                            'Distance based',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: CustomIntervalMode.timeBased,
-                          child: Text(
-                            'Time based',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ],
-                      alignment: AlignmentDirectional.topCenter,
-                      onChanged: customOptionAvailable()
-                          ? (value) {
-                        setState(() {
-                          selectedIntervalMode = value!;
-                        });
-                      }
-                          : null,
-                    )
+                            value: selectedIntervalMode,
+                            underline: Container(
+                              height: 1,
+                              color: Colors.grey,
+                            ),
+                            items: const [
+                              DropdownMenuItem(
+                                value: CustomIntervalMode.distanceBased,
+                                child: Text(
+                                  'Distance based',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: CustomIntervalMode.timeBased,
+                                child: Text(
+                                  'Time based',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
+                            ],
+                            alignment: AlignmentDirectional.topCenter,
+                            onChanged: customOptionAvailable()
+                                ? (value) {
+                                    setState(() {
+                                      selectedIntervalMode = value!;
+                                    });
+                                  }
+                                : null,
+                          )
                         : Container(),
                     Expanded(
                       child: Container(
@@ -375,14 +390,20 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                             maxLines: 1,
                             keyboardType: TextInputType.number,
                             style: TextStyle(
-                                color: customOptionAvailable() ? Colors.black : Colors.grey.shade400, fontSize: 16.0),
+                                color: customOptionAvailable()
+                                    ? Colors.black
+                                    : Colors.grey.shade400,
+                                fontSize: 16.0),
                             decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(left: 6, right: 6, top: 0, bottom: 0),
+                                contentPadding: const EdgeInsets.only(
+                                    left: 6, right: 6, top: 0, bottom: 0),
                                 border: const OutlineInputBorder(),
-                                hintText: selectedIntervalMode == CustomIntervalMode.distanceBased
+                                hintText: selectedIntervalMode ==
+                                        CustomIntervalMode.distanceBased
                                     ? "Dist. in meters"
                                     : "Time in seconds",
-                                hintStyle: const TextStyle(color: Colors.grey, fontSize: 15.0))),
+                                hintStyle: const TextStyle(
+                                    color: Colors.grey, fontSize: 15.0))),
                       ),
                     ),
                   ],
@@ -401,9 +422,10 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                           onPressed: _isRunning
                               ? null
                               : () {
-                            startTracking();
-                          },
-                          child: const Text('START TRACKING', style: TextStyle(fontSize: 13)),
+                                  startTracking();
+                                },
+                          child: const Text('START TRACKING',
+                              style: TextStyle(fontSize: 13)),
                         ),
                       ),
                     ),
@@ -413,16 +435,18 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                         child: ElevatedButton(
                           onPressed: _isRunning
                               ? () {
-                            stopTracking();
-                          }
+                                  stopTracking();
+                                }
                               : null,
-                          child: const Text('STOP TRACKING', style: TextStyle(fontSize: 13)),
+                          child: const Text('STOP TRACKING',
+                              style: TextStyle(fontSize: 13)),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),Padding(
+              ),
+              Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -434,9 +458,10 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                           onPressed: _isTripRunning
                               ? null
                               : () {
-                            startTrip();
-                          },
-                          child: const Text('START TRIP', style: TextStyle(fontSize: 13)),
+                                  startTrip();
+                                },
+                          child: const Text('START TRIP',
+                              style: TextStyle(fontSize: 13)),
                         ),
                       ),
                     ),
@@ -446,10 +471,11 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                         child: ElevatedButton(
                           onPressed: _isTripRunning
                               ? () {
-                            endTrip();
-                          }
+                                  endTrip();
+                                }
                               : null,
-                          child: const Text('END TRIP', style: TextStyle(fontSize: 13)),
+                          child: const Text('END TRIP',
+                              style: TextStyle(fontSize: 13)),
                         ),
                       ),
                     ),
@@ -479,18 +505,20 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   ),
                 ),
               ),
-              _currentTripID == null ? Container(): SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      pushToViewCurrentTrip();
-                    },
-                    child: const Text('View Current Trip'),
-                  ),
-                ),
-              ),
+              _currentTripID == null
+                  ? Container()
+                  : SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            pushToViewCurrentTrip();
+                          },
+                          child: const Text('View Current Trip'),
+                        ),
+                      ),
+                    ),
               SizedBox(
                 width: double.infinity,
                 child: Padding(
@@ -536,8 +564,9 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
   void pushToViewCurrentTrip() {
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => CurrentTripInfoScreen(tripId: _currentTripID!))
-    );
+        MaterialPageRoute(
+            builder: (context) =>
+                CurrentTripInfoScreen(tripId: _currentTripID!)));
   }
 
   void pushToTripHistory() {
@@ -575,17 +604,17 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
   @override
   void onTrackingStart(String message) {
     _isRunning = true;
-    updateTrackingStatus(_isRunning,_isTripRunning);
+    updateTrackingStatus(_isRunning, _isTripRunning);
     assetTracking.isTripInProgress().then((value) {
       _isTripRunning = value.data!;
-      updateTrackingStatus(_isRunning,_isTripRunning);
+      updateTrackingStatus(_isRunning, _isTripRunning);
     });
   }
 
   @override
   void onTrackingStop(String message) {
     _isRunning = false;
-    updateTrackingStatus(_isRunning,_isTripRunning);
+    updateTrackingStatus(_isRunning, _isTripRunning);
   }
 
   Widget _notificationConfig() {
@@ -608,7 +637,8 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   setState(() {
                     enableTrackingStartedNotification = value;
                   });
-                  sharedPreferences.setBool(keyOfEnableTrackingStartedNotification, value);
+                  sharedPreferences.setBool(
+                      keyOfEnableTrackingStartedNotification, value);
                 },
                 activeTrackColor: Colors.lightGreenAccent,
                 activeColor: Colors.green,
@@ -630,7 +660,8 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                   setState(() {
                     enableTrackingStopNotification = value;
                   });
-                  sharedPreferences.setBool(keyOfEnableTrackingStopNotification, value);
+                  sharedPreferences.setBool(
+                      keyOfEnableTrackingStopNotification, value);
                 },
                 activeTrackColor: Colors.lightGreenAccent,
                 activeColor: Colors.green,
@@ -645,21 +676,20 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
   @override
   void onTripStatusChanged(String tripId, TripState state) {
     setState(() {
-      if(state == TripState.started) {
+      if (state == TripState.started) {
         _currentTripID = tripId;
         _isTripRunning = true;
-      }else if(state == TripState.ended) {
+      } else if (state == TripState.ended) {
         _currentTripID = null;
         _isTripRunning = false;
         storeTripHistory(tripId);
-      }else if(state == TripState.deleted) {
-        if(_currentTripID == tripId) {
+      } else if (state == TripState.deleted) {
+        if (_currentTripID == tripId) {
           _currentTripID = null;
           _isTripRunning = false;
         }
       }
       updateTrackingStatus(_isRunning, _isTripRunning);
-
     });
   }
 }

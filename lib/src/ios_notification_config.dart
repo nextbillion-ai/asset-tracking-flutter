@@ -5,13 +5,16 @@ class IOSNotificationConfig with NBEncode {
   IOSNotificationConfig();
 
   // Configuration for asset enable notification
-  var assetEnableNotificationConfig = AssetEnableNotificationConfig(identifier: "startTrackingIdentifier");
+  var assetEnableNotificationConfig =
+      AssetEnableNotificationConfig(identifier: "startTrackingIdentifier");
 
   // Configuration for asset disable notification
-  var assetDisableNotificationConfig = AssetDisableNotificationConfig(identifier: "stopTrackingIdentifier");
+  var assetDisableNotificationConfig =
+      AssetDisableNotificationConfig(identifier: "stopTrackingIdentifier");
 
   // Configuration for low battery notification
-  var lowBatteryNotificationConfig = LowBatteryStatusNotificationConfig(identifier: "lowBatteryIdentifier");
+  var lowBatteryNotificationConfig =
+      LowBatteryStatusNotificationConfig(identifier: "lowBatteryIdentifier");
 
   // A Boolean value to determine whether to show the asset enable notification.
   bool showAssetEnableNotification = true;
@@ -27,14 +30,20 @@ class IOSNotificationConfig with NBEncode {
 
     var iosNotificationConfig = IOSNotificationConfig();
     iosNotificationConfig.assetEnableNotificationConfig =
-        AssetEnableNotificationConfig.fromJson(json['assetEnableNotificationConfig']);
+        AssetEnableNotificationConfig.fromJson(
+            json['assetEnableNotificationConfig']);
     iosNotificationConfig.assetDisableNotificationConfig =
-        AssetDisableNotificationConfig.fromJson(json['assetDisableNotificationConfig']);
+        AssetDisableNotificationConfig.fromJson(
+            json['assetDisableNotificationConfig']);
     iosNotificationConfig.lowBatteryNotificationConfig =
-        LowBatteryStatusNotificationConfig.fromJson(json['lowBatteryNotificationConfig']);
-    iosNotificationConfig.showAssetEnableNotification = json['showAssetEnableNotification'];
-    iosNotificationConfig.showAssetDisableNotification = json['showAssetDisableNotification'];
-    iosNotificationConfig.showLowBatteryNotification = json['showLowBatteryNotification'];
+        LowBatteryStatusNotificationConfig.fromJson(
+            json['lowBatteryNotificationConfig']);
+    iosNotificationConfig.showAssetEnableNotification =
+        json['showAssetEnableNotification'];
+    iosNotificationConfig.showAssetDisableNotification =
+        json['showAssetDisableNotification'];
+    iosNotificationConfig.showLowBatteryNotification =
+        json['showLowBatteryNotification'];
     return iosNotificationConfig;
   }
 
@@ -61,7 +70,8 @@ class _DefaultAssetNotificationConfig {
   String content;
 
   // Initializes a new instance of the notification configuration.
-  _DefaultAssetNotificationConfig({required this.identifier, required this.title, required this.content});
+  _DefaultAssetNotificationConfig(
+      {required this.identifier, required this.title, required this.content});
 }
 
 class AssetEnableNotificationConfig extends _DefaultAssetNotificationConfig {
@@ -69,7 +79,8 @@ class AssetEnableNotificationConfig extends _DefaultAssetNotificationConfig {
       : super(
           identifier: identifier,
           title: "",
-          content: "Asset tracking is now enabled and your device’s location will be tracked",
+          content:
+              "Asset tracking is now enabled and your device's location will be tracked",
         );
 
   Map<String, dynamic> toJson() {
@@ -98,7 +109,8 @@ class AssetDisableNotificationConfig extends _DefaultAssetNotificationConfig {
       : super(
           identifier: identifier,
           title: "",
-          content: "Asset tracking is now disabled and your device's location will no longer be tracked",
+          content:
+              "Asset tracking is now disabled and your device's location will no longer be tracked",
         );
 
   factory AssetDisableNotificationConfig.fromJson(Map<String, dynamic> json) {
@@ -107,7 +119,8 @@ class AssetDisableNotificationConfig extends _DefaultAssetNotificationConfig {
     );
     assetDisableNotificationConfig.title = json['title'];
     assetDisableNotificationConfig.content = json['content'];
-    assetDisableNotificationConfig.assetIDTrackedContent = json['assetIDTrackedContent'];
+    assetDisableNotificationConfig.assetIDTrackedContent =
+        json['assetIDTrackedContent'];
     return assetDisableNotificationConfig;
   }
 
@@ -121,7 +134,8 @@ class AssetDisableNotificationConfig extends _DefaultAssetNotificationConfig {
   }
 }
 
-class LowBatteryStatusNotificationConfig extends _DefaultAssetNotificationConfig {
+class LowBatteryStatusNotificationConfig
+    extends _DefaultAssetNotificationConfig {
   late double minBatteryLevel;
 
   LowBatteryStatusNotificationConfig({
@@ -131,12 +145,14 @@ class LowBatteryStatusNotificationConfig extends _DefaultAssetNotificationConfig
           identifier: identifier,
           title: "",
           content:
-              "Your device’s battery level is lower than $minBatteryLevel. Please recharge to continue tracking assets",
+              "Your device's battery level is lower than $minBatteryLevel. Please recharge to continue tracking assets",
         );
 
-  factory LowBatteryStatusNotificationConfig.fromJson(Map<String, dynamic> json) {
-    var lowBatteryStatusNotificationConfig =
-        LowBatteryStatusNotificationConfig(identifier: json['identifier'], minBatteryLevel: double.parse(json['minBatteryLevel'].toString()));
+  factory LowBatteryStatusNotificationConfig.fromJson(
+      Map<String, dynamic> json) {
+    var lowBatteryStatusNotificationConfig = LowBatteryStatusNotificationConfig(
+        identifier: json['identifier'],
+        minBatteryLevel: double.parse(json['minBatteryLevel'].toString()));
     lowBatteryStatusNotificationConfig.title = json['title'];
     lowBatteryStatusNotificationConfig.content = json['content'];
     return lowBatteryStatusNotificationConfig;

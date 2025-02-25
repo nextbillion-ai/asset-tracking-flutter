@@ -13,7 +13,13 @@ class AssetDetailInfo with NBEncode {
   Map<String, dynamic>? attributes;
 
   AssetDetailInfo(
-      {this.id, this.deviceId, this.name, this.description, this.createdAt, this.updatedAt, this.attributes});
+      {this.id,
+      this.deviceId,
+      this.name,
+      this.description,
+      this.createdAt,
+      this.updatedAt,
+      this.attributes});
 
   factory AssetDetailInfo.fromJson(String jsonString) {
     bool isAndroid = Platform.isAndroid;
@@ -40,5 +46,4 @@ class AssetDetailInfo with NBEncode {
       'attributes': attributes,
     };
   }
-
 }

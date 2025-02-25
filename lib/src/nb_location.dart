@@ -38,4 +38,22 @@ class NBLocation {
       timestamp: map['timestamp'] ?? 0,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'latitude': latitude,
+      'longitude': longitude,
+      'accuracy': accuracy,
+      'altitude': altitude,
+      'speed': speed,
+      'speedAccuracy': speedAccuracy,
+      'heading': heading,
+      'provider': provider,
+      'timestamp': timestamp,
+    };
+  }
+
+  String toJson() {
+    return jsonEncode(toMap());
+  }
 }

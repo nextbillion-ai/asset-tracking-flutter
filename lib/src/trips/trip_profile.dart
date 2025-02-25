@@ -4,7 +4,7 @@ import 'package:nb_asset_tracking_flutter/src/trips/trip_stop.dart';
 import '../nb_encode.dart';
 
 @immutable
- class TripProfile with NBEncode {
+class TripProfile with NBEncode {
   final String name;
   final String? customId;
   final String? description;

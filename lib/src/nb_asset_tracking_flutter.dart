@@ -23,12 +23,14 @@ class AssetTracking {
   }
 
   Future<bool> initialize({required String apiKey}) async {
-    String jsonString  = await NbAssetTrackingFlutterPlatform.instance.initialize(key: apiKey);
+    String jsonString =
+        await NbAssetTrackingFlutterPlatform.instance.initialize(key: apiKey);
     return AssetResult.fromJson(jsonString).success;
   }
 
   Future<bool> setKeyOfHeaderField({required String key}) async {
-    String jsonString = await NbAssetTrackingFlutterPlatform.instance.setKeyOfHeaderField(key: key);
+    String jsonString = await NbAssetTrackingFlutterPlatform.instance
+        .setKeyOfHeaderField(key: key);
     return AssetResult.fromJson(jsonString).success;
   }
 
@@ -57,7 +59,8 @@ class AssetTracking {
     return AssetResult.fromJson(jsonString);
   }
 
-  Future<AssetResult<String>> updateAsset({required AssetProfile assetProfile}) async {
+  Future<AssetResult<String>> updateAsset(
+      {required AssetProfile assetProfile}) async {
     String jsonString = await _platform.updateAsset(assetProfile: assetProfile);
     return AssetResult.fromJson(jsonString);
   }
@@ -68,7 +71,8 @@ class AssetTracking {
   }
 
   Future<void> setDefaultConfig({required DefaultConfig config}) async {
-    await NbAssetTrackingFlutterPlatform.instance.setDefaultConfig(config: config);
+    await NbAssetTrackingFlutterPlatform.instance
+        .setDefaultConfig(config: config);
   }
 
   Future<AssetResult<DefaultConfig>> getDefaultConfig() async {
@@ -76,16 +80,19 @@ class AssetTracking {
     return AssetResult.fromJson(jsonString);
   }
 
-  Future<void> setAndroidNotificationConfig({required AndroidNotificationConfig config}) async {
+  Future<void> setAndroidNotificationConfig(
+      {required AndroidNotificationConfig config}) async {
     await _platform.setAndroidNotificationConfig(config: config);
   }
 
-  Future<AssetResult<AndroidNotificationConfig>> getAndroidNotificationConfig() async {
+  Future<AssetResult<AndroidNotificationConfig>>
+      getAndroidNotificationConfig() async {
     String json = await _platform.getAndroidNotificationConfig();
     return AssetResult.fromJson(json);
   }
 
-  Future<void> setIOSNotificationConfig({required IOSNotificationConfig config}) async {
+  Future<void> setIOSNotificationConfig(
+      {required IOSNotificationConfig config}) async {
     await _platform.setIOSNotificationConfig(config: config);
   }
 
@@ -107,7 +114,8 @@ class AssetTracking {
     return AssetResult.fromJson(json);
   }
 
-  Future<void> setDataTrackingConfig({required DataTrackingConfig config}) async {
+  Future<void> setDataTrackingConfig(
+      {required DataTrackingConfig config}) async {
     await _platform.setDataTrackingConfig(config: config);
   }
 
@@ -130,7 +138,8 @@ class AssetTracking {
     return AssetResult.fromJson(jsonString);
   }
 
-  Future<AssetResult<String>> createAsset({required AssetProfile profile}) async {
+  Future<AssetResult<String>> createAsset(
+      {required AssetProfile profile}) async {
     String jsonString = await _platform.createAsset(profile: profile);
     return AssetResult.fromJson(jsonString);
   }
@@ -146,48 +155,48 @@ class AssetTracking {
   }
 
   Future<AssetResult<String>> startTrip({required TripProfile profile}) async {
-    String jsonString  = await _platform.startTrip(profile: profile);
+    String jsonString = await _platform.startTrip(profile: profile);
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<String>> endTrip() async {
-    String jsonString  = await _platform.endTrip();
+    String jsonString = await _platform.endTrip();
     return AssetResult.fromJson(jsonString);
   }
 
-  Future<AssetResult<TripInfo>> getTrip({required String tripId})  async {
-    String jsonString  = await _platform.getTrip(tripId: tripId);
+  Future<AssetResult<TripInfo>> getTrip({required String tripId}) async {
+    String jsonString = await _platform.getTrip(tripId: tripId);
     return AssetResult.fromJson(jsonString);
   }
 
-  Future<AssetResult<String>> updateTrip({required TripUpdateProfile profile}) async {
-    String jsonString  = await _platform.updateTrip(profile: profile);
+  Future<AssetResult<String>> updateTrip(
+      {required TripUpdateProfile profile}) async {
+    String jsonString = await _platform.updateTrip(profile: profile);
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<TripSummary>> getSummary({required String tripId}) async {
-    String jsonString  = await _platform.getSummary(tripId: tripId);
+    String jsonString = await _platform.getSummary(tripId: tripId);
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<String>> deleteTrip({required String tripId}) async {
-    String jsonString  = await _platform.deleteTrip(tripId: tripId);
+    String jsonString = await _platform.deleteTrip(tripId: tripId);
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<String?>> getActiveTripId() async {
-    String jsonString  = await _platform.getActiveTripId();
+    String jsonString = await _platform.getActiveTripId();
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<bool>> isTripInProgress() async {
-    String jsonString  = await _platform.isTripInProgress();
+    String jsonString = await _platform.isTripInProgress();
     return AssetResult.fromJson(jsonString);
   }
 
-
   Future<AssetResult<bool>> setupUserId({required String userId}) async {
-    String jsonString  = await _platform.setupUserId(userId: userId);
+    String jsonString = await _platform.setupUserId(userId: userId);
     return AssetResult.fromJson(jsonString);
   }
 
@@ -218,7 +227,6 @@ class AssetTracking {
           listener.onTripStatusChanged.call(tripId, state);
         }
       },
-
     );
   }
 }

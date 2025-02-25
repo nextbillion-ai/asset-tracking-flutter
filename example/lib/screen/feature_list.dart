@@ -21,12 +21,14 @@ class FeatureListScreenState extends State<FeatureListScreen> {
   @override
   void initState() {
     super.initState();
-    features.add(FeatureModel("Full Asset Tracking Example", "Comprehensive Example of asset tracking"));
-    features.add(FeatureModel("Simple Tracking Example", "A simple tracking example of the Plugin integration"));
-    features.add(FeatureModel(
-        "Asset Profile Operation Example", "Asset Profile related operation example of the Plugin integration"));
-    features.add(
-        FeatureModel("Update Tracking Configuration Example", "Example of updating the tracking related configuration"));
+    features.add(FeatureModel("Full Asset Tracking Example",
+        "Comprehensive Example of asset tracking"));
+    features.add(FeatureModel("Simple Tracking Example",
+        "A simple tracking example of the Plugin integration"));
+    features.add(FeatureModel("Asset Profile Operation Example",
+        "Asset Profile related operation example of the Plugin integration"));
+    features.add(FeatureModel("Update Tracking Configuration Example",
+        "Example of updating the tracking related configuration"));
 
     initAssetTracking();
   }
@@ -108,7 +110,7 @@ class FeatureListScreenState extends State<FeatureListScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: Visibility(visible:index == 0, child: const Divider()),
+              child: Visibility(visible: index == 0, child: const Divider()),
             )
           ],
         ),

@@ -59,13 +59,17 @@ class LocationConfig with NBEncode {
   factory LocationConfig.fromJson(String jsonString) {
     Map<String, dynamic> json = jsonDecode(jsonString);
     return LocationConfig(
-        trackingMode: TrackingMode.fromString(json['trackingMode']),
+        trackingMode: json['trackingMode'] == null
+            ? TrackingMode.active
+            : TrackingMode.fromString(json['trackingMode']),
         intervalForAndroid: json['interval'] ?? 0,
         smallestDisplacement: json['smallestDisplacement'] ?? 0,
-        desiredAccuracy: DesiredAccuracy.fromString(json['desiredAccuracy']),
+        desiredAccuracy: json['desiredAccuracy'] == null
+            ? DesiredAccuracy.high
+            : DesiredAccuracy.fromString(json['desiredAccuracy']),
         maxWaitTimeForAndroid: json['maxWaitTime'] ?? 0,
         fastestIntervalForAndroid: json['fastestInterval'] ?? 0,
-        enableStationaryCheck: json['enableStationaryCheck'] as bool);
+        enableStationaryCheck: json['enableStationaryCheck'] as bool? ?? false);
   }
 
   factory LocationConfig.config(TrackingMode mode) {

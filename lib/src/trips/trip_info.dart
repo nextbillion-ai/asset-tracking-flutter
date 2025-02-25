@@ -34,27 +34,39 @@ class TripInfo {
 
   // Factory constructor to create an instance from JSON
   factory TripInfo.fromJson(Map<String, dynamic> json) {
-    int  createdTime = json['created_at'];
-    int?  endedTime = json['ended_at'];
-    int?  updatedTime = json['updated_at'];
-    int  startedTime = json['started_at'];
+    int createdTime = json['created_at'];
+    int? endedTime = json['ended_at'];
+    int? updatedTime = json['updated_at'];
+    int startedTime = json['started_at'];
     return TripInfo(
       id: json['id'] ?? '',
       assetId: json['asset_id'] ?? '',
       state: json['state'] ?? '',
       name: json['name'] ?? '',
       description: json['description'],
-      metaData: json['meta_data'] != null ? Map<String, dynamic>.from(json['meta_data']) : null,
-      attributes: json['attributes'] != null ? Map<String, dynamic>.from(json['attributes']) : null,
+      metaData: json['meta_data'] != null
+          ? Map<String, dynamic>.from(json['meta_data'])
+          : null,
+      attributes: json['attributes'] != null
+          ? Map<String, dynamic>.from(json['attributes'])
+          : null,
       startedAt: DateTime.fromMillisecondsSinceEpoch(startedTime * 1000),
-      endedAt: endedTime != null ? DateTime.fromMillisecondsSinceEpoch(endedTime * 1000): null,
+      endedAt: endedTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(endedTime * 1000)
+          : null,
       createdAt: DateTime.fromMillisecondsSinceEpoch(createdTime * 1000),
-      updatedAt: updatedTime != null ? DateTime.fromMillisecondsSinceEpoch(updatedTime * 1000) : null,
+      updatedAt: updatedTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(updatedTime * 1000)
+          : null,
       stops: json['stops'] != null
-          ? (json['stops'] as List).map((item) => TripStop.fromJson(item)).toList()
+          ? (json['stops'] as List)
+              .map((item) => TripStop.fromJson(item))
+              .toList()
           : null,
       route: json['route'] != null
-          ? (json['route'] as List).map((item) => TrackLocation.fromJson(item)).toList()
+          ? (json['route'] as List)
+              .map((item) => TrackLocation.fromJson(item))
+              .toList()
           : null,
     );
   }

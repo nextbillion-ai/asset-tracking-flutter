@@ -9,7 +9,6 @@ Future<bool> checkLocationPermission() async {
 }
 
 Future<bool> checkAndRequestLocationPermission() async {
-
   var status = await Permission.location.status;
   if (status.isGranted) {
     return true;

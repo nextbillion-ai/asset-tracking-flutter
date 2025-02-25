@@ -1,5 +1,3 @@
-
-
 import 'package:nb_asset_tracking_flutter/src/trips/trip_last_location.dart';
 
 class TripAsset {
@@ -53,7 +51,9 @@ class TripAsset {
       state: json['state'],
       name: json['name'],
       description: json['description'],
-      tags: (json['tags'] as List<dynamic>?)?.map((tag) => tag as String).toList(),
+      tags: (json['tags'] as List<dynamic>?)
+          ?.map((tag) => tag as String)
+          .toList(),
       metaData: json['meta_data'] as Map<String, dynamic>?,
       createdAt: (json['created_at'] as num).toDouble(),
       updatedAt: (json['updated_at'] as num?)?.toDouble(),
@@ -64,5 +64,4 @@ class TripAsset {
           : null,
     );
   }
-
 }
