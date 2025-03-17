@@ -10,6 +10,11 @@ The Nextbillion.AI Asset Tracking Flutter plugin is designed to enable developer
 * Tracking status callback
 * Start and stop tracking function
 * Asset details retrieve
+* Start a trip 
+* End a trip 
+* Delete a trip
+* Trip details retrieve
+* Trip updates
 
 ## Getting Started
 ### Prerequisites
@@ -42,11 +47,68 @@ To ensure the proper functioning of NextBillion.ai's Flutter Asset Tracking SDK,
   <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/> 
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 ```
 
-The **ACCESS_FINE_LOCATION** and **ACCESS_COARSE_LOCATION** and **ACCESS_BACKGROUND_LOCATION** permissions allow the app to access the user's location, 
-The FOREGROUND_SERVICE permission is necessary for background location updates and Foreground services.
-And the **INTERNET** permission allows the app to access the internet.
+* `ACCESS_COARSE_LOCATION` : Allows the app to access approximate location based on sources like Wi-Fi and cell towers. Accuracy is typically within a few hundred meters.
+*  `ACCESS_FINE_LOCATION` : Grants access to precise location using GPS, Wi-Fi, and cellular networks.
+Necessary for features requiring high-accuracy location tracking.
+*  `ACCESS_BACKGROUND_LOCATION` : Allows the app to access location even when running in the background.
+Required if your app needs to track location continuously, even when not in use.
+*  `INTERNET` : Grants the app permission to access the internet. Needed for network operations like API calls, fetching data, or uploading information.
+*  `FOREGROUND_SERVICE` : Allows the app to run foreground services. Essential for long-running tasks like media playback, ongoing location tracking, or health monitoring.
+*  `FOREGROUND_SERVICE_LOCATION` : Specifically for foreground services that use location updates. Required for location-tracking apps running a foreground service.
+*  `POST_NOTIFICATIONS` (Android 13+): Allows the app to send push notifications. Required to display alerts, reminders, or updates to the user.
+
+##### Requesting Location Runtime Permissions (Foreground and Background) in Android 6.0 and Above
+
+For Android 6.0 (API 23) and above, you need to dynamically request permissions. Below is how to request location permissions using the `permission_handler` , including foreground and background permissions:
+```
+import 'package:permission_handler/permission_handler.dart';
+
+Future<void> checkAndRequestLocationPermissions() async {
+  // Request foreground location permission
+  PermissionStatus status = await Permission.location.request();
+  
+  if (status.isGranted) {
+    // If foreground location permission is granted, further request background location permission
+    // This permission is needed for Android 10 and above, if you need to continue updating navigation data when the app goes to the background
+    PermissionStatus backgroundStatus = await Permission.locationAlways.request();
+
+    if (!backgroundStatus.isGranted) {
+      // If background location permission is denied, notify the user and exit
+      print("Background location permission is required.");
+      return;
+    }
+  } else {
+    // If foreground location permission is denied, notify the user
+    print("Foreground location permission is required.");
+    return;
+  }
+}
+```
+##### Requesting Notification Runtime Permission in Android 13 and Above
+For Android 13 (API 33) and above, you need to dynamically request notification permissions if you want to show notifications while the app is in the background:
+
+```
+Future<void> checkAndRequestNotificationPermission() async {
+  // Check notification permission status
+  PermissionStatus status = await Permission.notification.status;
+
+  if (!status.isGranted) {
+    // Request notification permission
+    status = await Permission.notification.request();
+    if (status.isGranted) {
+      print("Notification permission granted.");
+    } else {
+      print("Notification permission denied.");
+    }
+  } else {
+    print("Notification permission already granted.");
+  }
+}
+```
 
 #### iOS
 ###### Getting Location Access
@@ -134,6 +196,29 @@ Customize data tracking settings if required:
 DataTrackingConfig dataTrackingConfig = DataTrackingConfig();
 await assetTracking.setDataTrackingConfig(config: dataTrackingConfig);
 ```
+#### 6. Start a trip
+```
+var profile = TripProfile(name: 'test trip', description: description, customId: customId);
+await assetTracking.startTrip(profile: profile)
+```
+#### 7. End a trip
+```
+await assetTracking.endTrip();
+```
+#### 8. Get a trip
+```
+AssetResult result = await AssetTracking().getTrip(tripId: tripId);
+```
+#### 9. Delete a trip
+```
+AssetResult result = await AssetTracking().deleteTrip(tripId: tripId);
+```
+
+#### 10. Check whether the trip in progress
+```
+AssetResult result = await assetTracking.isTripInProgress()
+```
+
 ### Event Listeners
 Register listeners to receive updates:
 ```
