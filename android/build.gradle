@@ -51,6 +51,10 @@ android {
         buildConfigField "String", "NBTRACKING_FLUTTER_VERSION", String.format("\"%s\"", project.version)
     }
 
+    buildFeatures {
+        buildConfig true // Enable the buildConfig feature
+    }
+
     dependencies {
         def nbPluginVersion = "2.0.1"
 

@@ -1,7 +1,5 @@
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nb_asset_tracking_flutter/src/asset_tracking_data_callback.dart';
-import 'package:nb_asset_tracking_flutter/src/nb_location.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 
 class MockTrackingCallback extends Mock implements OnTrackingDataCallBack {}
@@ -97,11 +95,11 @@ void main() {
     });
 
     test('no callbacks are triggered initially', () {
-      verifyNever(() => callback.onLocationSuccess(any<NBLocation>()));
+      verifyNever(() => callback.onLocationSuccess(any()));
       verifyNever(() => callback.onLocationFailure(any()));
       verifyNever(() => callback.onTrackingStart(any()));
       verifyNever(() => callback.onTrackingStop(any()));
-      verifyNever(() => callback.onTripStatusChanged(any(), any<TripState>()));
+      verifyNever(() => callback.onTripStatusChanged(any(), any()));
     });
   });
 }
