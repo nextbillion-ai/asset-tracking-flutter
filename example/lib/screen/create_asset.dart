@@ -33,8 +33,6 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
 
   final assetTracking = AssetTracking();
 
-  EnvConfig selectedEnvConfig = EnvConfig.prod;
-
   late SharedPreferences prefs;
   @override
   void initState() {
@@ -56,13 +54,6 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
     _assetAttribute1TextController.text = "A test attribute value";
     _assetBindIDTextController.text = createId;
     lastUsedAssetId = createId;
-
-    var envConfig = prefs.getString(keyOfEnvConfig);
-    if (envConfig?.isNotEmpty == true) {
-      setState(() {
-        selectedEnvConfig = EnvConfig.fromString(envConfig!);
-      });
-    }
   }
 
   Future<void> createAsset() async {
@@ -168,37 +159,6 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: CupertinoSegmentedControl<EnvConfig>(
-                padding: EdgeInsets.zero,
-                children: const {
-                  EnvConfig.prod: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        "prod",
-                        style: TextStyle(fontSize: 14),
-                      )),
-                  EnvConfig.staging: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text("staging", style: TextStyle(fontSize: 14)),
-                  ),
-                },
-                groupValue: selectedEnvConfig,
-                onValueChanged: (EnvConfig value) async {
-                  setState(() {
-                    prefs.setString(keyOfEnvConfig, value.name.split(".").last);
-                    selectedEnvConfig = value;
-                    assetTracking.setDataTrackingConfig(
-                        config: DataTrackingConfig(
-                            baseUrl: selectedEnvConfig == EnvConfig.prod
-                                ? baseUrlProd
-                                : baseUrlStaging));
-                  });
-                },
-                unselectedColor: Colors.white,
-              ),
-            ),
             TextField(
               controller: _customIDTextController,
               focusNode: _customDFocusNode,

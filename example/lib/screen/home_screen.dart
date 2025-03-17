@@ -78,15 +78,6 @@ class _MyAppState extends State<HomeScreen>
     TrackingMode mode = TrackingMode.fromString(trackingMode);
     assetTracking.setLocationConfig(config: LocationConfig.config(mode));
 
-    var envConfig = sharedPreferences.getString(keyOfEnvConfig);
-    if (envConfig?.isNotEmpty == true) {
-      assetTracking.setDataTrackingConfig(
-          config: DataTrackingConfig(
-              baseUrl: EnvConfig.fromString(envConfig!) == EnvConfig.prod
-                  ? baseUrlProd
-                  : baseUrlStaging));
-    }
-
     setState(() {
       isAllowMockLocation = allow;
       selectedOption = mode;
