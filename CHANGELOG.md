@@ -1,3 +1,6 @@
+## 2.0.2
+* README Update
+* Fix [AssetTracking.setupUserId] exceptions 
 ## 2.0.1
 * Upgraded Android native frameworks to v2.0.1 to fix the issue of 'android.buildFeatures.buildConfig true' in the app's build.gradle file.
 ## 2.0.0
