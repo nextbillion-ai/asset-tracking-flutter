@@ -5,6 +5,7 @@ import 'package:nb_asset_tracking_flutter_example/screen/asset_profile_screen.da
 import 'package:nb_asset_tracking_flutter_example/screen/home_screen.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/simple_tracking.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/update_tracking_configuration.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../util/consts.dart';
 
@@ -34,7 +35,31 @@ class FeatureListScreenState extends State<FeatureListScreen> {
   }
 
   void initAssetTracking() {
+    // Initialize the asset tracking and setup the access key here
     AssetTracking().initialize(apiKey: accessKey);
+    checkAndRequestPermission();
+  }
+
+  void checkAndRequestPermission() async {
+    var status = await Permission.location.status;
+    if (status.isGranted) {
+      var always = await Permission.locationAlways.status;
+      if (always.isGranted) {
+        return;
+      } else {
+        await Permission.locationAlways.request();
+      }
+    } else if (status.isDenied) {
+      status = await Permission.location.request();
+      var always = await Permission.locationAlways.status;
+      if (always.isGranted) {
+        return;
+      } else {
+        await Permission.locationAlways.request();
+      }
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
   }
 
   @override
