@@ -597,7 +597,7 @@ class _MyAppState extends State<HomeScreen>
     _isRunning = true;
     updateTrackingStatus(_isRunning, _isTripRunning);
     assetTracking.isTripInProgress().then((value) {
-      _isTripRunning = value.data!;
+      _isTripRunning = value.data;
       updateTrackingStatus(_isRunning, _isTripRunning);
     });
   }

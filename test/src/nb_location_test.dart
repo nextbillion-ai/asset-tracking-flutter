@@ -29,7 +29,7 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON string', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "latitude": 45.0,
           "longitude": -122.0,
@@ -57,7 +57,7 @@ void main() {
       });
 
       test('handles missing values in JSON with defaults', () {
-        final jsonString = '{}';
+        const jsonString = '{}';
         final location = NBLocation.fromJson(jsonString);
 
         expect(location.latitude, equals(0.0));
@@ -92,7 +92,7 @@ void main() {
       });
 
       test('throws FormatException for invalid JSON', () {
-        final invalidJson = '{invalid json}';
+        const invalidJson = '{invalid json}';
         expect(
           () => NBLocation.fromJson(invalidJson),
           throwsFormatException,

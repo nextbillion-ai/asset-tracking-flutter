@@ -1,6 +1,4 @@
 import 'package:test/test.dart';
-import 'package:nb_asset_tracking_flutter/src/asset_result.dart';
-import 'package:nb_asset_tracking_flutter/src/asset_profile.dart';
 import 'package:nb_asset_tracking_flutter/src/asset_detail_info.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 

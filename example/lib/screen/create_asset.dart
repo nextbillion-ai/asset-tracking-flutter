@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 import 'package:nb_asset_tracking_flutter_example/util/toast_mixin.dart';

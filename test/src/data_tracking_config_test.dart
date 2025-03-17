@@ -35,7 +35,7 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON string', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "baseUrl": "https://custom.api.com",
           "dataStorageSize": 1000,
@@ -62,7 +62,7 @@ void main() {
       });
 
       test('throws TypeError when required fields are missing', () {
-        final jsonString = '{}';
+        const jsonString = '{}';
 
         expect(
           () => DataTrackingConfig.fromJson(jsonString),

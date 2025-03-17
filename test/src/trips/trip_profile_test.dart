@@ -1,7 +1,6 @@
 import 'package:test/test.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_profile.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_stop.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_location.dart';
 
 void main() {
   group('TripProfile', () {
@@ -39,8 +38,8 @@ void main() {
         customId: 'custom123',
         name: 'Test Profile',
         description: 'Test Description',
-        attributes: {'attr1': 'value1'},
-        metaData: {'key': 'value'},
+        attributes: const {'attr1': 'value1'},
+        metaData: const {'key': 'value'},
         stops: stops,
       );
 
@@ -112,8 +111,8 @@ void main() {
         customId: 'custom123',
         name: 'Test Profile',
         description: 'Test Description',
-        attributes: {'attr1': 'value1'},
-        metaData: {'key': 'value'},
+        attributes: const {'attr1': 'value1'},
+        metaData: const {'key': 'value'},
         stops: stops,
       );
 

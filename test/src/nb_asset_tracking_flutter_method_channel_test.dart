@@ -369,9 +369,9 @@ void main() {
         customId: 'test_trip',
         name: 'Test Trip',
         description: 'Trip description',
-        attributes: {'key': 'value'},
-        metaData: {'meta': 'data'},
-        stops: [],
+        attributes: const {'key': 'value'},
+        metaData: const {'meta': 'data'},
+        stops: const [],
       );
 
       when(mockMethodChannel.invokeMethod('startTrip', profile.encode()))

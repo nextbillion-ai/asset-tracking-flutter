@@ -21,7 +21,7 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON string', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "enhanceService": true,
           "repeatInterval": 300,
@@ -48,7 +48,7 @@ void main() {
       });
 
       test('throws TypeError when required fields are missing', () {
-        final jsonString = '{}';
+        const jsonString = '{}';
 
         expect(
           () => DefaultConfig.fromJson(jsonString),
