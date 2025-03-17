@@ -195,8 +195,9 @@ class AssetTracking {
     return AssetResult.fromJson(jsonString);
   }
 
-  Future<AssetResult<bool>> setupUserId({required String userId}) async {
-    String jsonString = await _platform.setupUserId(userId: userId);
+
+  Future<AssetResult<String>> setupUserId({required String userId}) async {
+    String jsonString  = await _platform.setupUserId(userId: userId);
     return AssetResult.fromJson(jsonString);
   }
 
