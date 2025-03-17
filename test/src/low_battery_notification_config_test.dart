@@ -4,7 +4,7 @@ import 'package:nb_asset_tracking_flutter/src/low_battery_notification_config.da
 void main() {
   group('LowBatteryNotificationConfig', () {
     test('creates instance with default values', () {
-      final config = LowBatteryNotificationConfig();
+      const config = LowBatteryNotificationConfig();
 
       expect(config.threshold, equals(10.0));
       expect(config.channelId, equals('LowBatteryChannelId'));
@@ -18,7 +18,7 @@ void main() {
     });
 
     test('creates instance with custom values', () {
-      final config = LowBatteryNotificationConfig(
+      const config = LowBatteryNotificationConfig(
         threshold: 15.0,
         channelId: 'CustomChannelId',
         channelName: 'CustomChannelName',
@@ -53,7 +53,7 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON string', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "threshold": 15.0,
           "channelId": "CustomChannelId",
@@ -82,7 +82,7 @@ void main() {
       });
 
       test('handles integer threshold in JSON', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "threshold": 15,
           "channelId": "CustomChannelId",
@@ -100,7 +100,7 @@ void main() {
 
     group('toJson', () {
       test('converts to JSON correctly', () {
-        final config = LowBatteryNotificationConfig(
+        const config = LowBatteryNotificationConfig(
           threshold: 15.0,
           channelId: 'CustomChannelId',
           channelName: 'CustomChannelName',
@@ -120,7 +120,7 @@ void main() {
       });
 
       test('encodes via NBEncode mixin correctly', () {
-        final config = LowBatteryNotificationConfig(
+        const config = LowBatteryNotificationConfig(
           threshold: 15.0,
           channelId: 'CustomChannelId',
           channelName: 'CustomChannelName',

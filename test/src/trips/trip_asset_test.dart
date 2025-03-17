@@ -95,8 +95,8 @@ void main() {
         expect(asset.createdAt, equals(1635731234));
         expect(asset.updatedAt, equals(1635731235));
         expect(asset.attributes, equals({'attr1': 'value1'}));
-        expect(asset.latestLocation?.location?.lat, equals(1.0));
-        expect(asset.latestLocation?.location?.lon, equals(2.0));
+        expect(asset.latestLocation?.location.lat, equals(1.0));
+        expect(asset.latestLocation?.location.lon, equals(2.0));
         expect(asset.latestLocation?.timestamp, equals(1635731234));
       });
 

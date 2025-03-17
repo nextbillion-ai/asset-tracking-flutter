@@ -1,7 +1,5 @@
 import 'package:test/test.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_summary.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_stop.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/track_location.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_asset.dart';
 
 void main() {

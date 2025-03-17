@@ -78,7 +78,7 @@ void main() {
       });
 
       test('throws TypeError when required fields are missing', () {
-        final jsonString = '{}';
+        const jsonString = '{}';
 
         expect(
           () => AssetProfile.fromJson(jsonString),
@@ -87,7 +87,7 @@ void main() {
       });
 
       test('throws TypeError when required string fields have wrong type', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "customId": 123,
           "name": "Asset Name",
@@ -103,7 +103,7 @@ void main() {
       });
 
       test('accepts attributes with non-string values', () {
-        final jsonString = '''
+        const jsonString = '''
         {
           "customId": "custom123",
           "name": "Asset Name",
