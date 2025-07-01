@@ -1,3 +1,5 @@
+## 2.0.3
+* Fix [AssetTracking.updateAsset] method not working on Android
 ## 2.0.2
 * README Update
 * Fix [AssetTracking.setupUserId] exceptions 
