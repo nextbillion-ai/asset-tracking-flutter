@@ -227,6 +227,34 @@ class MethodHandler(private val channel: MethodChannel) :
                 })
             }
 
+            "updateAsset" -> run {
+                val profileString = call.arguments as String
+                val profile = ConfigConverter.assetProfileFromJson(profileString)
+                activity.updateAssetInfo(assetProfile = profile, callback = object : AssetApiCallback<Unit> {
+
+                    override fun onFailure(exception: AssetException) {
+                        val exceptionMessage = exception.message ?: ""
+                        methodResult.success(
+                            AssetResult(
+                                success = false,
+                                null,
+                                msg = exceptionMessage
+                            ).toJson()
+                        )
+                    }
+
+                    override fun onSuccess(result: Unit) {
+                        methodResult.success(
+                            AssetResult(
+                                success = true,
+                                result.toString(),
+                                msg = ""
+                            ).toJson()
+                        )
+                    }
+                })
+            }
+
             "forceBindAsset" -> {
                 val assetId = call.arguments as String
                 activity.forceBindAsset(assetId, object : AssetApiCallback<Unit> {
