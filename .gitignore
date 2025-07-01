@@ -83,3 +83,4 @@ example/pubspec.lock
 example/ios/Podfile.lock
 ios/Cartfile.resolved
 ios/Framework/
+.cxx
