@@ -42,6 +42,7 @@ class _MyAppState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
+    assetTracking.setAndroidNotificationConfig(config: AndroidNotificationConfig(title: "Title",content: "Content",smallIcon: "ic_notification_small"));
     Stream<AssetResult> statusStream = assetTracking.isTracking().asStream();
     statusStream.listen((value) {
       _isRunning = value.data;

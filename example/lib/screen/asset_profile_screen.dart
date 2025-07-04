@@ -76,12 +76,12 @@ class AssetProfileScreenState extends State<AssetProfileScreen>
               onPressed: assetId.isNotEmpty
                   ? () async {
                       var assetProfile = AssetProfile(
-                          customId: assetId,
-                          name: "new name",
-                          description: "new description",
-                          attributes: {"attribute1": "tester1"});
-                      var assetDetail = await assetTracking.updateAsset(
-                          assetProfile: assetProfile);
+                        customId: assetId,
+                        name: "new name",
+                        description: "new description",
+                        attributes: {"attribute1": "tester1"},
+                      );
+                      var assetDetail = await assetTracking.updateAsset(assetProfile: assetProfile);
                       if (assetDetail.success) {
                         showToast("Update Asset Info successfully");
                       } else {

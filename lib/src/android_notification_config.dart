@@ -8,8 +8,8 @@ class AndroidNotificationConfig with NBEncode {
   String channelName;
   String title;
   String content;
-  int smallIcon;
-  int largeIcon;
+  String smallIcon;
+  String largeIcon;
   bool showLowBatteryNotification;
   LowBatteryNotificationConfig lowBatteryNotificationConfig;
   bool showAssetIdTakenNotification;
@@ -24,8 +24,8 @@ class AndroidNotificationConfig with NBEncode {
     this.title = 'Default Title', // Replace with actual default title
     this.content =
         'Asset tracking start content', // Replace with actual default content
-    this.smallIcon = 0, // Replace with an appropriate icon identifier
-    this.largeIcon = 0,
+    this.smallIcon = "ic_notification_small", // Replace with an appropriate icon identifier
+    this.largeIcon = "",
     this.showLowBatteryNotification = true,
     this.lowBatteryNotificationConfig =
         LowBatteryNotificationConfig.defaultConfig,
@@ -44,8 +44,8 @@ class AndroidNotificationConfig with NBEncode {
       channelName: json['channelName'] as String? ?? 'NextBillion.AI',
       title: json['title'] as String? ?? 'Default Title',
       content: json['content'] as String? ?? 'Asset tracking start content',
-      smallIcon: json['smallIcon'] as int? ?? 0,
-      largeIcon: json['largeIcon'] as int? ?? 0,
+      smallIcon: json['smallIcon'] as String? ?? "",
+      largeIcon: json['largeIcon'] as String? ?? "",
       showLowBatteryNotification:
           json['showLowBatteryNotification'] as bool? ?? true,
       lowBatteryNotificationConfig: LowBatteryNotificationConfig.fromJson(

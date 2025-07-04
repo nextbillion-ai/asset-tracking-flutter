@@ -110,6 +110,48 @@ Future<void> checkAndRequestNotificationPermission() async {
 }
 ```
 
+#### Android Notification Configuration
+
+##### Icon Configuration
+
+When configuring Android notifications, you can specify icons using string names that correspond to drawable resources in your Android project.
+
+##### Usage Example
+
+```dart
+var androidNotificationConfig = AndroidNotificationConfig(
+  channelId: "my_channel",
+  channelName: "My Channel",
+  title: "Tracking Started",
+  content: "Asset tracking is now active",
+  smallIcon: "ic_launcher",     // Uses ic_launcher from drawable resources
+  largeIcon: "ic_launcher"      // Uses ic_launcher from drawable resources
+);
+
+assetTracking.setAndroidNotificationConfig(config: androidNotificationConfig);
+```
+
+##### Icon Requirements
+
+1. **Icon Files**: Place your icon files in the `android/app/src/main/res/drawable/` directory
+2. **File Names**: Use the filename without extension (e.g., `ic_launcher` for `ic_launcher.png`)
+3. **Resource Types**: Supported formats include PNG, JPG, XML drawables
+4. **Default Icons**: If no icon is specified or the icon is not found, the system will use a default icon
+
+#### Custom Icons
+
+To use custom icons:
+1. Add your icon file to `android/app/src/main/res/drawable/`
+2. Reference it by filename without extension in the configuration
+
+```dart
+AndroidNotificationConfig(
+  smallIcon: "my_custom_icon",  // References my_custom_icon.png/xml
+  largeIcon: "my_custom_icon"
+)
+```
+
+
 #### iOS
 ###### Getting Location Access
 The *NSLocationWhenInUseUsageDescription* and *NSLocationAlwaysUsageDescription* keys must be defined in your **Info.plist** file, which is located in the *Runner* folder of your Flutter project. These keys give users a clear and concise explanation of why your app requires access to their location data. This proactive approach promotes transparency and trust among your app's users.
