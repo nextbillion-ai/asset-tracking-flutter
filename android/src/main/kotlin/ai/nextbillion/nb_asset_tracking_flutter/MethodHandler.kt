@@ -1,10 +1,42 @@
 package ai.nextbillion.nb_asset_tracking_flutter
 
-import ai.nextbillion.assettracking.*
+import ai.nextbillion.assettracking.assetTrackingAddCallback
+import ai.nextbillion.assettracking.assetTrackingDeleteTrip
+import ai.nextbillion.assettracking.assetTrackingEndTrip
+import ai.nextbillion.assettracking.assetTrackingGetDataTrackingConfig
+import ai.nextbillion.assettracking.assetTrackingGetDefaultConfig
+import ai.nextbillion.assettracking.assetTrackingGetFakeGpsConfig
+import ai.nextbillion.assettracking.assetTrackingGetLocationConfig
+import ai.nextbillion.assettracking.assetTrackingGetNotificationConfig
+import ai.nextbillion.assettracking.assetTrackingGetTripInfo
+import ai.nextbillion.assettracking.assetTrackingIsRunning
+import ai.nextbillion.assettracking.assetTrackingIsTripInProgress
+import ai.nextbillion.assettracking.assetTrackingRemoveCallback
+import ai.nextbillion.assettracking.assetTrackingSetDataTrackingConfig
+import ai.nextbillion.assettracking.assetTrackingSetLocationConfig
+import ai.nextbillion.assettracking.assetTrackingSetNotificationConfig
+import ai.nextbillion.assettracking.assetTrackingStart
+import ai.nextbillion.assettracking.assetTrackingStartTrip
+import ai.nextbillion.assettracking.assetTrackingStop
+import ai.nextbillion.assettracking.assetTrackingTripId
+import ai.nextbillion.assettracking.assetTrackingTripSummary
+import ai.nextbillion.assettracking.assetTrackingUpdateFakeGpsConfig
+import ai.nextbillion.assettracking.assetTrackingUpdateLocationConfig
+import ai.nextbillion.assettracking.assetTrackingUpdateTrip
+import ai.nextbillion.assettracking.bindAsset
 import ai.nextbillion.assettracking.callback.AssetTrackingCallBack
+import ai.nextbillion.assettracking.createNewAsset
 import ai.nextbillion.assettracking.entity.FakeGpsConfig
 import ai.nextbillion.assettracking.entity.TrackingDisableType
 import ai.nextbillion.assettracking.entity.TripStatus
+import ai.nextbillion.assettracking.forceBindAsset
+import ai.nextbillion.assettracking.getAssetId
+import ai.nextbillion.assettracking.getAssetInfo
+import ai.nextbillion.assettracking.initialize
+import ai.nextbillion.assettracking.setCrossPlatformInfo
+import ai.nextbillion.assettracking.setKeyOfRequestHeader
+import ai.nextbillion.assettracking.setUserId
+import ai.nextbillion.assettracking.updateAssetInfo
 import ai.nextbillion.network.AssetApiCallback
 import ai.nextbillion.network.AssetException
 import ai.nextbillion.network.create.AssetCreationResponse
@@ -18,6 +50,7 @@ import android.text.TextUtils
 import com.google.gson.Gson
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+
 
 class MethodHandler(private val channel: MethodChannel) :
     AssetTrackingCallBack {
@@ -117,12 +150,12 @@ class MethodHandler(private val channel: MethodChannel) :
 
             "setAndroidNotificationConfig" -> {
                 val string = call.arguments as String
-                val config = ConfigConverter.notificationConfigFromJson(string)
+                val tempConfig = ConfigConverter.notificationConfigFromJson(string)
+                val config = ConfigConverter.convertTempToNotificationConfig(tempConfig, activity)
                 activity.assetTrackingSetNotificationConfig(config)
                 methodResult.success(AssetResult(success = true, "", msg = "").toJson())
             }
-
-            "geAndroidNotificationConfig" -> {
+            "getAndroidNotificationConfig" -> {
                 val config = activity.assetTrackingGetNotificationConfig()
                 val json = ConfigConverter.notificationConfigToJson(config)
                 methodResult.success(AssetResult(success = true, json, msg = "").toJson())

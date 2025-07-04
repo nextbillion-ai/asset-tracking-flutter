@@ -7,6 +7,7 @@ import ai.nextbillion.assettracking.entity.NotificationConfig
 import ai.nextbillion.assettracking.location.engine.DesiredAccuracy
 import ai.nextbillion.assettracking.location.engine.TrackingMode
 import ai.nextbillion.network.AssetProfile
+import android.content.Context
 import android.location.Location
 import com.google.gson.Gson
 import org.json.JSONObject
@@ -17,14 +18,46 @@ import ai.nextbillion.network.trip.entity.TripSummary
 
 object ConfigConverter {
 
-    fun notificationConfigFromJson(jsonString: String): NotificationConfig {
+    fun notificationConfigFromJson(jsonString: String): TempNotificationConfig {
         val gson = Gson()
-        return gson.fromJson(jsonString, NotificationConfig::class.java)
+        return gson.fromJson(jsonString, TempNotificationConfig::class.java)
     }
 
     fun notificationConfigToJson(config: NotificationConfig): String {
         val gson = Gson()
         return gson.toJson(config, NotificationConfig::class.java)
+    }
+
+    /**
+     * Converts TempNotificationConfig to NotificationConfig
+     * Uses getDrawableResourceId to convert string icon names to resource IDs
+     */
+    fun convertTempToNotificationConfig(tempConfig: TempNotificationConfig, context: Context): NotificationConfig {
+        return NotificationConfig(
+            serviceId = tempConfig.serviceId,
+            channelId = tempConfig.channelId,
+            channelName = tempConfig.channelName,
+            title = tempConfig.title ?: "",
+            content = tempConfig.content ?: "",
+            smallIcon = getDrawableResourceId(context, tempConfig.smallIcon ?: ""),
+            largeIcon = getDrawableResourceId(context, tempConfig.largeIcon ?: ""),
+            showLowBatteryNotification = tempConfig.showLowBatteryNotification,
+            lowBatteryNotification = tempConfig.lowBatteryNotification,
+            showAssetIdTakenNotification = tempConfig.showAssetIdTakenNotification,
+            contentAssetDisable = tempConfig.contentAssetDisable ?: "",
+            assetIdTakenContent = tempConfig.assetIdTakenContent ?: ""
+        )
+    }
+
+    /**
+     * Helper method to get drawable resource ID from string name
+     */
+    private fun getDrawableResourceId(context: Context, name: String): Int {
+        return if (name.isNotEmpty()) {
+            context.resources.getIdentifier(name, "drawable", context.packageName)
+        } else {
+            0 // Return 0 if name is empty or null
+        }
     }
 
     fun batteryConfigFromJson(jsonString: String): LowBatteryNotificationConfig {
