@@ -1,3 +1,7 @@
+## 2.1.0
+- **BREAKING**: `AndroidNotificationConfig.smallIcon` and `largeIcon` now use `String` type instead of `int`
+  - This change improves resource management by allowing drawable resource names instead of hardcoded IDs
+  - Added automatic string-to-resource-ID conversion on Android side
 ## 2.0.3
 * Fix [AssetTracking.updateAsset] method not working on Android
 ## 2.0.2
