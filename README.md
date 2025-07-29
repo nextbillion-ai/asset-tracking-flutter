@@ -206,8 +206,9 @@ await assetTracking.stopTracking();
 
 
 ### Custom Configurations
-#### 1. Default Configuration(Optional)
+#### 1. Default Configuration(Optional) - Android Only
 Create a default configuration object if you want to customize default settings:
+**Note:** This feature is only available on Android platform.
 ```
 DefaultConfig defaultConfig = DefaultConfig(); 
 await assetTracking.setDefaultConfig(config: defaultConfig);

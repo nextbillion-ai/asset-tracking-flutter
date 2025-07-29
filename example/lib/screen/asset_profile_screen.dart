@@ -81,7 +81,8 @@ class AssetProfileScreenState extends State<AssetProfileScreen>
                         description: "new description",
                         attributes: {"attribute1": "tester1"},
                       );
-                      var assetDetail = await assetTracking.updateAsset(assetProfile: assetProfile);
+                      var assetDetail = await assetTracking.updateAsset(
+                          assetProfile: assetProfile);
                       if (assetDetail.success) {
                         showToast("Update Asset Info successfully");
                       } else {

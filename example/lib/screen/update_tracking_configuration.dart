@@ -71,10 +71,10 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
               onPressed: assetId.isNotEmpty
                   ? () async {
                       var androidNotificationConfig = AndroidNotificationConfig(
-                          channelId: "testChannelId",
-                          channelName: "newChannelName",
-                          content: "122",
-                          title: "12222",
+                        channelId: "testChannelId",
+                        channelName: "newChannelName",
+                        content: "122",
+                        title: "12222",
                       );
                       var iOSNotificationConfig = IOSNotificationConfig();
                       iOSNotificationConfig.showAssetEnableNotification = false;
@@ -92,8 +92,7 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
                         var androidConfig =
                             await assetTracking.getAndroidNotificationConfig();
                         setState(() {
-                          configInfo =
-                              "notificationConfig: ${androidConfig}";
+                          configInfo = "notificationConfig: ${androidConfig}";
                         });
                       } else {
                         assetTracking.setIOSNotificationConfig(

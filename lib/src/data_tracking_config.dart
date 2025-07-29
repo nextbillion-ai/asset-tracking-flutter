@@ -4,12 +4,6 @@ import 'constants.dart';
 import 'nb_encode.dart';
 
 class DataTrackingConfig with NBEncode {
-  String baseUrl;
-  int dataStorageSize;
-  int dataUploadingBatchSize;
-  int dataUploadingBatchWindow;
-  bool shouldClearLocalDataWhenCollision;
-
   DataTrackingConfig({
     String? baseUrl,
     this.dataStorageSize =
@@ -23,7 +17,7 @@ class DataTrackingConfig with NBEncode {
   }) : baseUrl = baseUrl ?? Constants.defaultBaseUrl;
 
   factory DataTrackingConfig.fromJson(String jsonString) {
-    Map<String, dynamic> json = jsonDecode(jsonString);
+    final Map<String, dynamic> json = jsonDecode(jsonString);
     return DataTrackingConfig(
       baseUrl: json['baseUrl'] as String,
       dataStorageSize: json['dataStorageSize'] as int,
@@ -34,13 +28,17 @@ class DataTrackingConfig with NBEncode {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'baseUrl': baseUrl,
-      'dataStorageSize': dataStorageSize,
-      'dataUploadingBatchSize': dataUploadingBatchSize,
-      'dataUploadingBatchWindow': dataUploadingBatchWindow,
-      'shouldClearLocalDataWhenCollision': shouldClearLocalDataWhenCollision,
-    };
-  }
+  String baseUrl;
+  int dataStorageSize;
+  int dataUploadingBatchSize;
+  int dataUploadingBatchWindow;
+  bool shouldClearLocalDataWhenCollision;
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'baseUrl': baseUrl,
+        'dataStorageSize': dataStorageSize,
+        'dataUploadingBatchSize': dataUploadingBatchSize,
+        'dataUploadingBatchWindow': dataUploadingBatchWindow,
+        'shouldClearLocalDataWhenCollision': shouldClearLocalDataWhenCollision,
+      };
 }

@@ -9,24 +9,21 @@ import 'nb_asset_tracking_flutter_platform_interface.dart';
 /// handling trips, and configuring various tracking settings. It implements the observer pattern
 /// for tracking data callbacks.
 class AssetTracking {
-  final List<OnTrackingDataCallBack> _listeners = [];
-
-  late NativeResultCallback _nativeCallbacks;
-
-  late NbAssetTrackingFlutterPlatform _platform;
-
-  static final AssetTracking _instance = AssetTracking._internal();
+  /// Factory constructor that returns the singleton instance of [AssetTracking].
+  factory AssetTracking() => _instance;
 
   AssetTracking._internal() {
     _platform = NbAssetTrackingFlutterPlatform.instance;
     _initNativeCallbacks();
     _platform.setupResultCallBack(_nativeCallbacks);
   }
+  final List<OnTrackingDataCallBack> _listeners = <OnTrackingDataCallBack>[];
 
-  /// Factory constructor that returns the singleton instance of [AssetTracking].
-  factory AssetTracking() {
-    return _instance;
-  }
+  late NativeResultCallback _nativeCallbacks;
+
+  late NbAssetTrackingFlutterPlatform _platform;
+
+  static final AssetTracking _instance = AssetTracking._internal();
 
   /// Initializes the asset tracking system with the provided API key.
   ///
@@ -35,9 +32,9 @@ class AssetTracking {
   /// Parameters:
   ///   - [apiKey]: The API key required for authentication.
   Future<bool> initialize({required String apiKey}) async {
-    String jsonString =
+    final String jsonString =
         await NbAssetTrackingFlutterPlatform.instance.initialize(key: apiKey);
-    return AssetResult.fromJson(jsonString).success;
+    return AssetResult<String>.fromJson(jsonString).success;
   }
 
   /// Sets the key for the header field in API requests.
@@ -51,9 +48,9 @@ class AssetTracking {
   ///   - [key]: The key to be set in the header field.
   ///
   Future<bool> setKeyOfHeaderField({required String key}) async {
-    String jsonString = await NbAssetTrackingFlutterPlatform.instance
+    final String jsonString = await NbAssetTrackingFlutterPlatform.instance
         .setKeyOfHeaderField(key: key);
-    return AssetResult.fromJson(jsonString).success;
+    return AssetResult<String>.fromJson(jsonString).success;
   }
 
   /// Adds a listener for tracking data callbacks.
@@ -91,8 +88,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<String>>] containing the asset ID.
   Future<AssetResult<String>> getAssetId() async {
-    String jsonString = await _platform.getAssetId();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getAssetId();
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Updates the asset profile with new information.
@@ -103,22 +100,30 @@ class AssetTracking {
   /// Returns a [Future<AssetResult<String>>] containing the result of the update operation.
   Future<AssetResult<String>> updateAsset(
       {required AssetProfile assetProfile}) async {
-    String jsonString = await _platform.updateAsset(assetProfile: assetProfile);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString =
+        await _platform.updateAsset(assetProfile: assetProfile);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Retrieves detailed information about the current asset.
   ///
+  /// This method is only available on Android platform.
+  /// On iOS, this method will throw an [UnimplementedError].
   /// Returns a [Future<AssetResult<AssetDetailInfo>>] containing the asset details.
   Future<AssetResult<AssetDetailInfo>> getAssetDetail() async {
-    String jsonString = await _platform.getAssetDetail();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getAssetDetail();
+    return AssetResult<AssetDetailInfo>.fromJson(jsonString);
   }
 
   /// Sets the default configuration for the tracking system.
   ///
+  /// **Note:** This method is only available on Android platform.
+  /// On iOS, this method will throw an [UnimplementedError].
+  ///
   /// Parameters:
   ///   - [config]: The default configuration to be applied.
+  /// This method is only available on Android platform.
+  /// On iOS, this method will throw an [UnimplementedError].
   Future<void> setDefaultConfig({required DefaultConfig config}) async {
     await NbAssetTrackingFlutterPlatform.instance
         .setDefaultConfig(config: config);
@@ -126,10 +131,13 @@ class AssetTracking {
 
   /// Retrieves the current default configuration.
   ///
+  /// **Note:** This method is only available on Android platform.
+  /// On iOS, this method will throw an [UnimplementedError].
+  ///
   /// Returns a [Future<AssetResult<DefaultConfig>>] containing the default configuration.
   Future<AssetResult<DefaultConfig>> getDefaultConfig() async {
-    String jsonString = await _platform.getDefaultConfig();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getDefaultConfig();
+    return AssetResult<DefaultConfig>.fromJson(jsonString);
   }
 
   /// Sets the Android notification configuration.
@@ -146,8 +154,8 @@ class AssetTracking {
   /// Returns a [Future<AssetResult<AndroidNotificationConfig>>] containing the configuration.
   Future<AssetResult<AndroidNotificationConfig>>
       getAndroidNotificationConfig() async {
-    String json = await _platform.getAndroidNotificationConfig();
-    return AssetResult.fromJson(json);
+    final String json = await _platform.getAndroidNotificationConfig();
+    return AssetResult<AndroidNotificationConfig>.fromJson(json);
   }
 
   /// Sets the iOS notification configuration.
@@ -163,8 +171,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<IOSNotificationConfig>>] containing the configuration.
   Future<AssetResult<IOSNotificationConfig>> getIOSNotificationConfig() async {
-    String json = await _platform.getIOSNotificationConfig();
-    return AssetResult.fromJson(json);
+    final String json = await _platform.getIOSNotificationConfig();
+    return AssetResult<IOSNotificationConfig>.fromJson(json);
   }
 
   /// Updates the location tracking configuration.
@@ -187,8 +195,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<LocationConfig>>] containing the configuration.
   Future<AssetResult<LocationConfig>> getLocationConfig() async {
-    String json = await _platform.getLocationConfig();
-    return AssetResult.fromJson(json);
+    final String json = await _platform.getLocationConfig();
+    return AssetResult<LocationConfig>.fromJson(json);
   }
 
   /// Sets the data tracking configuration.
@@ -204,8 +212,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<bool>>] indicating if fake GPS is allowed.
   Future<AssetResult<bool>> getFakeGpsConfig() async {
-    String jsonString = await _platform.getFakeGpsConfig();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getFakeGpsConfig();
+    return AssetResult<bool>.fromJson(jsonString);
   }
 
   /// Sets whether fake GPS is allowed.
@@ -220,16 +228,16 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<DataTrackingConfig>>] containing the configuration.
   Future<AssetResult<DataTrackingConfig>> getDataTrackingConfig() async {
-    String jsonString = await _platform.getDataTrackingConfig();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getDataTrackingConfig();
+    return AssetResult<DataTrackingConfig>.fromJson(jsonString);
   }
 
   /// Checks if tracking is currently active.
   ///
   /// Returns a [Future<AssetResult<bool>>] indicating the tracking status.
   Future<AssetResult<bool>> isTracking() async {
-    String jsonString = await _platform.isTracking();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.isTracking();
+    return AssetResult<bool>.fromJson(jsonString);
   }
 
   /// Creates a new asset with the provided profile.
@@ -240,8 +248,8 @@ class AssetTracking {
   /// Returns a [Future<AssetResult<String>>] containing the result of the creation.
   Future<AssetResult<String>> createAsset(
       {required AssetProfile profile}) async {
-    String jsonString = await _platform.createAsset(profile: profile);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.createAsset(profile: profile);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Binds an asset using a custom ID.
@@ -251,8 +259,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<String>>] containing the result of the binding.
   Future<AssetResult<String>> bindAsset({required String customId}) async {
-    String jsonString = await _platform.bindAsset(customId: customId);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.bindAsset(customId: customId);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Forces the binding of an asset using a custom ID.
@@ -262,8 +270,9 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<String>>] containing the result of the force binding.
   Future<AssetResult<String>> forceBindAsset({required String customId}) async {
-    String jsonString = await _platform.forceBindAsset(customId: customId);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString =
+        await _platform.forceBindAsset(customId: customId);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Starts a new trip with the provided profile.
@@ -273,16 +282,16 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<String>>] containing the result of starting the trip.
   Future<AssetResult<String>> startTrip({required TripProfile profile}) async {
-    String jsonString = await _platform.startTrip(profile: profile);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.startTrip(profile: profile);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Ends the current trip.
   ///
   /// Returns a [Future<AssetResult<String>>] containing the result of ending the trip.
   Future<AssetResult<String>> endTrip() async {
-    String jsonString = await _platform.endTrip();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.endTrip();
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Retrieves information about a specific trip.
@@ -292,8 +301,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<TripInfo>>] containing the trip information.
   Future<AssetResult<TripInfo>> getTrip({required String tripId}) async {
-    String jsonString = await _platform.getTrip(tripId: tripId);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getTrip(tripId: tripId);
+    return AssetResult<TripInfo>.fromJson(jsonString);
   }
 
   /// Updates an existing trip with new information.
@@ -304,8 +313,8 @@ class AssetTracking {
   /// Returns a [Future<AssetResult<String>>] containing the result of the update.
   Future<AssetResult<String>> updateTrip(
       {required TripUpdateProfile profile}) async {
-    String jsonString = await _platform.updateTrip(profile: profile);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.updateTrip(profile: profile);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Retrieves the summary of a specific trip.
@@ -315,8 +324,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<TripSummary>>] containing the trip summary.
   Future<AssetResult<TripSummary>> getSummary({required String tripId}) async {
-    String jsonString = await _platform.getSummary(tripId: tripId);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getSummary(tripId: tripId);
+    return AssetResult<TripSummary>.fromJson(jsonString);
   }
 
   /// Deletes a specific trip.
@@ -326,24 +335,24 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<String>>] containing the result of the deletion.
   Future<AssetResult<String>> deleteTrip({required String tripId}) async {
-    String jsonString = await _platform.deleteTrip(tripId: tripId);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.deleteTrip(tripId: tripId);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Retrieves the ID of the currently active trip.
   ///
   /// Returns a [Future<AssetResult<String?>>] containing the active trip ID, if any.
   Future<AssetResult<String?>> getActiveTripId() async {
-    String jsonString = await _platform.getActiveTripId();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.getActiveTripId();
+    return AssetResult<String?>.fromJson(jsonString);
   }
 
   /// Checks if there is a trip currently in progress.
   ///
   /// Returns a [Future<AssetResult<bool>>] indicating if a trip is in progress.
   Future<AssetResult<bool>> isTripInProgress() async {
-    String jsonString = await _platform.isTripInProgress();
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.isTripInProgress();
+    return AssetResult<bool>.fromJson(jsonString);
   }
 
   /// Sets up the user ID for tracking.
@@ -353,8 +362,8 @@ class AssetTracking {
   ///
   /// Returns a [Future<AssetResult<String>>] containing the result of the setup.
   Future<AssetResult<String>> setupUserId({required String userId}) async {
-    String jsonString  = await _platform.setupUserId(userId: userId);
-    return AssetResult.fromJson(jsonString);
+    final String jsonString = await _platform.setupUserId(userId: userId);
+    return AssetResult<String>.fromJson(jsonString);
   }
 
   /// Initializes the native callbacks for tracking events.
@@ -364,27 +373,27 @@ class AssetTracking {
   void _initNativeCallbacks() {
     _nativeCallbacks = NativeResultCallback(
       onLocationSuccess: (NBLocation location) {
-        for (var listener in _listeners) {
+        for (final OnTrackingDataCallBack listener in _listeners) {
           listener.onLocationSuccess.call(location);
         }
       },
       onLocationFailure: (String message) {
-        for (var listener in _listeners) {
+        for (final OnTrackingDataCallBack listener in _listeners) {
           listener.onLocationFailure.call(message);
         }
       },
       onTrackingStart: (String assetId) {
-        for (var listener in _listeners) {
+        for (final OnTrackingDataCallBack listener in _listeners) {
           listener.onTrackingStart.call(assetId);
         }
       },
       onTrackingStop: (String assetId) {
-        for (var listener in _listeners) {
+        for (final OnTrackingDataCallBack listener in _listeners) {
           listener.onTrackingStop.call(assetId);
         }
       },
       onTripStatusChanged: (String tripId, TripState state) {
-        for (var listener in _listeners) {
+        for (final OnTrackingDataCallBack listener in _listeners) {
           listener.onTripStatusChanged.call(tripId, state);
         }
       },

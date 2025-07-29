@@ -2,14 +2,14 @@ group 'ai.nextbillion.nb_asset_tracking_flutter'
 version '1.1.0'
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.8.10'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -23,13 +23,14 @@ allprojects {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
 android {
     if (project.android.hasProperty("namespace")) {
         namespace 'ai.nextbillion.nb_asset_tracking_flutter'
     }
 
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -87,4 +88,14 @@ def static getGitRevision() {
     def process = cmd.execute()
     def ref = process.text.trim()
     return ref
+}
+
+ktlint {
+    android = true
+    verbose = true
+    filter {
+        exclude { element ->
+            element.file.path.contains("build/")
+        }
+    }
 }

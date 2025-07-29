@@ -22,7 +22,5 @@ extension TripStateExtension on TripState {
     }
   }
 
-  String toShortString() {
-    return toString().split('.').last;
-  }
+  String toShortString() => toString().split('.').last;
 }

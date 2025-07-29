@@ -13,6 +13,7 @@ import ai.nextbillion.assettracking.assetTrackingIsRunning
 import ai.nextbillion.assettracking.assetTrackingIsTripInProgress
 import ai.nextbillion.assettracking.assetTrackingRemoveCallback
 import ai.nextbillion.assettracking.assetTrackingSetDataTrackingConfig
+import ai.nextbillion.assettracking.assetTrackingSetDefaultConfig
 import ai.nextbillion.assettracking.assetTrackingSetLocationConfig
 import ai.nextbillion.assettracking.assetTrackingSetNotificationConfig
 import ai.nextbillion.assettracking.assetTrackingStart
@@ -51,7 +52,6 @@ import com.google.gson.Gson
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-
 class MethodHandler(private val channel: MethodChannel) :
     AssetTrackingCallBack {
 
@@ -66,7 +66,7 @@ class MethodHandler(private val channel: MethodChannel) :
     fun dispatchMethodHandler(
         activity: Activity?,
         call: MethodCall?,
-        methodResult: MethodChannel.Result?,
+        methodResult: MethodChannel.Result?
     ) {
         if (null == call || null == methodResult) {
             return
@@ -102,7 +102,7 @@ class MethodHandler(private val channel: MethodChannel) :
             "setKeyOfHeaderField" -> {
                 val key = call.arguments as String
                 // Initialize with the key if necessary
-                activity.setKeyOfRequestHeader(key);
+                activity.setKeyOfRequestHeader(key)
                 methodResult.success(AssetResult(success = true, "", msg = "").toJson())
             }
             "setupUserId" -> {
@@ -147,6 +147,12 @@ class MethodHandler(private val channel: MethodChannel) :
                 val config = activity.assetTrackingGetDefaultConfig()
                 methodResult.success(AssetResult(success = true, config, msg = "").toJson())
             }
+            "setDefaultConfig" -> {
+                val string = call.arguments as String
+                val config = ConfigConverter.defaultConfigFromJson(string)
+                activity.assetTrackingSetDefaultConfig(config)
+                methodResult.success(AssetResult(success = true, config, msg = "").toJson())
+            }
 
             "setAndroidNotificationConfig" -> {
                 val string = call.arguments as String
@@ -157,8 +163,8 @@ class MethodHandler(private val channel: MethodChannel) :
             }
             "getAndroidNotificationConfig" -> {
                 val config = activity.assetTrackingGetNotificationConfig()
-                val json = ConfigConverter.notificationConfigToJson(config)
-                methodResult.success(AssetResult(success = true, json, msg = "").toJson())
+                val tempConfig = ConfigConverter.convertNotificationToTempConfig(config,activity)
+                methodResult.success(AssetResult(success = true, tempConfig, msg = "").toJson())
             }
 
             "updateLocationConfig" -> {
@@ -207,112 +213,124 @@ class MethodHandler(private val channel: MethodChannel) :
             "createAsset" -> {
                 val profileString = call.arguments as String
                 val profile = ConfigConverter.assetProfileFromJson(profileString)
-                activity.createNewAsset(profile, object : AssetApiCallback<AssetCreationResponse> {
+                activity.createNewAsset(
+                    profile,
+                    object : AssetApiCallback<AssetCreationResponse> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        val errorCode = exception.errorCode
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                errorCode.toString(),
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
-                    }
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            val errorCode = exception.errorCode
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    errorCode.toString(),
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
 
-                    override fun onSuccess(result: AssetCreationResponse) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result.data.id,
-                                msg = result.toString()
-                            ).toJson()
-                        )
+                        override fun onSuccess(result: AssetCreationResponse) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result.data.id,
+                                    msg = result.toString()
+                                ).toJson()
+                            )
+                        }
                     }
-                })
+                )
             }
 
             "bindAsset" -> run {
                 val assetId = call.arguments as String
-                activity.bindAsset(assetId, object : AssetApiCallback<Unit> {
+                activity.bindAsset(
+                    assetId,
+                    object : AssetApiCallback<Unit> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                exception.errorCode.toString(),
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
-                    }
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    exception.errorCode.toString(),
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
 
-                    override fun onSuccess(result: Unit) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                assetId,
-                                msg = result.toString()
-                            ).toJson()
-                        )
+                        override fun onSuccess(result: Unit) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    assetId,
+                                    msg = result.toString()
+                                ).toJson()
+                            )
+                        }
                     }
-                })
+                )
             }
 
             "updateAsset" -> run {
                 val profileString = call.arguments as String
                 val profile = ConfigConverter.assetProfileFromJson(profileString)
-                activity.updateAssetInfo(assetProfile = profile, callback = object : AssetApiCallback<Unit> {
+                activity.updateAssetInfo(
+                    assetProfile = profile,
+                    callback = object : AssetApiCallback<Unit> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                null,
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
-                    }
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    profile.name,
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
 
-                    override fun onSuccess(result: Unit) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result.toString(),
-                                msg = ""
-                            ).toJson()
-                        )
+                        override fun onSuccess(result: Unit) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result.toString(),
+                                    msg = ""
+                                ).toJson()
+                            )
+                        }
                     }
-                })
+                )
             }
 
             "forceBindAsset" -> {
                 val assetId = call.arguments as String
-                activity.forceBindAsset(assetId, object : AssetApiCallback<Unit> {
+                activity.forceBindAsset(
+                    assetId,
+                    object : AssetApiCallback<Unit> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                exception.errorCode.toString(),
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
-                    }
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    exception.errorCode.toString(),
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
 
-                    override fun onSuccess(result: Unit) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result.toString(),
-                                msg = result.toString()
-                            ).toJson()
-                        )
+                        override fun onSuccess(result: Unit) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result.toString(),
+                                    msg = result.toString()
+                                ).toJson()
+                            )
+                        }
                     }
-                })
+                )
             }
 
             "startTracking" -> {
@@ -363,29 +381,33 @@ class MethodHandler(private val channel: MethodChannel) :
             "startTrip" -> {
                 val profileString = call.arguments as String
                 val profile = ConfigConverter.tripProfileFromJson(profileString)
-                activity.assetTrackingStartTrip(profile, true, object : AssetApiCallback<String> {
+                activity.assetTrackingStartTrip(
+                    profile,
+                    true,
+                    object : AssetApiCallback<String> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                null,
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
-                    }
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    profile.name,
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
 
-                    override fun onSuccess(result: String) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result,
-                                msg = result
-                            ).toJson()
-                        )
+                        override fun onSuccess(result: String) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result,
+                                    msg = result
+                                ).toJson()
+                            )
+                        }
                     }
-                })
+                )
             }
 
             "endTrip" -> {
@@ -396,7 +418,7 @@ class MethodHandler(private val channel: MethodChannel) :
                         methodResult.success(
                             AssetResult(
                                 success = false,
-                                null,
+                                "",
                                 msg = exceptionMessage
                             ).toJson()
                         )
@@ -416,116 +438,121 @@ class MethodHandler(private val channel: MethodChannel) :
 
             "getTrip" -> {
                 val tripId = call.arguments as String
-                activity.assetTrackingGetTripInfo(tripId, object : AssetApiCallback<Trip> {
+                activity.assetTrackingGetTripInfo(
+                    tripId,
+                    object : AssetApiCallback<Trip> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                null,
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    tripId,
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
+
+                        override fun onSuccess(result: Trip) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result,
+                                    msg = ""
+                                ).toJson()
+                            )
+                        }
                     }
-
-                    override fun onSuccess(result: Trip) {
-                        println("check demo getTrip: $result")
-                        val json = ConfigConverter.tripToJson(result)
-                        println("check demo json: $json")
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result,
-                                msg = ""
-                            ).toJson()
-                        )
-                    }
-                })
-
+                )
             }
 
             "updateTrip" -> {
                 val profileString = call.arguments as String
                 val profile = ConfigConverter.tripUpdateProfileFromJson(profileString)
-                activity.assetTrackingUpdateTrip( profile, object : AssetApiCallback<String> {
+                activity.assetTrackingUpdateTrip(
+                    profile,
+                    object : AssetApiCallback<String> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                null,
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    profile.name,
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
+
+                        override fun onSuccess(result: String) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result,
+                                    msg = ""
+                                ).toJson()
+                            )
+                        }
                     }
-
-                    override fun onSuccess(result: String) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result,
-                                msg = ""
-                            ).toJson()
-                        )
-                    }
-                })
-
+                )
             }
             "getSummary" -> {
                 val tripId = call.arguments as String
-                activity.assetTrackingTripSummary( tripId, object : AssetApiCallback<TripSummary> {
+                activity.assetTrackingTripSummary(
+                    tripId,
+                    object : AssetApiCallback<TripSummary> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                null,
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    tripId,
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
+
+                        override fun onSuccess(result: TripSummary) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result,
+                                    msg = ""
+                                ).toJson()
+                            )
+                        }
                     }
-
-                    override fun onSuccess(result: TripSummary) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result,
-                                msg = ""
-                            ).toJson()
-                        )
-                    }
-                })
-
+                )
             }
             "deleteTrip" -> {
                 val tripId = call.arguments as String
-                activity.assetTrackingDeleteTrip( tripId, object : AssetApiCallback<String> {
+                activity.assetTrackingDeleteTrip(
+                    tripId,
+                    object : AssetApiCallback<String> {
 
-                    override fun onFailure(exception: AssetException) {
-                        val exceptionMessage = exception.message ?: ""
-                        methodResult.success(
-                            AssetResult(
-                                success = false,
-                                null,
-                                msg = exceptionMessage
-                            ).toJson()
-                        )
+                        override fun onFailure(exception: AssetException) {
+                            val exceptionMessage = exception.message ?: ""
+                            methodResult.success(
+                                AssetResult(
+                                    success = false,
+                                    tripId,
+                                    msg = exceptionMessage
+                                ).toJson()
+                            )
+                        }
+
+                        override fun onSuccess(result: String) {
+                            methodResult.success(
+                                AssetResult(
+                                    success = true,
+                                    result,
+                                    msg = ""
+                                ).toJson()
+                            )
+                        }
                     }
-
-                    override fun onSuccess(result: String) {
-                        methodResult.success(
-                            AssetResult(
-                                success = true,
-                                result,
-                                msg = ""
-                            ).toJson()
-                        )
-                    }
-                })
-
+                )
             }
             "getActiveTripId" -> {
                 activity.assetTrackingTripId()?.let {
@@ -539,7 +566,7 @@ class MethodHandler(private val channel: MethodChannel) :
                 } ?: methodResult.success(
                     AssetResult(
                         success = false,
-                        null,
+                        "",
                         msg = "No active trip"
                     ).toJson()
                 )
@@ -561,7 +588,8 @@ class MethodHandler(private val channel: MethodChannel) :
 
     override fun onLocationFailure(exception: Exception) {
         channel.invokeMethod(
-            "check demo onLocationFailure", AssetResult(
+            "check demo onLocationFailure",
+            AssetResult(
                 success = true,
                 exception.message,
                 msg = exception.message
@@ -571,7 +599,8 @@ class MethodHandler(private val channel: MethodChannel) :
 
     override fun onLocationSuccess(location: Location) {
         channel.invokeMethod(
-            "onLocationSuccess", AssetResult(
+            "onLocationSuccess",
+            AssetResult(
                 success = true,
                 ConfigConverter.convertLocationToMap(location),
                 msg = ""
@@ -581,7 +610,8 @@ class MethodHandler(private val channel: MethodChannel) :
 
     override fun onTrackingStart(assetId: String) {
         channel.invokeMethod(
-            "onTrackingStart", AssetResult(
+            "onTrackingStart",
+            AssetResult(
                 success = true,
                 assetId,
                 msg = ""
@@ -591,7 +621,8 @@ class MethodHandler(private val channel: MethodChannel) :
 
     override fun onTrackingStop(assetId: String, trackingDisableType: TrackingDisableType) {
         channel.invokeMethod(
-            "onTrackingStop", AssetResult(
+            "onTrackingStop",
+            AssetResult(
                 success = true,
                 assetId,
                 msg = trackingDisableType.name
@@ -601,7 +632,8 @@ class MethodHandler(private val channel: MethodChannel) :
 
     override fun onTripStatusChanged(tripId: String, status: TripStatus) {
         channel.invokeMethod(
-            "onTripStatusChanged", AssetResult(
+            "onTripStatusChanged",
+            AssetResult(
                 success = true,
                 mapOf("tripId" to tripId, "status" to status.name).toString(),
                 msg = null
@@ -610,7 +642,5 @@ class MethodHandler(private val channel: MethodChannel) :
     }
 
     fun deInit() {
-
     }
-
 }

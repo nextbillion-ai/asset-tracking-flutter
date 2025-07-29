@@ -7,7 +7,6 @@ Future<bool> checkLocationPermission() async {
     if (locationAlways.isGranted) {
       return true;
     }
-
   }
   return false;
 }
