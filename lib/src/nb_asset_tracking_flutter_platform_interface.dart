@@ -1,10 +1,10 @@
+import 'package:nb_asset_tracking_flutter/src/android_notification_config.dart';
 import 'package:nb_asset_tracking_flutter/src/data_tracking_config.dart';
 import 'package:nb_asset_tracking_flutter/src/default_config.dart';
 import 'package:nb_asset_tracking_flutter/src/ios_notification_config.dart';
-import 'package:nb_asset_tracking_flutter/src/android_notification_config.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_profile.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_update_profile.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'asset_profile.dart';
 import 'location_config.dart';

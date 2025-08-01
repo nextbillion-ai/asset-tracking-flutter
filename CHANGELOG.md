@@ -1,3 +1,11 @@
+## 2.1.1
+- **UPGRADE**: Updated Kotlin version from 1.7.20 to 1.8.10 to resolve Flutter compatibility warnings
+- **UPGRADE**: Updated Android Gradle Plugin from 7.3.0 to 8.1.0
+- **UPGRADE**: Updated compileSdkVersion from 33 to 34
+- **UPGRADE**: Updated Gradle wrapper from 8.0 to 8.4
+- **FIX**: Updated GitHub workflow Flutter version from 3.19.0 to 3.24.0 to match SDK requirements
+- **DOCS**: Added platform-specific documentation for `setDefaultConfig` and `getDefaultConfig` methods (Android only)
+
 ## 2.1.0
 - **BREAKING**: `AndroidNotificationConfig.smallIcon` and `largeIcon` now use `String` type instead of `int`
   - This change improves resource management by allowing drawable resource names instead of hardcoded IDs

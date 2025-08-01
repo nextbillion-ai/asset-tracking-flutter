@@ -1,4 +1,3 @@
-
 const accessKey = "Your-Access-Key";
 
 const keyOfBoundId = "key_of_bind_id";
@@ -10,7 +9,6 @@ const keyOfEnableTrackingStopNotification =
 const keyOfTrackingMode = "key_of_tracking_mode";
 
 const keyOfTripHistory = "key_of_trip_history";
-
 
 enum CustomIntervalMode {
   timeBased,

@@ -26,6 +26,5 @@ data class AssetResult<T>(
     fun toJson(): String {
         val gson = Gson()
         return gson.toJson(this)
-
     }
 }

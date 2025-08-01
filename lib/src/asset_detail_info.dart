@@ -4,14 +4,6 @@ import 'dart:io';
 import 'package:nb_asset_tracking_flutter/src/nb_encode.dart';
 
 class AssetDetailInfo with NBEncode {
-  String? id;
-  String? deviceId;
-  String? name;
-  String? description;
-  num? createdAt;
-  num? updatedAt;
-  Map<String, dynamic>? attributes;
-
   AssetDetailInfo(
       {this.id,
       this.deviceId,
@@ -22,12 +14,12 @@ class AssetDetailInfo with NBEncode {
       this.attributes});
 
   factory AssetDetailInfo.fromJson(String jsonString) {
-    bool isAndroid = Platform.isAndroid;
-    Map<String, dynamic> json = jsonDecode(jsonString);
+    final bool isAndroid = Platform.isAndroid;
+    final Map<String, dynamic> json = jsonDecode(jsonString);
     return AssetDetailInfo(
       id: json['id'],
       deviceId: isAndroid ? json['device_id'] : json['deviceId'],
-      description: isAndroid ? json['description'] : json["assetDescription"],
+      description: isAndroid ? json['description'] : json['assetDescription'],
       name: json['name'],
       createdAt: isAndroid ? json['created_at'] : json['createdAt'],
       updatedAt: isAndroid ? json['updated_at'] : json['updatedAt'],
@@ -35,15 +27,21 @@ class AssetDetailInfo with NBEncode {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'device_id': deviceId,
-      'description': description,
-      'name': name,
-      "created_at": createdAt,
-      "updated_at": updatedAt,
-      'attributes': attributes,
-    };
-  }
+  String? id;
+  String? deviceId;
+  String? name;
+  String? description;
+  num? createdAt;
+  num? updatedAt;
+  Map<String, dynamic>? attributes;
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
+        'device_id': deviceId,
+        'description': description,
+        'name': name,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+        'attributes': attributes,
+      };
 }

@@ -1,32 +1,18 @@
-import 'trip_stop.dart';
 import 'track_location.dart';
+import 'trip_stop.dart';
 
 class TripInfo {
-  final String id;
-  final String assetId;
-  final String state;
-  final String name;
-  final String? description;
-  final Map<String, dynamic>? metaData;
-  final Map<String, dynamic>? attributes;
-  final DateTime startedAt;
-  final DateTime? endedAt;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final List<TripStop>? stops;
-  final List<TrackLocation>? route;
-
   TripInfo({
     required this.id,
     required this.assetId,
     required this.state,
     required this.name,
+    required this.startedAt,
+    required this.createdAt,
     this.description,
     this.metaData,
     this.attributes,
-    required this.startedAt,
     this.endedAt,
-    required this.createdAt,
     this.updatedAt,
     this.stops,
     this.route,
@@ -34,10 +20,10 @@ class TripInfo {
 
   // Factory constructor to create an instance from JSON
   factory TripInfo.fromJson(Map<String, dynamic> json) {
-    int createdTime = json['created_at'];
-    int? endedTime = json['ended_at'];
-    int? updatedTime = json['updated_at'];
-    int startedTime = json['started_at'];
+    final int createdTime = json['created_at'];
+    final int? endedTime = json['ended_at'];
+    final int? updatedTime = json['updated_at'];
+    final int startedTime = json['started_at'];
     return TripInfo(
       id: json['id'] ?? '',
       assetId: json['asset_id'] ?? '',
@@ -59,34 +45,45 @@ class TripInfo {
           ? DateTime.fromMillisecondsSinceEpoch(updatedTime * 1000)
           : null,
       stops: json['stops'] != null
-          ? (json['stops'] as List)
-              .map((item) => TripStop.fromJson(item))
+          ? (json['stops'] as List<Map<String, dynamic>>)
+              .map(TripStop.fromJson)
               .toList()
           : null,
       route: json['route'] != null
-          ? (json['route'] as List)
-              .map((item) => TrackLocation.fromJson(item))
+          ? (json['route'] as List<Map<String, dynamic>>)
+              .map(TrackLocation.fromJson)
               .toList()
           : null,
     );
   }
+  final String id;
+  final String assetId;
+  final String state;
+  final String name;
+  final String? description;
+  final Map<String, dynamic>? metaData;
+  final Map<String, dynamic>? attributes;
+  final DateTime startedAt;
+  final DateTime? endedAt;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final List<TripStop>? stops;
+  final List<TrackLocation>? route;
 
   // Method to convert an instance to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'asset_id': assetId,
-      'state': state,
-      'name': name,
-      'description': description,
-      'meta_data': metaData,
-      'attributes': attributes,
-      'started_at': startedAt,
-      'ended_at': endedAt,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-      'stops': stops?.map((item) => item.toJson()).toList(),
-      'route': route?.map((item) => item.toJson()).toList(),
-    };
-  }
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
+        'asset_id': assetId,
+        'state': state,
+        'name': name,
+        'description': description,
+        'meta_data': metaData,
+        'attributes': attributes,
+        'started_at': startedAt,
+        'ended_at': endedAt,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+        'stops': stops?.map((TripStop item) => item.toJson()).toList(),
+        'route': route?.map((TrackLocation item) => item.toJson()).toList(),
+      };
 }

@@ -43,7 +43,6 @@ data class TempNotificationConfig(
      */
     val largeIconBitmap: Bitmap? = null,
 
-
     /**
      * Custom layout for the remote view
      */

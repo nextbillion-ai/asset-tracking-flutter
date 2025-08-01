@@ -4,8 +4,8 @@ version: 2.1.0
 homepage: https://docs.nextbillion.ai/tracking/flutter-tracking-sdk/introduction
 repository: https://github.com/nextbillion-ai/asset-tracking-flutter
 environment:
-  sdk: '>=3.2.3 <4.0.0'
-  flutter: '>=3.3.0'
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
 
 dependencies:
   flutter:
@@ -13,13 +13,14 @@ dependencies:
   plugin_platform_interface: ^2.0.2
 
 dev_dependencies:
+  build_runner: ^2.4.8
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  test: any
   mockito: ^5.4.4
   mocktail: ^1.0.0
-  build_runner: ^2.4.8
+  test: any
+
 
 
 # For information on the generic Dart part of this file, see the

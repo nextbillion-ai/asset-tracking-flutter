@@ -1,7 +1,5 @@
 import 'dart:convert';
 
 mixin NBEncode {
-  String encode() {
-    return jsonEncode(this);
-  }
+  String encode() => jsonEncode(this);
 }

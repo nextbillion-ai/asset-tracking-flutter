@@ -1,20 +1,21 @@
 package ai.nextbillion.nb_asset_tracking_flutter
 
 import ai.nextbillion.assettracking.entity.DataTrackingConfig
+import ai.nextbillion.assettracking.entity.DefaultConfig
 import ai.nextbillion.assettracking.entity.LocationConfig
 import ai.nextbillion.assettracking.entity.LowBatteryNotificationConfig
 import ai.nextbillion.assettracking.entity.NotificationConfig
 import ai.nextbillion.assettracking.location.engine.DesiredAccuracy
 import ai.nextbillion.assettracking.location.engine.TrackingMode
 import ai.nextbillion.network.AssetProfile
-import android.content.Context
-import android.location.Location
-import com.google.gson.Gson
-import org.json.JSONObject
 import ai.nextbillion.network.trip.TripProfile
 import ai.nextbillion.network.trip.TripUpdateProfile
 import ai.nextbillion.network.trip.entity.Trip
 import ai.nextbillion.network.trip.entity.TripSummary
+import android.content.Context
+import android.location.Location
+import com.google.gson.Gson
+import org.json.JSONObject
 
 object ConfigConverter {
 
@@ -23,6 +24,10 @@ object ConfigConverter {
         return gson.fromJson(jsonString, TempNotificationConfig::class.java)
     }
 
+    fun defaultConfigFromJson(jsonString: String): DefaultConfig {
+        val gson = Gson()
+        return gson.fromJson(jsonString, DefaultConfig::class.java)
+    }
     fun notificationConfigToJson(config: NotificationConfig): String {
         val gson = Gson()
         return gson.toJson(config, NotificationConfig::class.java)
@@ -49,6 +54,23 @@ object ConfigConverter {
         )
     }
 
+    fun convertNotificationToTempConfig(config: NotificationConfig, context: Context): TempNotificationConfig {
+        return TempNotificationConfig(
+            serviceId = config.serviceId,
+            channelId = config.channelId,
+            channelName = config.channelName,
+            title = config.title ?: "",
+            content = config.content ?: "",
+            smallIcon = getDrawableNameByResourceId(context, config.smallIcon),
+            largeIcon = getDrawableNameByResourceId(context, config.largeIcon),
+            showLowBatteryNotification = config.showLowBatteryNotification,
+            lowBatteryNotification = config.lowBatteryNotification,
+            showAssetIdTakenNotification = config.showAssetIdTakenNotification,
+            contentAssetDisable = config.contentAssetDisable ?: "",
+            assetIdTakenContent = config.assetIdTakenContent ?: ""
+        )
+    }
+
     /**
      * Helper method to get drawable resource ID from string name
      */
@@ -58,6 +80,13 @@ object ConfigConverter {
         } else {
             0 // Return 0 if name is empty or null
         }
+    }
+
+    private fun getDrawableNameByResourceId(context: Context, resourceId: Int): String {
+        if (resourceId == 0) {
+            return "";
+        }
+        return context.resources.getResourceEntryName(resourceId)
     }
 
     fun batteryConfigFromJson(jsonString: String): LowBatteryNotificationConfig {
@@ -81,7 +110,7 @@ object ConfigConverter {
             json[key] = value
         }
 
-        val desiredAccuracy:DesiredAccuracy = when (json["desiredAccuracy"]) {
+        val desiredAccuracy: DesiredAccuracy = when (json["desiredAccuracy"]) {
             "high" -> {
                 DesiredAccuracy.HIGH
             }
@@ -115,7 +144,7 @@ object ConfigConverter {
                     desiredAccuracy = desiredAccuracy,
                     maxWaitTime = (json["maxWaitTime"] as Int).toLong(),
                     fastestInterval = (json["fastestInterval"] as Int).toLong(),
-                    enableStationaryCheck = json["enableStationaryCheck"] as Boolean,
+                    enableStationaryCheck = json["enableStationaryCheck"] as Boolean
                 )
             }
         }
@@ -166,7 +195,7 @@ object ConfigConverter {
             "maxWaitTime" to config.maxWaitTime,
             "fastestInterval" to config.fastestInterval,
             "enableStationaryCheck" to config.enableStationaryCheck,
-            "desiredAccuracy" to desiredAccuracy,
+            "desiredAccuracy" to desiredAccuracy
         )
         return gson.toJson(map, Map::class.java)
     }
@@ -220,13 +249,11 @@ object ConfigConverter {
 
     fun tripToJson(trip: Trip): String {
         val gson = Gson()
-        return gson.toJson(trip);
+        return gson.toJson(trip)
     }
 
     fun summaryToJson(summary: TripSummary): String {
         val gson = Gson()
         return gson.toJson(summary, TripSummary::class.java)
     }
-
-
 }

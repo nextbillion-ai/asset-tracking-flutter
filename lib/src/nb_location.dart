@@ -1,16 +1,6 @@
 import 'dart:convert';
 
 class NBLocation {
-  final num latitude;
-  final num longitude;
-  final num accuracy;
-  final num altitude;
-  final num speed;
-  final num speedAccuracy;
-  final num heading;
-  final String provider;
-  final num timestamp;
-
   NBLocation({
     required this.latitude,
     required this.longitude,
@@ -25,7 +15,7 @@ class NBLocation {
 
   // Factory method to create FlutterLocation from a map
   factory NBLocation.fromJson(String jsonString) {
-    Map<String, dynamic> map = jsonDecode(jsonString);
+    final Map<String, dynamic> map = jsonDecode(jsonString);
     return NBLocation(
       latitude: map['latitude'] ?? 0.0,
       longitude: map['longitude'] ?? 0.0,
@@ -34,26 +24,31 @@ class NBLocation {
       speed: map['speed'] ?? 0.0,
       speedAccuracy: map['speedAccuracy'] ?? 0.0,
       heading: map['heading'] ?? 0.0,
-      provider: map['provider'] ?? "",
+      provider: map['provider'] ?? '',
       timestamp: map['timestamp'] ?? 0,
     );
   }
+  final num latitude;
+  final num longitude;
+  final num accuracy;
+  final num altitude;
+  final num speed;
+  final num speedAccuracy;
+  final num heading;
+  final String provider;
+  final num timestamp;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'latitude': latitude,
-      'longitude': longitude,
-      'accuracy': accuracy,
-      'altitude': altitude,
-      'speed': speed,
-      'speedAccuracy': speedAccuracy,
-      'heading': heading,
-      'provider': provider,
-      'timestamp': timestamp,
-    };
-  }
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'latitude': latitude,
+        'longitude': longitude,
+        'accuracy': accuracy,
+        'altitude': altitude,
+        'speed': speed,
+        'speedAccuracy': speedAccuracy,
+        'heading': heading,
+        'provider': provider,
+        'timestamp': timestamp,
+      };
 
-  String toJson() {
-    return jsonEncode(toMap());
-  }
+  String toJson() => jsonEncode(toMap());
 }
