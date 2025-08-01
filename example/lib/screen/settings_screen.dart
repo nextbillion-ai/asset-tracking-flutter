@@ -13,6 +13,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
   bool _isLoading = false;
+  String? _currentUserId;
   DataTrackingConfig? _dataTrackingConfig;
   LocationConfig? _locationConfig;
   DefaultConfig? _defaultConfig;
@@ -32,6 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
 
     try {
       await Future.wait([
+        _loadUserId(),
         _loadDataTrackingConfig(),
         _loadLocationConfig(),
         _loadDefaultConfig(),
@@ -69,6 +71,19 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
       }
     } catch (e) {
       // Ignore the error and use the default configuration
+    }
+  }
+
+  Future<void> _loadUserId() async {
+    try {
+      final result = await AssetTracking().getUserId();
+      if (result.success) {
+        setState(() {
+          _currentUserId = result.data;
+        });
+      }
+    } catch (e) {
+      // Ignore the error and use empty user ID
     }
   }
 
@@ -137,6 +152,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _buildUserIdCard(),
+                  const SizedBox(height: 16),
                   _buildDataTrackingConfigCard(),
                   const SizedBox(height: 16),
                   _buildLocationConfigCard(),
@@ -319,6 +336,38 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
     );
   }
 
+  Widget _buildUserIdCard() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'User ID Configuration',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => _showUserIdDialog(),
+                  tooltip: 'Edit User ID',
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            _buildConfigItem('User ID', _currentUserId ?? 'Not set'),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildConfigItem(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -334,6 +383,48 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
           ),
           Expanded(
             child: Text(value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showUserIdDialog() {
+    final userIdController = TextEditingController(text: _currentUserId ?? '');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit User ID'),
+        content: TextField(
+          controller: userIdController,
+          decoration: const InputDecoration(
+            labelText: 'User ID',
+            hintText: 'Enter user ID',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              try {
+                final userId = userIdController.text.trim();
+                if (userId.isNotEmpty) {
+                  await AssetTracking().setupUserId(userId: userId);
+                  await _loadUserId();
+                  Navigator.pop(context);
+                  showToast('User ID updated successfully');
+                } else {
+                  showToast('User ID cannot be empty');
+                }
+              } catch (e) {
+                showToast('Error updating user ID: $e');
+              }
+            },
+            child: const Text('Save'),
           ),
         ],
       ),
