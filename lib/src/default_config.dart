@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'nb_encode.dart';
 
 class DefaultConfig with NBEncode {

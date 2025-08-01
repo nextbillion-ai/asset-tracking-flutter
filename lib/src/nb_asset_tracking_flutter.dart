@@ -1,5 +1,4 @@
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
-import 'package:nb_asset_tracking_flutter/src/asset_detail_info.dart';
 import 'native_result_callback.dart';
 import 'nb_asset_tracking_flutter_platform_interface.dart';
 
@@ -365,6 +364,12 @@ class AssetTracking {
     final String jsonString = await _platform.setupUserId(userId: userId);
     return AssetResult<String>.fromJson(jsonString);
   }
+
+  Future<AssetResult<String>> getUserId() async {
+    final String jsonString = await _platform.getUserId();
+    return AssetResult<String>.fromJson(jsonString);
+  }
+
 
   /// Initializes the native callbacks for tracking events.
   ///

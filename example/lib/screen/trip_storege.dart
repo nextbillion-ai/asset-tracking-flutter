@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import '../util/consts.dart';
 
-// 存储 List<String>
+
 Future<void> storeTripHistory(String tripId) async {
   final prefs = await SharedPreferences.getInstance();
   List<String> list = await getHistoryList();
@@ -11,7 +11,7 @@ Future<void> storeTripHistory(String tripId) async {
   await prefs.setString(keyOfTripHistory, jsonString);
 }
 
-// 读取 List<String>
+
 Future<List<String>> getHistoryList() async {
   final prefs = await SharedPreferences.getInstance();
   String? jsonString = prefs.getString(keyOfTripHistory);
@@ -21,4 +21,13 @@ Future<List<String>> getHistoryList() async {
   } else {
     return [];
   }
+}
+
+
+Future<void> removeFromHistory(String tripId) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> list = await getHistoryList();
+  list.remove(tripId);
+  String jsonString = jsonEncode(list);
+  await prefs.setString(keyOfTripHistory, jsonString);
 }

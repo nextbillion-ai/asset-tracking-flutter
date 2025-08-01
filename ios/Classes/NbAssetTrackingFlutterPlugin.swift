@@ -247,7 +247,7 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             let isInProgress = assetTracking.isTripInProgress()
             result(AssetResult(success: true, data: isInProgress, msg: "").toJson())
            break
-          case "setupUserId":
+        case "setupUserId":
            if let userId = call.arguments as? String,!userId.isEmpty{
                assetTracking.setUserId(userId: userId)
                result(AssetResult(success: true, data:userId, msg: "User id have been set success").toJson())
@@ -255,6 +255,13 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                result(AssetResult(success: false, data:"User ID is nil or empty.", msg: "User ID is nil or empty.").toJson())
            }
            break
+        case "getUserId":
+            if let userId = assetTracking.getUserId() {
+                result(AssetResult(success: true, data:userId, msg: "User id have been set success").toJson())
+            } else {
+                result(AssetResult(success: true, data:"", msg: "User id have been set success").toJson())
+            }
+            break
         default:
             result(FlutterMethodNotImplemented)
         }

@@ -9,11 +9,14 @@ import 'package:nb_asset_tracking_flutter_example/screen/trip_storege.dart';
 import 'package:nb_asset_tracking_flutter_example/util/permiss_checker.dart';
 import 'package:nb_asset_tracking_flutter_example/util/toast_mixin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../util/consts.dart';
 import 'create_asset.dart';
+import 'create_trip_screen.dart';
 import 'current_trip_screen.dart';
-import 'dialog.dart';
+import 'asset_detail_screen.dart';
+import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,11 +45,7 @@ class _MyAppState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    assetTracking.setAndroidNotificationConfig(
-        config: AndroidNotificationConfig(
-            title: "Title",
-            content: "Content",
-            smallIcon: "ic_notification_small"));
+    initAssetTracking();
     Stream<AssetResult> statusStream = assetTracking.isTracking().asStream();
     statusStream.listen((value) {
       _isRunning = value.data;
@@ -65,9 +64,36 @@ class _MyAppState extends State<HomeScreen>
     assetTracking.getActiveTripId().then((value) {
       _currentTripID = value.data;
     });
-    assetTracking.setupUserId(userId: "userId-123");
     assetTracking.addDataListener(this);
     initSharedPreferences();
+  }
+
+  void initAssetTracking() {
+    // Initialize the asset tracking and setup the access key here
+    AssetTracking().initialize(apiKey: accessKey);
+    checkAndRequestPermission();
+  }
+
+  void checkAndRequestPermission() async {
+    var status = await Permission.location.status;
+    if (status.isGranted) {
+      var always = await Permission.locationAlways.status;
+      if (always.isGranted) {
+        return;
+      } else {
+        await Permission.locationAlways.request();
+      }
+    } else if (status.isDenied) {
+      status = await Permission.location.request();
+      var always = await Permission.locationAlways.status;
+      if (always.isGranted) {
+        return;
+      } else {
+        await Permission.locationAlways.request();
+      }
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
   }
 
   Future initSharedPreferences() async {
@@ -152,17 +178,17 @@ class _MyAppState extends State<HomeScreen>
   }
 
   void startTrip() async {
-    showInputDialog(context, (title, description, customId) {
-      var profile = TripProfile(
-          name: 'test trip', description: description, customId: customId);
-      assetTracking.startTrip(profile: profile).then((value) {
-        if (value.success) {
-          showToast("Trip started");
-        } else {
-          showToast("Trip start failed: ${value.msg}");
-        }
-      });
-    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateTripScreen(
+          onTripCreated: () {
+            // 行程创建成功后的回调
+            showToast("Trip started successfully");
+          },
+        ),
+      ),
+    );
   }
 
   void endTrip() async {
@@ -178,6 +204,11 @@ class _MyAppState extends State<HomeScreen>
           enableTrackingStopNotification;
       assetTracking.setIOSNotificationConfig(config: iosNotificationConfig);
     }
+    // else {
+    //   var androidNotificationConfig = AndroidNotificationConfig();
+    //   androidNotificationConfig.showAssetIdTakenNotification
+    //   assetTracking.setAndroidNotificationConfig(config: config);
+    // }
   }
 
   bool locationConfigAvailable() {
@@ -211,11 +242,25 @@ class _MyAppState extends State<HomeScreen>
     assetTracking.stopTracking();
   }
 
+  void _navigateToSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Asset Tracking Flutter'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: _navigateToSettings,
+            tooltip: 'Settings',
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -501,8 +546,38 @@ class _MyAppState extends State<HomeScreen>
                   ),
                 ),
               ),
-              _currentTripID == null
-                  ? Container()
+              if (_isRunning) ...[
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        pushToAssetDetail();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('View Asset Details'),
+                    ),
+                  ),
+                ),
+              ],
+              _isTripRunning
+                  ? SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            pushToViewCurrentTrip();
+                          },
+                          child: const Text('View Current Trip'),
+                        ),
+                      ),
+                    )
                   : SizedBox(
                       width: double.infinity,
                       child: Padding(
@@ -553,7 +628,7 @@ class _MyAppState extends State<HomeScreen>
   void pushToCreateAsset() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const CreateAssteScreen()),
+      MaterialPageRoute(builder: (context) => const CreateAssetScreen()),
     );
   }
 
@@ -569,6 +644,13 @@ class _MyAppState extends State<HomeScreen>
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const TripHistoryScreen()),
+    );
+  }
+
+  void pushToAssetDetail() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AssetDetailScreen()),
     );
   }
 
