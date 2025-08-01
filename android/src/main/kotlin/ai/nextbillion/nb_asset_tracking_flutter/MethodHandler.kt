@@ -110,6 +110,10 @@ class MethodHandler(private val channel: MethodChannel) :
                 activity.setUserId(userId)
                 methodResult.success(AssetResult(success = true, "", msg = "").toJson())
             }
+            "getUserId" -> {
+                val userId = activity.getUserId()
+                methodResult.success(AssetResult(success = true, userId, msg = "").toJson())
+            }
             "getAssetId" -> {
                 val assetId = activity.getAssetId()
                 methodResult.success(AssetResult(success = true, assetId, msg = "").toJson())
