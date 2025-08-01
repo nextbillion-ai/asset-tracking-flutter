@@ -33,6 +33,7 @@ import ai.nextbillion.assettracking.entity.TripStatus
 import ai.nextbillion.assettracking.forceBindAsset
 import ai.nextbillion.assettracking.getAssetId
 import ai.nextbillion.assettracking.getAssetInfo
+import ai.nextbillion.assettracking.getUserId
 import ai.nextbillion.assettracking.initialize
 import ai.nextbillion.assettracking.setCrossPlatformInfo
 import ai.nextbillion.assettracking.setKeyOfRequestHeader

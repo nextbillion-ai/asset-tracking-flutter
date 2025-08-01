@@ -365,6 +365,12 @@ class AssetTracking {
     return AssetResult<String>.fromJson(jsonString);
   }
 
+  Future<AssetResult<String>> getUserId({required String userId}) async {
+    final String jsonString = await _platform.getUserId();
+    return AssetResult<String>.fromJson(jsonString);
+  }
+
+
   /// Initializes the native callbacks for tracking events.
   ///
   /// This method sets up the callback handlers for location updates,

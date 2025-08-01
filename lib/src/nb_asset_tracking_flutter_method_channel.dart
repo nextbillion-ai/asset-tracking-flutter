@@ -203,4 +203,8 @@ class MethodChannelNbAssetTrackingFlutter
   @override
   Future<String> setupUserId({required String userId}) async =>
       await methodChannel.invokeMethod('setupUserId', userId);
+
+
+  @override
+  Future<String> getUserId() async => await methodChannel.invokeMethod('getUserId');
 }
