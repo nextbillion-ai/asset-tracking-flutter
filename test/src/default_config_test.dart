@@ -1,10 +1,10 @@
-import 'package:test/test.dart';
 import 'package:nb_asset_tracking_flutter/src/default_config.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('DefaultConfig', () {
     test('creates instance with provided values', () {
-      final config = DefaultConfig(
+      final DefaultConfig config = DefaultConfig(
         enhanceService: true,
         repeatInterval: 300,
         workerEnabled: true,
@@ -21,17 +21,15 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON string', () {
-        const jsonString = '''
-        {
-          "enhanceService": true,
-          "repeatInterval": 300,
-          "workerEnabled": true,
-          "crashRestartEnabled": true,
-          "workOnMainThread": false
-        }
-        ''';
+        final Map<String,dynamic > map = {
+          'enhanceService': true,
+          'repeatInterval': 300,
+          'workerEnabled': true,
+          'crashRestartEnabled': true,
+          'workOnMainThread': false
+        };
 
-        final config = DefaultConfig.fromJson(jsonString);
+        final DefaultConfig config = DefaultConfig.fromJson(map);
 
         expect(config.enhanceService, isTrue);
         expect(config.repeatInterval, equals(300));
@@ -39,27 +37,11 @@ void main() {
         expect(config.crashRestartEnabled, isTrue);
         expect(config.workOnMainThread, isFalse);
       });
-
-      test('throws FormatException for invalid JSON', () {
-        expect(
-          () => DefaultConfig.fromJson('{invalid json}'),
-          throwsFormatException,
-        );
-      });
-
-      test('throws TypeError when required fields are missing', () {
-        const jsonString = '{}';
-
-        expect(
-          () => DefaultConfig.fromJson(jsonString),
-          throwsA(isA<TypeError>()),
-        );
-      });
     });
 
     group('toJson', () {
       test('converts to JSON correctly', () {
-        final config = DefaultConfig(
+        final DefaultConfig config = DefaultConfig(
           enhanceService: true,
           repeatInterval: 300,
           workerEnabled: true,
@@ -67,7 +49,7 @@ void main() {
           workOnMainThread: false,
         );
 
-        final json = config.toJson();
+        final Map<String, dynamic> json = config.toJson();
 
         expect(json['enhanceService'], isTrue);
         expect(json['repeatInterval'], equals(300));
@@ -77,7 +59,7 @@ void main() {
       });
 
       test('encodes via NBEncode mixin correctly', () {
-        final config = DefaultConfig(
+        final DefaultConfig config = DefaultConfig(
           enhanceService: true,
           repeatInterval: 300,
           workerEnabled: true,

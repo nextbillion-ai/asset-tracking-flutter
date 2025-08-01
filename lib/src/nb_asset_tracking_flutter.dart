@@ -1,5 +1,4 @@
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
-import 'package:nb_asset_tracking_flutter/src/asset_detail_info.dart';
 import 'native_result_callback.dart';
 import 'nb_asset_tracking_flutter_platform_interface.dart';
 

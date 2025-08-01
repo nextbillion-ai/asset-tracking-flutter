@@ -11,9 +11,6 @@ analyzer:
 
   # Exclude files from analysis
   exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
-    - "**/generated_plugin_registrant.dart"
     - "example/**"
     - "test/**"
 

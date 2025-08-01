@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
+import 'edit_trip_screen.dart';
 
 class CurrentTripInfoScreen extends StatefulWidget {
   final String tripId;
@@ -16,11 +17,17 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
   @override
   void initState() {
     super.initState();
-    _tripInfoFuture = _fetchTripInfo();
+    _loadTripInfo();
+  }
+
+  void _loadTripInfo() {
+    setState(() {
+      _tripInfoFuture = _fetchTripInfo();
+    });
   }
 
   Future<TripInfo> _fetchTripInfo() async {
-    AssetResult result = await AssetTracking().getTrip(tripId: widget.tripId);
+    final AssetResult result = await AssetTracking().getTrip(tripId: widget.tripId);
     if (result.success) {
       return result.data;
     } else {
@@ -33,6 +40,12 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Trip Information'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () => _showEditDialog(context),
+          ),
+        ],
       ),
       body: FutureBuilder<TripInfo>(
         future: _tripInfoFuture,
@@ -45,7 +58,7 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
             return const Center(child: Text('No Trip Info Found'));
           }
 
-          TripInfo tripInfo = snapshot.data!;
+          final TripInfo tripInfo = snapshot.data!;
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -100,6 +113,37 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
           );
         },
       ),
+    );
+  }
+
+  void _showEditDialog(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditTripScreen(
+          tripId: widget.tripId,
+          onTripUpdated: _loadTripInfo,
+        ),
+      ),
+    );
+  }
+}
+
+class TripStopInput {
+  String name;
+  String geofenceId;
+  final List<MapEntry<String, String>> metaData;
+
+  TripStopInput({
+    this.name = '',
+    this.geofenceId = '',
+    List<MapEntry<String, String>>? metaData,
+  }) : metaData = metaData ?? [];
+
+  TripStop toTripStop() {
+    return TripStop(
+      name: name,
+      geofenceId: geofenceId,
+      metaData: metaData.isNotEmpty ? Map<String, dynamic>.fromEntries(metaData) : null,
     );
   }
 }
