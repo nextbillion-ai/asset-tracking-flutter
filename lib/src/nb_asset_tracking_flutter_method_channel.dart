@@ -55,7 +55,8 @@ class MethodChannelNbAssetTrackingFlutter
       _resultCallback?.onTrackingStop?.call(result.data);
     } else if (call.method == 'onTripStatusChanged') {
       final String jsonString = call.arguments;
-      final AssetResult<Map<String, dynamic>> result = AssetResult<Map<String, dynamic>>.fromJson(jsonString);
+      final AssetResult<Map<String, dynamic>> result =
+          AssetResult<Map<String, dynamic>>.fromJson(jsonString);
       final String tripId = result.data['tripId'] as String;
       final String status = result.data['status'] as String;
       final TripState state = TripStateExtension.fromString(status);
@@ -203,4 +204,8 @@ class MethodChannelNbAssetTrackingFlutter
   @override
   Future<String> setupUserId({required String userId}) async =>
       await methodChannel.invokeMethod('setupUserId', userId);
+
+  @override
+  Future<String> getUserId() async =>
+      await methodChannel.invokeMethod('getUserId');
 }

@@ -22,7 +22,11 @@ class TripAsset {
         state: json['state'],
         name: json['name'],
         description: json['description'],
-        tags: (json['tags'] as List<dynamic>?)?.map((tag) => tag as String).toList(),
+        // ignore: always_specify_types
+        tags: (json['tags'] as List<dynamic>?)
+            // ignore: always_specify_types
+            ?.map((tag) => tag as String)
+            .toList(),
         metaData: json['meta_data'] as Map<String, dynamic>?,
         createdAt: (json['created_at'] as num).toDouble(),
         updatedAt: (json['updated_at'] as num?)?.toDouble(),

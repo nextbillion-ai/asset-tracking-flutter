@@ -33,6 +33,7 @@ import ai.nextbillion.assettracking.entity.TripStatus
 import ai.nextbillion.assettracking.forceBindAsset
 import ai.nextbillion.assettracking.getAssetId
 import ai.nextbillion.assettracking.getAssetInfo
+import ai.nextbillion.assettracking.getUserId
 import ai.nextbillion.assettracking.initialize
 import ai.nextbillion.assettracking.setCrossPlatformInfo
 import ai.nextbillion.assettracking.setKeyOfRequestHeader
@@ -109,6 +110,10 @@ class MethodHandler(private val channel: MethodChannel) :
                 val userId = call.arguments as String
                 activity.setUserId(userId)
                 methodResult.success(AssetResult(success = true, "", msg = "").toJson())
+            }
+            "getUserId" -> {
+                val userId = activity.getUserId()
+                methodResult.success(AssetResult(success = true, userId, msg = "").toJson())
             }
             "getAssetId" -> {
                 val assetId = activity.getAssetId()

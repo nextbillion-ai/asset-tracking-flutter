@@ -111,6 +111,9 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
       var assetResult = await assetTracking.bindAsset(customId: assetID);
       if (assetResult.success) {
         showToast("Bind asset successfully with asset id ${assetResult.data}");
+        if (!mounted) {
+          return;
+        }
         setState(() {
           assetId = assetResult.data;
           bindAsset = true;
@@ -164,7 +167,5 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
   }
 
   @override
-  void onTripStatusChanged(String assetId, TripState state) {
-    // TODO: implement onTripStatusChanged
-  }
+  void onTripStatusChanged(String assetId, TripState state) {}
 }

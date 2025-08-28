@@ -1,51 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
-import 'package:nb_asset_tracking_flutter_example/util/toast_mixin.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
 
-import '../util/consts.dart';
+class EditAssetScreen extends StatefulWidget {
+  final AssetDetailInfo assetDetail;
+  final VoidCallback? onAssetUpdated;
 
-class CreateAssetScreen extends StatefulWidget {
-  const CreateAssetScreen({super.key});
+  const EditAssetScreen({
+    super.key,
+    required this.assetDetail,
+    this.onAssetUpdated,
+  });
 
   @override
-  State<CreateAssetScreen> createState() => _CreateAssetScreenState();
+  State<EditAssetScreen> createState() => _EditAssetScreenState();
 }
 
-class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
+class _EditAssetScreenState extends State<EditAssetScreen> {
   final TextEditingController _customIdController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _bindIdController = TextEditingController();
-
   final List<MapEntry<String, String>> _attributes = [];
-
-  String _lastUsedAssetId = "";
   bool _isLoading = false;
-
-  final AssetTracking _assetTracking = AssetTracking();
-  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
-    _initData();
+    _initializeData();
   }
 
-  void _initData() async {
-    _prefs = await SharedPreferences.getInstance();
-    final String createId = _prefs.getString(keyOfBoundId) ?? "";
-    _customIdController.text = createId.isEmpty ? _generateUUID() : createId;
-    _nameController.text = "My Car";
-    _descriptionController.text = "Nancy's BMW";
-    _bindIdController.text = createId;
-    _lastUsedAssetId = createId;
+  void _initializeData() {
+    // 填充原始数据
+    _customIdController.text = widget.assetDetail.id ?? '';
+    _nameController.text = widget.assetDetail.name ?? '';
+    _descriptionController.text = widget.assetDetail.description ?? '';
+
+    // 转换 attributes 为可编辑的格式
+    if (widget.assetDetail.attributes != null) {
+      widget.assetDetail.attributes!.forEach((key, value) {
+        _attributes.add(MapEntry(key, value.toString()));
+      });
+    }
   }
 
-  String _generateUUID() {
-    const uuid = Uuid();
-    return uuid.v4();
+  @override
+  void dispose() {
+    _customIdController.dispose();
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   Map<String, dynamic> _convertAttributesToMap() {
@@ -76,9 +78,11 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
     });
   }
 
-  Future<void> _createAsset() async {
+  Future<void> _updateAsset() async {
     if (_customIdController.text.trim().isEmpty) {
-      showToast('Custom ID is required');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Custom ID is required')),
+      );
       return;
     }
 
@@ -99,111 +103,35 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
       );
 
       final AssetResult result =
-          await _assetTracking.createAsset(profile: profile);
+          await AssetTracking().updateAsset(assetProfile: profile);
 
       if (result.success) {
-        showToast("Create asset successfully with asset id ${result.data}");
-        _bindIdController.text = result.data;
-      } else {
-        showToast("Create asset failed: ${result.msg ?? ""}");
-      }
-    } catch (e) {
-      showToast("Error creating asset: $e");
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _bindAsset() async {
-    final String assetId = _bindIdController.text;
-    if (assetId.trim().isEmpty) {
-      showToast('Asset Bind ID is required');
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final AssetResult result =
-          await _assetTracking.bindAsset(customId: assetId);
-      if (result.success) {
-        showToast("Bind asset successfully with asset id ${result.data}");
-        _saveData(result.data);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Asset updated successfully')),
+        );
+        widget.onAssetUpdated?.call();
         Navigator.of(context).pop();
       } else {
-        if (result.data == "2001") {
-          _showDialog(() async {
-            final assetResult =
-                await _assetTracking.forceBindAsset(customId: assetId);
-            if (assetResult.success) {
-              _saveData(assetId);
-              showToast(
-                  "Force bind new asset successfully with assetId: $assetId");
-              Navigator.pop(context);
-            } else {
-              showToast("Bind Failed: ${result.msg ?? ""}");
-            }
-          },
-              title: "Bind Failed",
-              msg:
-                  "${result.msg}, do you want to clear local data and force bind to new asset id?");
-        } else {
-          showToast("Bind Failed: ${result.msg ?? ""}");
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update asset: ${result.msg}')),
+        );
       }
     } catch (e) {
-      showToast("Error binding asset: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating asset: $e')),
+      );
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
-  }
-
-  void _saveData(String boundId) async {
-    await _prefs.setString(keyOfBoundId, boundId);
-    setState(() {
-      _lastUsedAssetId = boundId;
-    });
-  }
-
-  Future<void> _showDialog(VoidCallback okPressedCallback,
-      {required String title, required String msg}) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(msg),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                okPressedCallback();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Proceed'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Asset'),
+        title: const Text('Edit Asset'),
         actions: [
           if (_isLoading)
             const Padding(
@@ -213,6 +141,11 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
                 height: 20,
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
+            )
+          else
+            TextButton(
+              onPressed: _updateAsset,
+              child: const Text('Save'),
             ),
         ],
       ),
@@ -382,98 +315,9 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-
-            // Create Asset Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _createAsset,
-                child: const Text('Create Asset'),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Bind Asset Section
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Bind Asset',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _bindIdController,
-                      decoration: const InputDecoration(
-                        labelText: 'Asset Bind ID',
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter asset ID to bind',
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _isLoading ? null : _bindAsset,
-                        child: const Text('Bind Asset'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Last Used Asset ID
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Your last used asset ID',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Text(_lastUsedAssetId),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _customIdController.dispose();
-    _nameController.dispose();
-    _descriptionController.dispose();
-    _bindIdController.dispose();
-    super.dispose();
   }
 }
