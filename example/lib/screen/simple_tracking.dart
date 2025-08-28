@@ -167,7 +167,5 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
   }
 
   @override
-  void onTripStatusChanged(String assetId, TripState state) {
-
-  }
+  void onTripStatusChanged(String assetId, TripState state) {}
 }

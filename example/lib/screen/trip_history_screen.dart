@@ -34,7 +34,7 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
         await removeFromHistory(tripId);
         // Reload the list
         await _loadTripHistory();
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Trip deleted successfully')),
@@ -93,7 +93,8 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: const Text('Delete Trip'),
-                          content: Text('Are you sure you want to delete trip "$tripId"?'),
+                          content: Text(
+                              'Are you sure you want to delete trip "$tripId"?'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(false),
@@ -123,7 +124,8 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TripSummaryScreen(tripId: tripId),
+                          builder: (context) =>
+                              TripSummaryScreen(tripId: tripId),
                         ),
                       );
                     },

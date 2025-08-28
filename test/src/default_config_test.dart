@@ -21,7 +21,7 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON string', () {
-        final Map<String,dynamic > map = {
+        final Map<String, dynamic> map = {
           'enhanceService': true,
           'repeatInterval': 300,
           'workerEnabled': true,

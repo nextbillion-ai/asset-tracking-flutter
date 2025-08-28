@@ -27,7 +27,8 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
   }
 
   Future<TripInfo> _fetchTripInfo() async {
-    final AssetResult result = await AssetTracking().getTrip(tripId: widget.tripId);
+    final AssetResult result =
+        await AssetTracking().getTrip(tripId: widget.tripId);
     if (result.success) {
       return result.data;
     } else {
@@ -138,9 +139,10 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
             _buildInfoRow('Trip ID', tripInfo.id),
             _buildInfoRow('Asset ID', tripInfo.assetId),
             _buildInfoRow('State', tripInfo.state,
-              valueColor: _getStateColor(tripInfo.state)),
+                valueColor: _getStateColor(tripInfo.state)),
             _buildInfoRow('Name', tripInfo.name),
-            if (tripInfo.description != null && tripInfo.description!.isNotEmpty)
+            if (tripInfo.description != null &&
+                tripInfo.description!.isNotEmpty)
               _buildInfoRow('Description', tripInfo.description!),
           ],
         ),
@@ -210,18 +212,21 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
-              ...tripInfo.metaData!.entries.map((entry) =>
-                _buildInfoRow(entry.key, entry.value.toString(), indent: true)),
+              ...tripInfo.metaData!.entries.map((entry) => _buildInfoRow(
+                  entry.key, entry.value.toString(),
+                  indent: true)),
               const SizedBox(height: 16),
             ],
-            if (tripInfo.attributes != null && tripInfo.attributes!.isNotEmpty) ...[
+            if (tripInfo.attributes != null &&
+                tripInfo.attributes!.isNotEmpty) ...[
               const Text(
                 'Attributes:',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 8),
-              ...tripInfo.attributes!.entries.map((entry) =>
-                _buildInfoRow(entry.key, entry.value.toString(), indent: true)),
+              ...tripInfo.attributes!.entries.map((entry) => _buildInfoRow(
+                  entry.key, entry.value.toString(),
+                  indent: true)),
             ],
           ],
         ),
@@ -305,7 +310,9 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
                       ...stop.metaData!.entries.map((metaEntry) =>
-                        _buildInfoRow(metaEntry.key, metaEntry.value.toString(), indent: true)),
+                          _buildInfoRow(
+                              metaEntry.key, metaEntry.value.toString(),
+                              indent: true)),
                     ],
                   ],
                 ),
@@ -379,25 +386,37 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
                             const SizedBox(width: 8),
                             Text(
                               'Point ${index + 1}',
-                              style: const TextStyle(fontWeight: FontWeight.w600),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
                         _buildInfoRow('Location',
-                          '${location.location?.lat?.toStringAsFixed(6)}, ${location.location?.lon?.toStringAsFixed(6)}',
-                          indent: true),
+                            '${location.location?.lat?.toStringAsFixed(6)}, ${location.location?.lon?.toStringAsFixed(6)}',
+                            indent: true),
                         if (location.speed != null)
-                          _buildInfoRow('Speed', '${location.speed!.toStringAsFixed(1)} km/h', indent: true),
+                          _buildInfoRow('Speed',
+                              '${location.speed!.toStringAsFixed(1)} km/h',
+                              indent: true),
                         if (location.accuracy != null)
-                          _buildInfoRow('Accuracy', '${location.accuracy!.toStringAsFixed(1)}m', indent: true),
+                          _buildInfoRow('Accuracy',
+                              '${location.accuracy!.toStringAsFixed(1)}m',
+                              indent: true),
                         if (location.altitude != null)
-                          _buildInfoRow('Altitude', '${location.altitude!.toStringAsFixed(1)}m', indent: true),
+                          _buildInfoRow('Altitude',
+                              '${location.altitude!.toStringAsFixed(1)}m',
+                              indent: true),
                         if (location.bearing != null)
-                          _buildInfoRow('Bearing', '${location.bearing!.toStringAsFixed(1)}°', indent: true),
+                          _buildInfoRow('Bearing',
+                              '${location.bearing!.toStringAsFixed(1)}°',
+                              indent: true),
                         if (location.batteryLevel != null)
-                          _buildInfoRow('Battery', '${location.batteryLevel}%', indent: true),
-                        _buildInfoRow('Time', _formatDateTime(location.timestamp), indent: true),
+                          _buildInfoRow('Battery', '${location.batteryLevel}%',
+                              indent: true),
+                        _buildInfoRow(
+                            'Time', _formatDateTime(location.timestamp),
+                            indent: true),
                       ],
                     ),
                   );
@@ -410,7 +429,8 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {bool indent = false, Color? valueColor}) {
+  Widget _buildInfoRow(String label, String value,
+      {bool indent = false, Color? valueColor}) {
     return Padding(
       padding: EdgeInsets.only(
         left: indent ? 16.0 : 0.0,
@@ -492,7 +512,9 @@ class TripStopInput {
     return TripStop(
       name: name,
       geofenceId: geofenceId,
-      metaData: metaData.isNotEmpty ? Map<String, dynamic>.fromEntries(metaData) : null,
+      metaData: metaData.isNotEmpty
+          ? Map<String, dynamic>.fromEntries(metaData)
+          : null,
     );
   }
 }

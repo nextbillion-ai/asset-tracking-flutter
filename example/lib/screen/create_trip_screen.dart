@@ -124,15 +124,24 @@ class _CreateTripScreenState extends State<CreateTripScreen> with ToastMixin {
     try {
       final TripProfile profile = TripProfile(
         name: _nameController.text.trim(),
-        customId: _customIdController.text.trim().isNotEmpty ? _customIdController.text.trim() : null,
-        description: _descriptionController.text.trim().isNotEmpty ? _descriptionController.text.trim() : null,
-        attributes: _convertToMap(_attributes).isNotEmpty ? _convertToMap(_attributes) : null,
-        metaData: _convertToMap(_metaData).isNotEmpty ? _convertToMap(_metaData) : null,
+        customId: _customIdController.text.trim().isNotEmpty
+            ? _customIdController.text.trim()
+            : null,
+        description: _descriptionController.text.trim().isNotEmpty
+            ? _descriptionController.text.trim()
+            : null,
+        attributes: _convertToMap(_attributes).isNotEmpty
+            ? _convertToMap(_attributes)
+            : null,
+        metaData: _convertToMap(_metaData).isNotEmpty
+            ? _convertToMap(_metaData)
+            : null,
         stops: _convertStops().isNotEmpty ? _convertStops() : null,
       );
 
-      final AssetResult result = await AssetTracking().startTrip(profile: profile);
-      
+      final AssetResult result =
+          await AssetTracking().startTrip(profile: profile);
+
       if (result.success) {
         showToast('Trip created successfully');
         widget.onTripCreated?.call();
@@ -309,7 +318,8 @@ class _CreateTripScreenState extends State<CreateTripScreen> with ToastMixin {
                                   labelText: 'Key',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateAttribute(index, value, attribute.value),
+                                onChanged: (value) => _updateAttribute(
+                                    index, value, attribute.value),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -319,7 +329,8 @@ class _CreateTripScreenState extends State<CreateTripScreen> with ToastMixin {
                                   labelText: 'Value',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateAttribute(index, attribute.key, value),
+                                onChanged: (value) => _updateAttribute(
+                                    index, attribute.key, value),
                               ),
                             ),
                             IconButton(
@@ -382,7 +393,8 @@ class _CreateTripScreenState extends State<CreateTripScreen> with ToastMixin {
                                   labelText: 'Key',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateMetaData(index, value, metaData.value),
+                                onChanged: (value) => _updateMetaData(
+                                    index, value, metaData.value),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -392,7 +404,8 @@ class _CreateTripScreenState extends State<CreateTripScreen> with ToastMixin {
                                   labelText: 'Value',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateMetaData(index, metaData.key, value),
+                                onChanged: (value) =>
+                                    _updateMetaData(index, metaData.key, value),
                               ),
                             ),
                             IconButton(
@@ -548,7 +561,8 @@ class _CreateTripScreenState extends State<CreateTripScreen> with ToastMixin {
                           border: OutlineInputBorder(),
                         ),
                         onChanged: (value) {
-                          stop.metaData[metaIndex] = MapEntry(value, metaData.value);
+                          stop.metaData[metaIndex] =
+                              MapEntry(value, metaData.value);
                           _updateStop(index, stop);
                         },
                       ),
@@ -561,13 +575,15 @@ class _CreateTripScreenState extends State<CreateTripScreen> with ToastMixin {
                           border: OutlineInputBorder(),
                         ),
                         onChanged: (value) {
-                          stop.metaData[metaIndex] = MapEntry(metaData.key, value);
+                          stop.metaData[metaIndex] =
+                              MapEntry(metaData.key, value);
                           _updateStop(index, stop);
                         },
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                      icon:
+                          const Icon(Icons.delete, color: Colors.red, size: 20),
                       onPressed: () {
                         stop.metaData.removeAt(metaIndex);
                         _updateStop(index, stop);
@@ -600,7 +616,9 @@ class TripStopInput {
     return TripStop(
       name: name,
       geofenceId: geofenceId,
-      metaData: metaData.isNotEmpty ? Map<String, dynamic>.fromEntries(metaData) : null,
+      metaData: metaData.isNotEmpty
+          ? Map<String, dynamic>.fromEntries(metaData)
+          : null,
     );
   }
-} 
+}

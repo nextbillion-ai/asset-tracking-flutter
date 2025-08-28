@@ -370,7 +370,6 @@ class AssetTracking {
     return AssetResult<String>.fromJson(jsonString);
   }
 
-
   /// Initializes the native callbacks for tracking events.
   ///
   /// This method sets up the callback handlers for location updates,

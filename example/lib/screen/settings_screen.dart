@@ -194,12 +194,19 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
             const SizedBox(height: 8),
             if (_dataTrackingConfig != null) ...[
               _buildConfigItem('Base URL', _dataTrackingConfig!.baseUrl),
-              _buildConfigItem('Data Storage Size', _dataTrackingConfig!.dataStorageSize.toString()),
-              _buildConfigItem('Data Uploading Batch Size', _dataTrackingConfig!.dataUploadingBatchSize.toString()),
-              _buildConfigItem('Data Uploading Batch Window', _dataTrackingConfig!.dataUploadingBatchWindow.toString()),
-              _buildConfigItem('Clear Local Data When Collision', _dataTrackingConfig!.shouldClearLocalDataWhenCollision.toString()),
+              _buildConfigItem('Data Storage Size',
+                  _dataTrackingConfig!.dataStorageSize.toString()),
+              _buildConfigItem('Data Uploading Batch Size',
+                  _dataTrackingConfig!.dataUploadingBatchSize.toString()),
+              _buildConfigItem('Data Uploading Batch Window',
+                  _dataTrackingConfig!.dataUploadingBatchWindow.toString()),
+              _buildConfigItem(
+                  'Clear Local Data When Collision',
+                  _dataTrackingConfig!.shouldClearLocalDataWhenCollision
+                      .toString()),
             ] else
-              const Text('No configuration available', style: TextStyle(color: Colors.grey)),
+              const Text('No configuration available',
+                  style: TextStyle(color: Colors.grey)),
           ],
         ),
       ),
@@ -232,15 +239,25 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
             ),
             const SizedBox(height: 8),
             if (_locationConfig != null) ...[
-              _buildConfigItem('Tracking Mode', _locationConfig!.trackingMode?.toString() ?? 'N/A'),
-              _buildConfigItem('Interval (Android)', _locationConfig!.intervalForAndroid?.toString() ?? 'N/A'),
-              _buildConfigItem('Smallest Displacement', _locationConfig!.smallestDisplacement?.toString() ?? 'N/A'),
-              _buildConfigItem('Desired Accuracy', _locationConfig!.desiredAccuracy?.toString() ?? 'N/A'),
-              _buildConfigItem('Max Wait Time (Android)', _locationConfig!.maxWaitTimeForAndroid?.toString() ?? 'N/A'),
-              _buildConfigItem('Fastest Interval (Android)', _locationConfig!.fastestIntervalForAndroid?.toString() ?? 'N/A'),
-              _buildConfigItem('Enable Stationary Check', _locationConfig!.enableStationaryCheck?.toString() ?? 'N/A'),
+              _buildConfigItem('Tracking Mode',
+                  _locationConfig!.trackingMode?.toString() ?? 'N/A'),
+              _buildConfigItem('Interval (Android)',
+                  _locationConfig!.intervalForAndroid?.toString() ?? 'N/A'),
+              _buildConfigItem('Smallest Displacement',
+                  _locationConfig!.smallestDisplacement?.toString() ?? 'N/A'),
+              _buildConfigItem('Desired Accuracy',
+                  _locationConfig!.desiredAccuracy?.toString() ?? 'N/A'),
+              _buildConfigItem('Max Wait Time (Android)',
+                  _locationConfig!.maxWaitTimeForAndroid?.toString() ?? 'N/A'),
+              _buildConfigItem(
+                  'Fastest Interval (Android)',
+                  _locationConfig!.fastestIntervalForAndroid?.toString() ??
+                      'N/A'),
+              _buildConfigItem('Enable Stationary Check',
+                  _locationConfig!.enableStationaryCheck?.toString() ?? 'N/A'),
             ] else
-              const Text('No configuration available', style: TextStyle(color: Colors.grey)),
+              const Text('No configuration available',
+                  style: TextStyle(color: Colors.grey)),
           ],
         ),
       ),
@@ -273,13 +290,19 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
             ),
             const SizedBox(height: 8),
             if (_defaultConfig != null) ...[
-              _buildConfigItem('Enhance Service', _defaultConfig!.enhanceService.toString()),
-              _buildConfigItem('Repeat Interval', _defaultConfig!.repeatInterval.toString()),
-              _buildConfigItem('Worker Enabled', _defaultConfig!.workerEnabled.toString()),
-              _buildConfigItem('Crash Restart Enabled', _defaultConfig!.crashRestartEnabled.toString()),
-              _buildConfigItem('Work On Main Thread', _defaultConfig!.workOnMainThread.toString()),
+              _buildConfigItem(
+                  'Enhance Service', _defaultConfig!.enhanceService.toString()),
+              _buildConfigItem(
+                  'Repeat Interval', _defaultConfig!.repeatInterval.toString()),
+              _buildConfigItem(
+                  'Worker Enabled', _defaultConfig!.workerEnabled.toString()),
+              _buildConfigItem('Crash Restart Enabled',
+                  _defaultConfig!.crashRestartEnabled.toString()),
+              _buildConfigItem('Work On Main Thread',
+                  _defaultConfig!.workOnMainThread.toString()),
             ] else
-              const Text('No configuration available', style: TextStyle(color: Colors.grey)),
+              const Text('No configuration available',
+                  style: TextStyle(color: Colors.grey)),
           ],
         ),
       ),
@@ -313,22 +336,39 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
             const SizedBox(height: 8),
             if (Platform.isAndroid) ...[
               if (_androidNotificationConfig != null) ...[
-                _buildConfigItem('Service ID', _androidNotificationConfig!.serviceId.toString()),
-                _buildConfigItem('Channel ID', _androidNotificationConfig!.channelId),
-                _buildConfigItem('Channel Name', _androidNotificationConfig!.channelName),
+                _buildConfigItem('Service ID',
+                    _androidNotificationConfig!.serviceId.toString()),
+                _buildConfigItem(
+                    'Channel ID', _androidNotificationConfig!.channelId),
+                _buildConfigItem(
+                    'Channel Name', _androidNotificationConfig!.channelName),
                 _buildConfigItem('Title', _androidNotificationConfig!.title),
-                _buildConfigItem('Content', _androidNotificationConfig!.content),
-                _buildConfigItem('Small Icon', _androidNotificationConfig!.smallIcon),
-                _buildConfigItem('Large Icon', _androidNotificationConfig!.largeIcon),
-                _buildConfigItem('Show Low Battery Notification', _androidNotificationConfig!.showLowBatteryNotification.toString()),
+                _buildConfigItem(
+                    'Content', _androidNotificationConfig!.content),
+                _buildConfigItem(
+                    'Small Icon', _androidNotificationConfig!.smallIcon),
+                _buildConfigItem(
+                    'Large Icon', _androidNotificationConfig!.largeIcon),
+                _buildConfigItem(
+                    'Show Low Battery Notification',
+                    _androidNotificationConfig!.showLowBatteryNotification
+                        .toString()),
               ] else
-                const Text('No configuration available', style: TextStyle(color: Colors.grey)),
+                const Text('No configuration available',
+                    style: TextStyle(color: Colors.grey)),
             ] else ...[
               if (_iosNotificationConfig != null) ...[
-                _buildConfigItem('Show Asset Enable Notification', _iosNotificationConfig!.showAssetEnableNotification.toString()),
-                _buildConfigItem('Show Asset Disable Notification', _iosNotificationConfig!.showAssetDisableNotification.toString()),
+                _buildConfigItem(
+                    'Show Asset Enable Notification',
+                    _iosNotificationConfig!.showAssetEnableNotification
+                        .toString()),
+                _buildConfigItem(
+                    'Show Asset Disable Notification',
+                    _iosNotificationConfig!.showAssetDisableNotification
+                        .toString()),
               ] else
-                const Text('No configuration available', style: TextStyle(color: Colors.grey)),
+                const Text('No configuration available',
+                    style: TextStyle(color: Colors.grey)),
             ],
           ],
         ),
@@ -432,11 +472,16 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
   }
 
   void _showDataTrackingConfigDialog() {
-    final baseUrlController = TextEditingController(text: _dataTrackingConfig?.baseUrl ?? '');
-    final storageSizeController = TextEditingController(text: _dataTrackingConfig?.dataStorageSize.toString() ?? '5000');
-    final batchSizeController = TextEditingController(text: _dataTrackingConfig?.dataUploadingBatchSize.toString() ?? '30');
-    final batchWindowController = TextEditingController(text: _dataTrackingConfig?.dataUploadingBatchWindow.toString() ?? '20');
-    bool clearLocalData = _dataTrackingConfig?.shouldClearLocalDataWhenCollision ?? true;
+    final baseUrlController =
+        TextEditingController(text: _dataTrackingConfig?.baseUrl ?? '');
+    final storageSizeController = TextEditingController(
+        text: _dataTrackingConfig?.dataStorageSize.toString() ?? '5000');
+    final batchSizeController = TextEditingController(
+        text: _dataTrackingConfig?.dataUploadingBatchSize.toString() ?? '30');
+    final batchWindowController = TextEditingController(
+        text: _dataTrackingConfig?.dataUploadingBatchWindow.toString() ?? '20');
+    bool clearLocalData =
+        _dataTrackingConfig?.shouldClearLocalDataWhenCollision ?? true;
 
     showDialog(
       context: context,
@@ -452,17 +497,20 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
               ),
               TextField(
                 controller: storageSizeController,
-                decoration: const InputDecoration(labelText: 'Data Storage Size'),
+                decoration:
+                    const InputDecoration(labelText: 'Data Storage Size'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: batchSizeController,
-                decoration: const InputDecoration(labelText: 'Data Uploading Batch Size'),
+                decoration: const InputDecoration(
+                    labelText: 'Data Uploading Batch Size'),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: batchWindowController,
-                decoration: const InputDecoration(labelText: 'Data Uploading Batch Window'),
+                decoration: const InputDecoration(
+                    labelText: 'Data Uploading Batch Window'),
                 keyboardType: TextInputType.number,
               ),
               CheckboxListTile(
@@ -483,9 +531,12 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
               try {
                 final config = DataTrackingConfig(
                   baseUrl: baseUrlController.text,
-                  dataStorageSize: int.tryParse(storageSizeController.text) ?? 5000,
-                  dataUploadingBatchSize: int.tryParse(batchSizeController.text) ?? 30,
-                  dataUploadingBatchWindow: int.tryParse(batchWindowController.text) ?? 20,
+                  dataStorageSize:
+                      int.tryParse(storageSizeController.text) ?? 5000,
+                  dataUploadingBatchSize:
+                      int.tryParse(batchSizeController.text) ?? 30,
+                  dataUploadingBatchWindow:
+                      int.tryParse(batchWindowController.text) ?? 20,
                   shouldClearLocalDataWhenCollision: clearLocalData,
                 );
                 await AssetTracking().setDataTrackingConfig(config: config);
@@ -508,7 +559,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Location Configuration'),
-        content: const Text('Location configuration is managed through the main tracking controls.'),
+        content: const Text(
+            'Location configuration is managed through the main tracking controls.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -520,11 +572,16 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
   }
 
   void _showDefaultConfigDialog() {
-    final enhanceServiceController = TextEditingController(text: _defaultConfig?.enhanceService.toString() ?? 'true');
-    final repeatIntervalController = TextEditingController(text: _defaultConfig?.repeatInterval.toString() ?? '1000');
-    final workerEnabledController = TextEditingController(text: _defaultConfig?.workerEnabled.toString() ?? 'true');
-    final crashRestartEnabledController = TextEditingController(text: _defaultConfig?.crashRestartEnabled.toString() ?? 'true');
-    final workOnMainThreadController = TextEditingController(text: _defaultConfig?.workOnMainThread.toString() ?? 'false');
+    final enhanceServiceController = TextEditingController(
+        text: _defaultConfig?.enhanceService.toString() ?? 'true');
+    final repeatIntervalController = TextEditingController(
+        text: _defaultConfig?.repeatInterval.toString() ?? '1000');
+    final workerEnabledController = TextEditingController(
+        text: _defaultConfig?.workerEnabled.toString() ?? 'true');
+    final crashRestartEnabledController = TextEditingController(
+        text: _defaultConfig?.crashRestartEnabled.toString() ?? 'true');
+    final workOnMainThreadController = TextEditingController(
+        text: _defaultConfig?.workOnMainThread.toString() ?? 'false');
 
     showDialog(
       context: context,
@@ -537,7 +594,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
               CheckboxListTile(
                 title: const Text('Enhance Service'),
                 value: _defaultConfig?.enhanceService ?? true,
-                onChanged: (value) => enhanceServiceController.text = value.toString(),
+                onChanged: (value) =>
+                    enhanceServiceController.text = value.toString(),
               ),
               TextField(
                 controller: repeatIntervalController,
@@ -547,17 +605,20 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
               CheckboxListTile(
                 title: const Text('Worker Enabled'),
                 value: _defaultConfig?.workerEnabled ?? true,
-                onChanged: (value) => workerEnabledController.text = value.toString(),
+                onChanged: (value) =>
+                    workerEnabledController.text = value.toString(),
               ),
               CheckboxListTile(
                 title: const Text('Crash Restart Enabled'),
                 value: _defaultConfig?.crashRestartEnabled ?? true,
-                onChanged: (value) => crashRestartEnabledController.text = value.toString(),
+                onChanged: (value) =>
+                    crashRestartEnabledController.text = value.toString(),
               ),
               CheckboxListTile(
                 title: const Text('Work On Main Thread'),
                 value: _defaultConfig?.workOnMainThread ?? false,
-                onChanged: (value) => workOnMainThreadController.text = value.toString(),
+                onChanged: (value) =>
+                    workOnMainThreadController.text = value.toString(),
               ),
             ],
           ),
@@ -571,11 +632,17 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
             onPressed: () async {
               try {
                 final config = DefaultConfig(
-                  enhanceService: enhanceServiceController.text.toLowerCase() == 'true',
-                  repeatInterval: int.tryParse(repeatIntervalController.text) ?? 1000,
-                  workerEnabled: workerEnabledController.text.toLowerCase() == 'true',
-                  crashRestartEnabled: crashRestartEnabledController.text.toLowerCase() == 'true',
-                  workOnMainThread: workOnMainThreadController.text.toLowerCase() == 'true',
+                  enhanceService:
+                      enhanceServiceController.text.toLowerCase() == 'true',
+                  repeatInterval:
+                      int.tryParse(repeatIntervalController.text) ?? 1000,
+                  workerEnabled:
+                      workerEnabledController.text.toLowerCase() == 'true',
+                  crashRestartEnabled:
+                      crashRestartEnabledController.text.toLowerCase() ==
+                          'true',
+                  workOnMainThread:
+                      workOnMainThreadController.text.toLowerCase() == 'true',
                 );
                 await AssetTracking().setDefaultConfig(config: config);
                 await _loadDefaultConfig();
@@ -601,14 +668,22 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
   }
 
   void _showAndroidNotificationConfigDialog() {
-    final serviceIdController = TextEditingController(text: _androidNotificationConfig?.serviceId.toString() ?? '1');
-    final channelIdController = TextEditingController(text: _androidNotificationConfig?.channelId ?? '');
-    final channelNameController = TextEditingController(text: _androidNotificationConfig?.channelName ?? '');
-    final titleController = TextEditingController(text: _androidNotificationConfig?.title ?? '');
-    final contentController = TextEditingController(text: _androidNotificationConfig?.content ?? '');
-    final smallIconController = TextEditingController(text: _androidNotificationConfig?.smallIcon ?? '');
-    final largeIconController = TextEditingController(text: _androidNotificationConfig?.largeIcon ?? '');
-    bool showLowBatteryNotification = _androidNotificationConfig?.showLowBatteryNotification ?? true;
+    final serviceIdController = TextEditingController(
+        text: _androidNotificationConfig?.serviceId.toString() ?? '1');
+    final channelIdController = TextEditingController(
+        text: _androidNotificationConfig?.channelId ?? '');
+    final channelNameController = TextEditingController(
+        text: _androidNotificationConfig?.channelName ?? '');
+    final titleController =
+        TextEditingController(text: _androidNotificationConfig?.title ?? '');
+    final contentController =
+        TextEditingController(text: _androidNotificationConfig?.content ?? '');
+    final smallIconController = TextEditingController(
+        text: _androidNotificationConfig?.smallIcon ?? '');
+    final largeIconController = TextEditingController(
+        text: _androidNotificationConfig?.largeIcon ?? '');
+    bool showLowBatteryNotification =
+        _androidNotificationConfig?.showLowBatteryNotification ?? true;
 
     showDialog(
       context: context,
@@ -660,7 +735,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
               CheckboxListTile(
                 title: const Text('Show Low Battery Notification'),
                 value: showLowBatteryNotification,
-                onChanged: (value) => setState(() => showLowBatteryNotification = value!),
+                onChanged: (value) =>
+                    setState(() => showLowBatteryNotification = value!),
               ),
             ],
           ),
@@ -683,7 +759,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
                   largeIcon: largeIconController.text,
                   showLowBatteryNotification: showLowBatteryNotification,
                 );
-                await AssetTracking().setAndroidNotificationConfig(config: config);
+                await AssetTracking()
+                    .setAndroidNotificationConfig(config: config);
                 await _loadNotificationConfigs();
                 Navigator.pop(context);
                 showToast('Android notification config updated successfully');
@@ -699,8 +776,10 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
   }
 
   void _showIOSNotificationConfigDialog() {
-    bool showAssetEnableNotification = _iosNotificationConfig?.showAssetEnableNotification ?? true;
-    bool showAssetDisableNotification = _iosNotificationConfig?.showAssetDisableNotification ?? true;
+    bool showAssetEnableNotification =
+        _iosNotificationConfig?.showAssetEnableNotification ?? true;
+    bool showAssetDisableNotification =
+        _iosNotificationConfig?.showAssetDisableNotification ?? true;
 
     showDialog(
       context: context,
@@ -712,12 +791,14 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
             CheckboxListTile(
               title: const Text('Show Asset Enable Notification'),
               value: showAssetEnableNotification,
-              onChanged: (value) => setState(() => showAssetEnableNotification = value!),
+              onChanged: (value) =>
+                  setState(() => showAssetEnableNotification = value!),
             ),
             CheckboxListTile(
               title: const Text('Show Asset Disable Notification'),
               value: showAssetDisableNotification,
-              onChanged: (value) => setState(() => showAssetDisableNotification = value!),
+              onChanged: (value) =>
+                  setState(() => showAssetDisableNotification = value!),
             ),
           ],
         ),

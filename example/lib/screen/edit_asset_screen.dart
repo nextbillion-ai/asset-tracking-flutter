@@ -33,7 +33,7 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
     _customIdController.text = widget.assetDetail.id ?? '';
     _nameController.text = widget.assetDetail.name ?? '';
     _descriptionController.text = widget.assetDetail.description ?? '';
-    
+
     // 转换 attributes 为可编辑的格式
     if (widget.assetDetail.attributes != null) {
       widget.assetDetail.attributes!.forEach((key, value) {
@@ -93,13 +93,18 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
     try {
       final AssetProfile profile = AssetProfile(
         customId: _customIdController.text.trim(),
-        name: _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : '',
-        description: _descriptionController.text.trim().isNotEmpty ? _descriptionController.text.trim() : '',
+        name: _nameController.text.trim().isNotEmpty
+            ? _nameController.text.trim()
+            : '',
+        description: _descriptionController.text.trim().isNotEmpty
+            ? _descriptionController.text.trim()
+            : '',
         attributes: _convertAttributesToMap(),
       );
 
-      final AssetResult result = await AssetTracking().updateAsset(assetProfile: profile);
-      
+      final AssetResult result =
+          await AssetTracking().updateAsset(assetProfile: profile);
+
       if (result.success) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Asset updated successfully')),
@@ -282,7 +287,8 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
                                   labelText: 'Key',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateAttribute(index, value, attribute.value),
+                                onChanged: (value) => _updateAttribute(
+                                    index, value, attribute.value),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -292,7 +298,8 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
                                   labelText: 'Value',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateAttribute(index, attribute.key, value),
+                                onChanged: (value) => _updateAttribute(
+                                    index, attribute.key, value),
                               ),
                             ),
                             IconButton(
@@ -313,4 +320,4 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
       ),
     );
   }
-} 
+}

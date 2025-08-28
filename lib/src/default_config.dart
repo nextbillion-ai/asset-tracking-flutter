@@ -9,14 +9,13 @@ class DefaultConfig with NBEncode {
     required this.workOnMainThread,
   });
 
-  factory DefaultConfig.fromJson(Map<String,dynamic> json) => DefaultConfig(
-      enhanceService: json['enhanceService'] as bool,
-      repeatInterval: json['repeatInterval'] as int,
-      workerEnabled: json['workerEnabled'] as bool,
-      crashRestartEnabled: json['crashRestartEnabled'] as bool,
-      workOnMainThread: json['workOnMainThread'] as bool,
-    );
-
+  factory DefaultConfig.fromJson(Map<String, dynamic> json) => DefaultConfig(
+        enhanceService: json['enhanceService'] as bool,
+        repeatInterval: json['repeatInterval'] as int,
+        workerEnabled: json['workerEnabled'] as bool,
+        crashRestartEnabled: json['crashRestartEnabled'] as bool,
+        workOnMainThread: json['workOnMainThread'] as bool,
+      );
 
   bool enhanceService;
   int repeatInterval;

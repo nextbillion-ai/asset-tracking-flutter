@@ -18,9 +18,9 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _bindIdController = TextEditingController();
-  
+
   final List<MapEntry<String, String>> _attributes = [];
-  
+
   String _lastUsedAssetId = "";
   bool _isLoading = false;
 
@@ -89,13 +89,18 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
     try {
       final AssetProfile profile = AssetProfile(
         customId: _customIdController.text.trim(),
-        name: _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : '',
-        description: _descriptionController.text.trim().isNotEmpty ? _descriptionController.text.trim() : '',
+        name: _nameController.text.trim().isNotEmpty
+            ? _nameController.text.trim()
+            : '',
+        description: _descriptionController.text.trim().isNotEmpty
+            ? _descriptionController.text.trim()
+            : '',
         attributes: _convertAttributesToMap(),
       );
 
-      final AssetResult result = await _assetTracking.createAsset(profile: profile);
-      
+      final AssetResult result =
+          await _assetTracking.createAsset(profile: profile);
+
       if (result.success) {
         showToast("Create asset successfully with asset id ${result.data}");
         _bindIdController.text = result.data;
@@ -123,7 +128,8 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
     });
 
     try {
-      final AssetResult result = await _assetTracking.bindAsset(customId: assetId);
+      final AssetResult result =
+          await _assetTracking.bindAsset(customId: assetId);
       if (result.success) {
         showToast("Bind asset successfully with asset id ${result.data}");
         _saveData(result.data);
@@ -131,17 +137,20 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
       } else {
         if (result.data == "2001") {
           _showDialog(() async {
-            final assetResult = await _assetTracking.forceBindAsset(customId: assetId);
+            final assetResult =
+                await _assetTracking.forceBindAsset(customId: assetId);
             if (assetResult.success) {
               _saveData(assetId);
-              showToast("Force bind new asset successfully with assetId: $assetId");
+              showToast(
+                  "Force bind new asset successfully with assetId: $assetId");
               Navigator.pop(context);
             } else {
               showToast("Bind Failed: ${result.msg ?? ""}");
             }
           },
               title: "Bind Failed",
-              msg: "${result.msg}, do you want to clear local data and force bind to new asset id?");
+              msg:
+                  "${result.msg}, do you want to clear local data and force bind to new asset id?");
         } else {
           showToast("Bind Failed: ${result.msg ?? ""}");
         }
@@ -345,7 +354,8 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
                                   labelText: 'Key',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateAttribute(index, value, attribute.value),
+                                onChanged: (value) => _updateAttribute(
+                                    index, value, attribute.value),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -355,7 +365,8 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
                                   labelText: 'Value',
                                   border: OutlineInputBorder(),
                                 ),
-                                onChanged: (value) => _updateAttribute(index, attribute.key, value),
+                                onChanged: (value) => _updateAttribute(
+                                    index, attribute.key, value),
                               ),
                             ),
                             IconButton(

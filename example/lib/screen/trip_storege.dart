@@ -3,14 +3,12 @@ import 'dart:convert';
 
 import '../util/consts.dart';
 
-
 Future<void> storeTripHistory(String tripId) async {
   final prefs = await SharedPreferences.getInstance();
   List<String> list = await getHistoryList();
   String jsonString = jsonEncode(list..add(tripId));
   await prefs.setString(keyOfTripHistory, jsonString);
 }
-
 
 Future<List<String>> getHistoryList() async {
   final prefs = await SharedPreferences.getInstance();
@@ -22,7 +20,6 @@ Future<List<String>> getHistoryList() async {
     return [];
   }
 }
-
 
 Future<void> removeFromHistory(String tripId) async {
   final prefs = await SharedPreferences.getInstance();

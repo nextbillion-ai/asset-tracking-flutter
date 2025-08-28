@@ -112,9 +112,12 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
                             'Basic Information',
                             [
                               _buildDetailRow('ID', _assetDetail!.id ?? 'N/A'),
-                              _buildDetailRow('Device ID', _assetDetail!.deviceId ?? 'N/A'),
-                              _buildDetailRow('Name', _assetDetail!.name ?? 'N/A'),
-                              _buildDetailRow('Description', _assetDetail!.description ?? 'N/A'),
+                              _buildDetailRow(
+                                  'Device ID', _assetDetail!.deviceId ?? 'N/A'),
+                              _buildDetailRow(
+                                  'Name', _assetDetail!.name ?? 'N/A'),
+                              _buildDetailRow('Description',
+                                  _assetDetail!.description ?? 'N/A'),
                             ],
                           ),
                           const SizedBox(height: 16),
@@ -124,23 +127,31 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
                               _buildDetailRow(
                                 'Created At',
                                 _assetDetail!.createdAt != null
-                                    ? DateTime.fromMillisecondsSinceEpoch((_assetDetail!.createdAt! * 1000).toInt()).toString()
+                                    ? DateTime.fromMillisecondsSinceEpoch(
+                                            (_assetDetail!.createdAt! * 1000)
+                                                .toInt())
+                                        .toString()
                                     : 'N/A',
                               ),
                               _buildDetailRow(
                                 'Updated At',
                                 _assetDetail!.updatedAt != null
-                                    ? DateTime.fromMillisecondsSinceEpoch((_assetDetail!.updatedAt! * 1000).toInt()).toString()
+                                    ? DateTime.fromMillisecondsSinceEpoch(
+                                            (_assetDetail!.updatedAt! * 1000)
+                                                .toInt())
+                                        .toString()
                                     : 'N/A',
                               ),
                             ],
                           ),
-                          if (_assetDetail!.attributes != null && _assetDetail!.attributes!.isNotEmpty) ...[
+                          if (_assetDetail!.attributes != null &&
+                              _assetDetail!.attributes!.isNotEmpty) ...[
                             const SizedBox(height: 16),
                             _buildDetailCard(
                               'Attributes',
                               _assetDetail!.attributes!.entries.map((entry) {
-                                return _buildDetailRow(entry.key, entry.value.toString());
+                                return _buildDetailRow(
+                                    entry.key, entry.value.toString());
                               }).toList(),
                             ),
                           ],

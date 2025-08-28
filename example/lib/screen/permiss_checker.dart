@@ -3,7 +3,8 @@ import 'package:permission_handler/permission_handler.dart';
 Future<bool> checkLocationPermission() async {
   final PermissionStatus location = await Permission.location.status;
   if (location.isGranted) {
-    final PermissionStatus locationAlways = await Permission.locationAlways.status;
+    final PermissionStatus locationAlways =
+        await Permission.locationAlways.status;
     if (locationAlways.isGranted) {
       return true;
     }

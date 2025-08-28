@@ -4,12 +4,12 @@ import 'nb_encode.dart';
 
 class AndroidNotificationConfig with NBEncode {
   AndroidNotificationConfig({
-    this.serviceId = defaultServiceId, // Default value, as random generation is not possible here
+    this.serviceId =
+        defaultServiceId, // Default value, as random generation is not possible here
     this.channelId = defaultChannelId,
     this.channelName = defaultChannelName,
     this.title = '', // Replace with actual default title
-    this.content =
-        '', // Replace with actual default content
+    this.content = '', // Replace with actual default content
     this.smallIcon =
         'ic_notification_small', // Replace with an appropriate icon identifier
     this.largeIcon = '',
@@ -23,25 +23,26 @@ class AndroidNotificationConfig with NBEncode {
         'Asset ID taken content', // Replace with actual default content
   });
 
-  factory AndroidNotificationConfig.fromJson(Map<String,dynamic> json) => AndroidNotificationConfig(
-      serviceId: json['serviceId'] as int? ?? defaultServiceId,
-      channelId: json['channelId'] as String? ?? defaultChannelId,
-      channelName: json['channelName'] as String? ?? defaultChannelName,
-      title: json['title'] as String? ?? '',
-      content: json['content'] as String? ?? '',
-      smallIcon: json['smallIcon'] as String? ?? '',
-      largeIcon: json['largeIcon'] as String? ?? '',
-      showLowBatteryNotification:
-          json['showLowBatteryNotification'] as bool? ?? true,
-      lowBatteryNotificationConfig: LowBatteryNotificationConfig.fromJson(
-          jsonEncode(json['lowBatteryNotification'])),
-      showAssetIdTakenNotification:
-          json['showAssetIdTakenNotification'] as bool? ?? true,
-      contentAssetDisable: json['contentAssetDisable'] as String? ??
-          'Asset tracking stop content',
-      assetIdTakenContent:
-          json['assetIdTakenContent'] as String? ?? 'Asset ID taken content',
-    );
+  factory AndroidNotificationConfig.fromJson(Map<String, dynamic> json) =>
+      AndroidNotificationConfig(
+        serviceId: json['serviceId'] as int? ?? defaultServiceId,
+        channelId: json['channelId'] as String? ?? defaultChannelId,
+        channelName: json['channelName'] as String? ?? defaultChannelName,
+        title: json['title'] as String? ?? '',
+        content: json['content'] as String? ?? '',
+        smallIcon: json['smallIcon'] as String? ?? '',
+        largeIcon: json['largeIcon'] as String? ?? '',
+        showLowBatteryNotification:
+            json['showLowBatteryNotification'] as bool? ?? true,
+        lowBatteryNotificationConfig: LowBatteryNotificationConfig.fromJson(
+            jsonEncode(json['lowBatteryNotification'])),
+        showAssetIdTakenNotification:
+            json['showAssetIdTakenNotification'] as bool? ?? true,
+        contentAssetDisable: json['contentAssetDisable'] as String? ??
+            'Asset tracking stop content',
+        assetIdTakenContent:
+            json['assetIdTakenContent'] as String? ?? 'Asset ID taken content',
+      );
 
   static const String defaultChannelId = 'NextBillion.AI';
   static const String defaultChannelName = 'NextBillion.AI';

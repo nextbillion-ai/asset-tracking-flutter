@@ -16,7 +16,9 @@ class TripStopInput {
     return TripStop(
       name: name,
       geofenceId: geofenceId,
-      metaData: metaData.isNotEmpty ? Map<String, dynamic>.fromEntries(metaData) : null,
+      metaData: metaData.isNotEmpty
+          ? Map<String, dynamic>.fromEntries(metaData)
+          : null,
     );
   }
 }
@@ -26,7 +28,7 @@ class EditTripScreen extends StatefulWidget {
   final VoidCallback? onTripUpdated;
 
   const EditTripScreen({
-    super.key, 
+    super.key,
     required this.tripId,
     this.onTripUpdated,
   });
@@ -154,20 +156,25 @@ class EditTripScreenState extends State<EditTripScreen> {
 
       // Create TripUpdateProfile with the filled data
       final TripUpdateProfile profile = TripUpdateProfile(
-        name: _nameController.text.isNotEmpty ? _nameController.text : 'Updated Trip',
-        description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
+        name: _nameController.text.isNotEmpty
+            ? _nameController.text
+            : 'Updated Trip',
+        description: _descriptionController.text.isNotEmpty
+            ? _descriptionController.text
+            : null,
         attributes: attributes,
         metaData: metaData,
         stops: stops,
       );
 
-      final AssetResult result = await AssetTracking().updateTrip(profile: profile);
+      final AssetResult result =
+          await AssetTracking().updateTrip(profile: profile);
 
       if (result.success) {
         if (mounted) {
           // Call the callback to refresh the trip data
           widget.onTripUpdated?.call();
-          
+
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Trip updated successfully!')),
@@ -282,7 +289,8 @@ class EditTripScreenState extends State<EditTripScreen> {
                                     labelText: 'Key',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateAttribute(index, value, attribute.value),
+                                  onChanged: (value) => _updateAttribute(
+                                      index, value, attribute.value),
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -292,11 +300,13 @@ class EditTripScreenState extends State<EditTripScreen> {
                                     labelText: 'Value',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateAttribute(index, attribute.key, value),
+                                  onChanged: (value) => _updateAttribute(
+                                      index, attribute.key, value),
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () => _removeAttribute(index),
                                 tooltip: 'Remove Attribute',
                               ),
@@ -354,7 +364,8 @@ class EditTripScreenState extends State<EditTripScreen> {
                                     labelText: 'Key',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateMetaData(index, value, metaData.value),
+                                  onChanged: (value) => _updateMetaData(
+                                      index, value, metaData.value),
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -364,11 +375,13 @@ class EditTripScreenState extends State<EditTripScreen> {
                                     labelText: 'Value',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateMetaData(index, metaData.key, value),
+                                  onChanged: (value) => _updateMetaData(
+                                      index, metaData.key, value),
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () => _removeMetaData(index),
                                 tooltip: 'Remove Meta Data',
                               ),
@@ -430,14 +443,14 @@ class EditTripScreenState extends State<EditTripScreen> {
                 ),
                 child: _isLoading
                     ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
                     : const Text(
-                  'Update Trip',
-                  style: TextStyle(fontSize: 16),
-                ),
+                        'Update Trip',
+                        style: TextStyle(fontSize: 16),
+                      ),
               ),
             ],
           ),
@@ -537,7 +550,8 @@ class EditTripScreenState extends State<EditTripScreen> {
                           border: OutlineInputBorder(),
                         ),
                         onChanged: (value) {
-                          stop.metaData[metaIndex] = MapEntry(value, metaData.value);
+                          stop.metaData[metaIndex] =
+                              MapEntry(value, metaData.value);
                           _updateStop(index, stop);
                         },
                       ),
@@ -550,13 +564,15 @@ class EditTripScreenState extends State<EditTripScreen> {
                           border: OutlineInputBorder(),
                         ),
                         onChanged: (value) {
-                          stop.metaData[metaIndex] = MapEntry(metaData.key, value);
+                          stop.metaData[metaIndex] =
+                              MapEntry(metaData.key, value);
                           _updateStop(index, stop);
                         },
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                      icon:
+                          const Icon(Icons.delete, color: Colors.red, size: 20),
                       onPressed: () {
                         stop.metaData.removeAt(metaIndex);
                         _updateStop(index, stop);
