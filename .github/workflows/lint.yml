@@ -105,17 +105,26 @@ jobs:
       run: |
         pwd
         ls -la
-        echo "Navigating to example/ios..."
+        echo "=== Environment Information ==="
+        echo "Xcode version:"
+        xcodebuild -version
+        echo "macOS version:"
+        sw_vers
+        echo "=== Navigating to example/ios... ==="
         cd example/ios
         pwd
         ls -la
-        echo "Running pod install..."
+        echo "=== Running pod install... ==="
         pod install
-        echo "Running xcodebuild with code signing disabled..."
+        echo "=== Pod install completed, checking Podfile.lock ==="
+        cat Podfile.lock | grep -A 5 -B 5 "DEPLOYMENT_TARGET" || echo "No deployment target info in Podfile.lock"
+        echo "=== Running xcodebuild with code signing disabled... ==="
+        set -e
         xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Debug clean build \
           -allowProvisioningUpdates \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
           DEVELOPMENT_TEAM="" \
-          PROVISIONING_PROFILE="" 
+          PROVISIONING_PROFILE="" 2>&1 | tee xcodebuild.log
+        echo "=== Build exit code: $? ==="
