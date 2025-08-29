@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/trip_history_screen.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/trip_storege.dart';
@@ -213,12 +212,9 @@ class _MyAppState extends State<HomeScreen>
 
   bool locationConfigAvailable() {
     if (selectedOption == TrackingMode.custom) {
-      num? customValue = num.tryParse(textEditingController.text);
+      final num? customValue = num.tryParse(textEditingController.text);
       if (customValue == null) {
-        Fluttertoast.showToast(
-            msg:
-                "Please enter ${selectedIntervalMode == CustomIntervalMode.distanceBased ? "distance interval" : "time interval"}",
-            gravity: ToastGravity.CENTER);
+        showToast("Please enter ${selectedIntervalMode == CustomIntervalMode.distanceBased ? "distance interval" : "time interval"}");
         return false;
       }
       var locationConfig = LocationConfig();
