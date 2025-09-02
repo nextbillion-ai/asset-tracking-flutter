@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 
 mixin ToastMixin {
   static OverlayEntry? _overlayEntry;
@@ -8,14 +9,16 @@ mixin ToastMixin {
   void showToast(String string) {
     // Get current context
     final BuildContext? context = _getToastContext();
-    if (context == null || !context.mounted) return;
+    if (context == null || !context.mounted) {
+      return;
+    }
 
     // Remove existing toast if any
     _dismissToast();
 
     // Get overlay from current context
     final overlay = Overlay.of(context);
-    
+
     // Create toast widget
     _overlayEntry = OverlayEntry(
       builder: (context) => _ToastWidget(message: string),
@@ -25,15 +28,13 @@ mixin ToastMixin {
     overlay.insert(_overlayEntry!);
 
     // Set timer to auto-dismiss after 5 seconds
-    _timer = Timer(const Duration(seconds: 5), () {
-      _dismissToast();
-    });
+    _timer = Timer(const Duration(seconds: 5), _dismissToast);
   }
 
   static void _dismissToast() {
     _timer?.cancel();
     _timer = null;
-    
+
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
@@ -49,9 +50,9 @@ mixin ToastMixin {
 }
 
 class _ToastWidget extends StatefulWidget {
-  final String message;
 
   const _ToastWidget({required this.message});
+  final String message;
 
   @override
   State<_ToastWidget> createState() => _ToastWidgetState();
@@ -66,15 +67,15 @@ class _ToastWidgetState extends State<_ToastWidget>
   @override
   void initState() {
     super.initState();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
 
     _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
+      begin: 0,
+      end: 1,
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
@@ -82,7 +83,7 @@ class _ToastWidgetState extends State<_ToastWidget>
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 1),
-      end: const Offset(0, 0),
+      end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
@@ -99,8 +100,7 @@ class _ToastWidgetState extends State<_ToastWidget>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Positioned(
+  Widget build(BuildContext context) => Positioned(
       left: 20,
       right: 20,
       bottom: 40, // 40dp from bottom
@@ -112,16 +112,16 @@ class _ToastWidgetState extends State<_ToastWidget>
             color: Colors.transparent,
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12.0,
+                horizontal: 16,
+                vertical: 12,
               ),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.8),
-                borderRadius: BorderRadius.circular(8.0),
+                color: Colors.black.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(8),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
-                    blurRadius: 4.0,
+                    blurRadius: 4,
                     offset: Offset(0, 2),
                   ),
                 ],
@@ -130,7 +130,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                 widget.message,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 16.0,
+                  fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -139,5 +139,4 @@ class _ToastWidgetState extends State<_ToastWidget>
         ),
       ),
     );
-  }
 }

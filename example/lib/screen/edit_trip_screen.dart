@@ -2,36 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 
 class TripStopInput {
-  String name;
-  String geofenceId;
-  final List<MapEntry<String, String>> metaData;
 
   TripStopInput({
     this.name = '',
     this.geofenceId = '',
     List<MapEntry<String, String>>? metaData,
-  }) : metaData = metaData ?? [];
+  }) : metaData = metaData ?? <MapEntry<String, String>>[];
+  String name;
+  String geofenceId;
+  final List<MapEntry<String, String>> metaData;
 
-  TripStop toTripStop() {
-    return TripStop(
+  TripStop toTripStop() => TripStop(
       name: name,
       geofenceId: geofenceId,
       metaData: metaData.isNotEmpty
           ? Map<String, dynamic>.fromEntries(metaData)
           : null,
     );
-  }
 }
 
 class EditTripScreen extends StatefulWidget {
-  final String tripId;
-  final VoidCallback? onTripUpdated;
 
   const EditTripScreen({
-    super.key,
-    required this.tripId,
+    required this.tripId, super.key,
     this.onTripUpdated,
   });
+  final String tripId;
+  final VoidCallback? onTripUpdated;
 
   @override
   EditTripScreenState createState() => EditTripScreenState();
@@ -43,13 +40,13 @@ class EditTripScreenState extends State<EditTripScreen> {
   bool _isLoading = false;
 
   // Attributes key-value pairs
-  final List<MapEntry<String, String>> _attributes = [];
+  final List<MapEntry<String, String>> _attributes = <MapEntry<String, String>>[];
 
   // MetaData key-value pairs
-  final List<MapEntry<String, String>> _metaData = [];
+  final List<MapEntry<String, String>> _metaData = <MapEntry<String, String>>[];
 
   // Stops list
-  final List<TripStopInput> _stops = [];
+  final List<TripStopInput> _stops = <TripStopInput>[];
 
   @override
   void dispose() {
@@ -59,13 +56,15 @@ class EditTripScreenState extends State<EditTripScreen> {
   }
 
   Map<String, dynamic>? _convertToMap(List<MapEntry<String, String>> entries) {
-    if (entries.isEmpty) return null;
+    if (entries.isEmpty) {
+      return null;
+    }
     return Map<String, dynamic>.fromEntries(entries);
   }
 
   void _addAttribute() {
     setState(() {
-      _attributes.add(const MapEntry('', ''));
+      _attributes.add(const MapEntry<String, String>('', ''));
     });
   }
 
@@ -77,13 +76,13 @@ class EditTripScreenState extends State<EditTripScreen> {
 
   void _updateAttribute(int index, String key, String value) {
     setState(() {
-      _attributes[index] = MapEntry(key, value);
+      _attributes[index] = MapEntry<String, String>(key, value);
     });
   }
 
   void _addMetaData() {
     setState(() {
-      _metaData.add(const MapEntry('', ''));
+      _metaData.add(const MapEntry<String, String>('', ''));
     });
   }
 
@@ -95,7 +94,7 @@ class EditTripScreenState extends State<EditTripScreen> {
 
   void _updateMetaData(int index, String key, String value) {
     setState(() {
-      _metaData[index] = MapEntry(key, value);
+      _metaData[index] = MapEntry<String, String>(key, value);
     });
   }
 
@@ -118,8 +117,10 @@ class EditTripScreenState extends State<EditTripScreen> {
   }
 
   List<TripStop>? _convertStops() {
-    if (_stops.isEmpty) return null;
-    return _stops.map((stopInput) => stopInput.toTripStop()).toList();
+    if (_stops.isEmpty) {
+      return null;
+    }
+    return _stops.map<TripStop>((TripStopInput stopInput) => stopInput.toTripStop()).toList();
   }
 
   Future<void> _updateTrip() async {
@@ -167,7 +168,7 @@ class EditTripScreenState extends State<EditTripScreen> {
         stops: stops,
       );
 
-      final AssetResult result =
+      final AssetResult<String> result =
           await AssetTracking().updateTrip(profile: profile);
 
       if (result.success) {
@@ -187,7 +188,7 @@ class EditTripScreenState extends State<EditTripScreen> {
           );
         }
       }
-    } catch (e) {
+    } on Exception catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error updating trip: $e')),
@@ -203,14 +204,13 @@ class EditTripScreenState extends State<EditTripScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Edit Trip'),
-        actions: [
+        actions: <Widget>[
           if (_isLoading)
             const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16),
               child: SizedBox(
                 width: 20,
                 height: 20,
@@ -220,11 +220,11 @@ class EditTripScreenState extends State<EditTripScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+            children: <Widget>[
               TextField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -247,13 +247,13 @@ class EditTripScreenState extends State<EditTripScreen> {
               // Attributes Section
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Attributes (optional)',
                             style: TextStyle(
@@ -270,26 +270,26 @@ class EditTripScreenState extends State<EditTripScreen> {
                       ),
                       if (_attributes.isEmpty)
                         const Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8),
                           child: Text(
                             'No attributes added',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),
-                      ..._attributes.asMap().entries.map((entry) {
+                      ..._attributes.asMap().entries.map((MapEntry<int, MapEntry<String, String>> entry) {
                         final int index = entry.key;
                         final MapEntry<String, String> attribute = entry.value;
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Row(
-                            children: [
+                            children: <Widget>[
                               Expanded(
                                 child: TextField(
                                   decoration: const InputDecoration(
                                     labelText: 'Key',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateAttribute(
+                                  onChanged: (String value) => _updateAttribute(
                                       index, value, attribute.value),
                                 ),
                               ),
@@ -300,7 +300,7 @@ class EditTripScreenState extends State<EditTripScreen> {
                                     labelText: 'Value',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateAttribute(
+                                  onChanged: (String value) => _updateAttribute(
                                       index, attribute.key, value),
                                 ),
                               ),
@@ -313,7 +313,7 @@ class EditTripScreenState extends State<EditTripScreen> {
                             ],
                           ),
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ),
@@ -322,13 +322,13 @@ class EditTripScreenState extends State<EditTripScreen> {
               // MetaData Section
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Meta Data (optional)',
                             style: TextStyle(
@@ -345,26 +345,26 @@ class EditTripScreenState extends State<EditTripScreen> {
                       ),
                       if (_metaData.isEmpty)
                         const Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8),
                           child: Text(
                             'No meta data added',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),
-                      ..._metaData.asMap().entries.map((entry) {
+                      ..._metaData.asMap().entries.map((MapEntry<int, MapEntry<String, String>> entry) {
                         final int index = entry.key;
                         final MapEntry<String, String> metaData = entry.value;
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Row(
-                            children: [
+                            children: <Widget>[
                               Expanded(
                                 child: TextField(
                                   decoration: const InputDecoration(
                                     labelText: 'Key',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateMetaData(
+                                  onChanged: (String value) => _updateMetaData(
                                       index, value, metaData.value),
                                 ),
                               ),
@@ -375,7 +375,7 @@ class EditTripScreenState extends State<EditTripScreen> {
                                     labelText: 'Value',
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (value) => _updateMetaData(
+                                  onChanged: (String value) => _updateMetaData(
                                       index, metaData.key, value),
                                 ),
                               ),
@@ -388,7 +388,7 @@ class EditTripScreenState extends State<EditTripScreen> {
                             ],
                           ),
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ),
@@ -397,13 +397,13 @@ class EditTripScreenState extends State<EditTripScreen> {
               // Stops Section
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Stops (optional)',
                             style: TextStyle(
@@ -420,17 +420,17 @@ class EditTripScreenState extends State<EditTripScreen> {
                       ),
                       if (_stops.isEmpty)
                         const Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8),
                           child: Text(
                             'No stops added',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),
-                      ..._stops.asMap().entries.map((entry) {
+                      ..._stops.asMap().entries.map((MapEntry<int, TripStopInput> entry) {
                         final int index = entry.key;
                         final TripStopInput stop = entry.value;
                         return _buildStopInput(index, stop);
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ),
@@ -457,19 +457,17 @@ class EditTripScreenState extends State<EditTripScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildStopInput(int index, TripStopInput stop) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+  Widget _buildStopInput(int index, TripStopInput stop) => Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+                                  children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+                                      children: <Widget>[
                 Text(
                   'Stop ${index + 1}',
                   style: const TextStyle(
@@ -490,7 +488,7 @@ class EditTripScreenState extends State<EditTripScreen> {
                 labelText: 'Name',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (value) {
+              onChanged: (String value) {
                 stop.name = value;
                 _updateStop(index, stop);
               },
@@ -501,7 +499,7 @@ class EditTripScreenState extends State<EditTripScreen> {
                 labelText: 'Geofence ID',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (value) {
+              onChanged: (String value) {
                 stop.geofenceId = value;
                 _updateStop(index, stop);
               },
@@ -510,7 +508,7 @@ class EditTripScreenState extends State<EditTripScreen> {
             // MetaData for this stop
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+                                      children: <Widget>[
                 const Text(
                   'Meta Data (optional)',
                   style: TextStyle(
@@ -521,7 +519,7 @@ class EditTripScreenState extends State<EditTripScreen> {
                 IconButton(
                   icon: const Icon(Icons.add, size: 20),
                   onPressed: () {
-                    stop.metaData.add(const MapEntry('', ''));
+                    stop.metaData.add(const MapEntry<String, String>('', ''));
                     _updateStop(index, stop);
                   },
                   tooltip: 'Add Meta Data',
@@ -530,28 +528,28 @@ class EditTripScreenState extends State<EditTripScreen> {
             ),
             if (stop.metaData.isEmpty)
               const Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8),
                 child: Text(
                   'No meta data added',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ),
-            ...stop.metaData.asMap().entries.map((metaEntry) {
+            ...stop.metaData.asMap().entries.map((MapEntry<int, MapEntry<String, String>> metaEntry) {
               final int metaIndex = metaEntry.key;
               final MapEntry<String, String> metaData = metaEntry.value;
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
-                  children: [
+                                          children: <Widget>[
                     Expanded(
                       child: TextField(
                         decoration: const InputDecoration(
                           labelText: 'Key',
                           border: OutlineInputBorder(),
                         ),
-                        onChanged: (value) {
+                        onChanged: (String value) {
                           stop.metaData[metaIndex] =
-                              MapEntry(value, metaData.value);
+                              MapEntry<String, String>(value, metaData.value);
                           _updateStop(index, stop);
                         },
                       ),
@@ -563,9 +561,9 @@ class EditTripScreenState extends State<EditTripScreen> {
                           labelText: 'Value',
                           border: OutlineInputBorder(),
                         ),
-                        onChanged: (value) {
+                        onChanged: (String value) {
                           stop.metaData[metaIndex] =
-                              MapEntry(metaData.key, value);
+                              MapEntry<String, String>(metaData.key, value);
                           _updateStop(index, stop);
                         },
                       ),
@@ -582,10 +580,9 @@ class EditTripScreenState extends State<EditTripScreen> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
     );
-  }
 }

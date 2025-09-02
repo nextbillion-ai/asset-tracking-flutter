@@ -1,10 +1,10 @@
-import 'package:test/test.dart';
 import 'package:nb_asset_tracking_flutter/src/nb_location.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('NBLocation', () {
     test('creates instance with provided values', () {
-      final location = NBLocation(
+      final NBLocation location = NBLocation(
         latitude: 45.0,
         longitude: -122.0,
         accuracy: 10.0,
@@ -12,7 +12,7 @@ void main() {
         speed: 5.0,
         speedAccuracy: 1.0,
         heading: 90.0,
-        provider: "gps",
+        provider: 'gps',
         timestamp: 1234567890,
       );
 
@@ -23,7 +23,7 @@ void main() {
       expect(location.speed, equals(5.0));
       expect(location.speedAccuracy, equals(1.0));
       expect(location.heading, equals(90.0));
-      expect(location.provider, equals("gps"));
+      expect(location.provider, equals('gps'));
       expect(location.timestamp, equals(1234567890));
     });
 
@@ -38,7 +38,7 @@ void main() {
           "speed": 5.0,
           "speedAccuracy": 1.0,
           "heading": 90.0,
-          "provider": "gps",
+          "provider": 'gps',
           "timestamp": 1234567890
         }
         ''';
@@ -52,7 +52,7 @@ void main() {
         expect(location.speed, equals(5.0));
         expect(location.speedAccuracy, equals(1.0));
         expect(location.heading, equals(90.0));
-        expect(location.provider, equals("gps"));
+        expect(location.provider, equals('gps'));
         expect(location.timestamp, equals(1234567890));
       });
 
@@ -81,7 +81,7 @@ void main() {
           "speed": 5,
           "speedAccuracy": 1,
           "heading": 90,
-          "provider": "gps",
+          "provider": 'gps',
           "timestamp": 1234567890
         }
         ''';

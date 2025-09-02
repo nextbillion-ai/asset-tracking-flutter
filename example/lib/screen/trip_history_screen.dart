@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/trip_storege.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/trip_summary_screen.dart';
-import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 
 class TripHistoryScreen extends StatefulWidget {
   const TripHistoryScreen({super.key});
@@ -47,7 +47,7 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
           );
         }
       }
-    } catch (e) {
+    } on Exception catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error deleting trip: $e')),
@@ -57,14 +57,13 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Trip History'),
       ),
       body: tripHistory == null || tripHistory!.isEmpty
           ? const Center(
-              child: Text("No ended trip"),
+              child: Text('No ended trip'),
             )
           : ListView.separated(
               itemCount: tripHistory?.length ?? 0,
@@ -80,18 +79,16 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
                   background: Container(
                     color: Colors.red,
                     alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(right: 20.0),
+                    padding: const EdgeInsets.only(right: 20),
                     child: const Icon(
                       Icons.delete,
                       color: Colors.white,
                     ),
                   ),
                   direction: DismissDirection.endToStart,
-                  confirmDismiss: (direction) async {
-                    return await showDialog<bool>(
+                  confirmDismiss: (direction) async => showDialog<bool>(
                       context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
+                      builder: (BuildContext context) => AlertDialog(
                           title: const Text('Delete Trip'),
                           content: Text(
                               'Are you sure you want to delete trip "$tripId"?'),
@@ -108,16 +105,14 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
                               child: const Text('Delete'),
                             ),
                           ],
-                        );
-                      },
-                    );
-                  },
+                        ),
+                    ),
                   onDismissed: (direction) {
                     _deleteTrip(tripId);
                   },
                   child: ListTile(
                     title: Text(tripId),
-                    subtitle: Text('Tap to view trip summary'),
+                    subtitle: const Text('Tap to view trip summary'),
                     leading: const Icon(Icons.history),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
@@ -134,5 +129,4 @@ class TripHistoryScreenState extends State<TripHistoryScreen> {
               },
             ),
     );
-  }
 }

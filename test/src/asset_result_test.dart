@@ -1,11 +1,10 @@
-import 'package:test/test.dart';
-import 'package:nb_asset_tracking_flutter/src/asset_detail_info.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('AssetResult', () {
     test('creates instance with all properties', () {
-      final result = AssetResult<String>(
+      final AssetResult<String> result = AssetResult<String>(
         success: true,
         data: 'test data',
         msg: 'Success message',
@@ -26,7 +25,7 @@ void main() {
         }
         ''';
 
-        final result = AssetResult<AssetProfile>.fromJson(jsonString);
+        final AssetResult<AssetProfile> result = AssetResult<AssetProfile>.fromJson(jsonString);
 
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));
@@ -44,7 +43,7 @@ void main() {
         }
         ''';
 
-        final result = AssetResult<AssetDetailInfo>.fromJson(jsonString);
+        final AssetResult<AssetDetailInfo> result = AssetResult<AssetDetailInfo>.fromJson(jsonString);
 
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));
@@ -103,7 +102,7 @@ void main() {
         }
         ''';
 
-        final result = AssetResult<String>.fromJson(jsonString);
+        final AssetResult<String> result = AssetResult<String>.fromJson(jsonString);
 
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));

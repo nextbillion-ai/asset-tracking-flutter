@@ -5,17 +5,16 @@ typedef InputDialogCallback = void Function(
     String title, String description, String tripId);
 
 void showInputDialog(BuildContext context, InputDialogCallback callback) {
-  final formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final tripIdController =
+  final TextEditingController tripIdController =
       TextEditingController(text: const Uuid().v4().toString());
-  final tripNameController = TextEditingController();
-  final tripDescriptionController = TextEditingController();
+  final TextEditingController tripNameController = TextEditingController();
+  final TextEditingController tripDescriptionController = TextEditingController();
 
   showDialog(
     context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
+    builder: (BuildContext context) => AlertDialog(
         title: const Text('Create Trip'),
         content: Form(
           key: formKey,
@@ -25,7 +24,7 @@ void showInputDialog(BuildContext context, InputDialogCallback callback) {
                 TextFormField(
                   controller: tripNameController,
                   decoration: const InputDecoration(labelText: 'Title'),
-                  validator: (value) {
+                  validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a title';
                     }
@@ -46,7 +45,7 @@ void showInputDialog(BuildContext context, InputDialogCallback callback) {
                   controller: tripIdController,
                   decoration:
                       const InputDecoration(labelText: 'Custom Trip ID'),
-                  validator: (value) {
+                  validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a custom trip ID';
                     }
@@ -76,7 +75,6 @@ void showInputDialog(BuildContext context, InputDialogCallback callback) {
             },
           ),
         ],
-      );
-    },
+      ),
   );
 }

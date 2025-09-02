@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 
 class EditAssetScreen extends StatefulWidget {
-  final AssetDetailInfo assetDetail;
-  final VoidCallback? onAssetUpdated;
 
   const EditAssetScreen({
-    super.key,
-    required this.assetDetail,
+    required this.assetDetail, super.key,
     this.onAssetUpdated,
   });
+  final AssetDetailInfo assetDetail;
+  final VoidCallback? onAssetUpdated;
 
   @override
   State<EditAssetScreen> createState() => _EditAssetScreenState();
@@ -29,12 +28,10 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
   }
 
   void _initializeData() {
-    // 填充原始数据
     _customIdController.text = widget.assetDetail.id ?? '';
     _nameController.text = widget.assetDetail.name ?? '';
     _descriptionController.text = widget.assetDetail.description ?? '';
 
-    // 转换 attributes 为可编辑的格式
     if (widget.assetDetail.attributes != null) {
       widget.assetDetail.attributes!.forEach((key, value) {
         _attributes.add(MapEntry(key, value.toString()));
@@ -106,20 +103,26 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
           await AssetTracking().updateAsset(assetProfile: profile);
 
       if (result.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Asset updated successfully')),
-        );
-        widget.onAssetUpdated?.call();
-        Navigator.of(context).pop();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Asset updated successfully')),
+          );
+          widget.onAssetUpdated?.call();
+          Navigator.of(context).pop();
+        }
       } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to update asset: ${result.msg}')),
+          );
+        }
+      }
+    } on Exception catch (e) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update asset: ${result.msg}')),
+          SnackBar(content: Text('Error updating asset: $e')),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating asset: $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -128,14 +131,13 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Edit Asset'),
         actions: [
           if (_isLoading)
             const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16),
               child: SizedBox(
                 width: 20,
                 height: 20,
@@ -150,14 +152,14 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Custom ID Section
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -186,7 +188,7 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
             // Name Section
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -215,7 +217,7 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
             // Description Section
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -245,7 +247,7 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
             // Attributes Section
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -268,7 +270,7 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
                     ),
                     if (_attributes.isEmpty)
                       const Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8),
                         child: Text(
                           'No attributes added',
                           style: TextStyle(color: Colors.grey),
@@ -278,7 +280,7 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
                       final int index = entry.key;
                       final MapEntry<String, String> attribute = entry.value;
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Row(
                           children: [
                             Expanded(
@@ -310,7 +312,7 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
@@ -319,5 +321,4 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
         ),
       ),
     );
-  }
 }

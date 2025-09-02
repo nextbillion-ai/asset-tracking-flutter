@@ -3,9 +3,8 @@ import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 import 'edit_trip_screen.dart';
 
 class CurrentTripInfoScreen extends StatefulWidget {
+  const CurrentTripInfoScreen({required this.tripId, super.key});
   final String tripId;
-
-  const CurrentTripInfoScreen({super.key, required this.tripId});
 
   @override
   TripInfoScreenState createState() => TripInfoScreenState();
@@ -37,8 +36,7 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Trip Information'),
         actions: [
@@ -50,7 +48,7 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
       ),
       body: FutureBuilder<TripInfo>(
         future: _tripInfoFuture,
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<TripInfo> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -87,7 +85,7 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
           return RefreshIndicator(
             onRefresh: () async => _loadTripInfo(),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -112,21 +110,19 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
         },
       ),
     );
-  }
 
-  Widget _buildBasicInfoCard(TripInfo tripInfo) {
-    return Card(
+  Widget _buildBasicInfoCard(TripInfo tripInfo) => Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(Icons.info_outline, color: Colors.blue),
-                const SizedBox(width: 8),
-                const Text(
+                Icon(Icons.info_outline, color: Colors.blue),
+                SizedBox(width: 8),
+                Text(
                   'Basic Information',
                   style: TextStyle(
                     fontSize: 18,
@@ -148,21 +144,19 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildTimeInfoCard(TripInfo tripInfo) {
-    return Card(
+  Widget _buildTimeInfoCard(TripInfo tripInfo) => Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+          children: <Widget>[
+            const Row(
               children: [
-                const Icon(Icons.schedule, color: Colors.orange),
-                const SizedBox(width: 8),
-                const Text(
+                Icon(Icons.schedule, color: Colors.orange),
+                SizedBox(width: 8),
+                Text(
                   'Time Information',
                   style: TextStyle(
                     fontSize: 18,
@@ -174,29 +168,27 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
             const SizedBox(height: 16),
             _buildInfoRow('Started At', _formatDateTime(tripInfo.startedAt)),
             if (tripInfo.endedAt != null)
-              _buildInfoRow('Ended At', _formatDateTime(tripInfo.endedAt!)),
+              _buildInfoRow('Ended At', _formatDateTime(tripInfo.endedAt)),
             _buildInfoRow('Created At', _formatDateTime(tripInfo.createdAt)),
             if (tripInfo.updatedAt != null)
-              _buildInfoRow('Updated At', _formatDateTime(tripInfo.updatedAt!)),
+              _buildInfoRow('Updated At', _formatDateTime(tripInfo.updatedAt)),
           ],
         ),
       ),
     );
-  }
 
-  Widget _buildMetadataCard(TripInfo tripInfo) {
-    return Card(
+  Widget _buildMetadataCard(TripInfo tripInfo) => Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(Icons.data_usage, color: Colors.green),
-                const SizedBox(width: 8),
-                const Text(
+                Icon(Icons.data_usage, color: Colors.green),
+                SizedBox(width: 8),
+                Text(
                   'Metadata',
                   style: TextStyle(
                     fontSize: 18,
@@ -232,18 +224,16 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildStopsCard(TripInfo tripInfo) {
-    return Card(
+  Widget _buildStopsCard(TripInfo tripInfo) => Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Row(
-              children: [
+              children: <Widget>[
                 const Icon(Icons.location_on, color: Colors.red),
                 const SizedBox(width: 8),
                 Text(
@@ -322,16 +312,14 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildRouteCard(TripInfo tripInfo) {
-    return Card(
+  Widget _buildRouteCard(TripInfo tripInfo) => Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Row(
               children: [
                 const Icon(Icons.route, color: Colors.purple),
@@ -350,8 +338,8 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
               height: 300,
               child: ListView.builder(
                 itemCount: tripInfo.route!.length,
-                itemBuilder: (context, index) {
-                  final location = tripInfo.route![index];
+                itemBuilder: (BuildContext context, int index) {
+                  final TrackLocation location = tripInfo.route![index];
                   return Container(
                     margin: const EdgeInsets.only(bottom: 8),
                     padding: const EdgeInsets.all(12),
@@ -393,7 +381,7 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
                         ),
                         const SizedBox(height: 8),
                         _buildInfoRow('Location',
-                            '${location.location?.lat?.toStringAsFixed(6)}, ${location.location?.lon?.toStringAsFixed(6)}',
+                            '${location.location?.lat.toStringAsFixed(6)}, ${location.location?.lon.toStringAsFixed(6)}',
                             indent: true),
                         if (location.speed != null)
                           _buildInfoRow('Speed',
@@ -411,9 +399,8 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
                           _buildInfoRow('Bearing',
                               '${location.bearing!.toStringAsFixed(1)}°',
                               indent: true),
-                        if (location.batteryLevel != null)
-                          _buildInfoRow('Battery', '${location.batteryLevel}%',
-                              indent: true),
+                        _buildInfoRow('Battery', '${location.batteryLevel}%',
+                            indent: true),
                         _buildInfoRow(
                             'Time', _formatDateTime(location.timestamp),
                             indent: true),
@@ -427,14 +414,12 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
         ),
       ),
     );
-  }
 
   Widget _buildInfoRow(String label, String value,
-      {bool indent = false, Color? valueColor}) {
-    return Padding(
+      {bool indent = false, Color? valueColor}) => Padding(
       padding: EdgeInsets.only(
         left: indent ? 16.0 : 0.0,
-        bottom: 8.0,
+        bottom: 8,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,13 +446,12 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
         ],
       ),
     );
-  }
 
   String _formatDateTime(DateTime? dateTime) {
     if (dateTime == null) {
-      return "N/A";
+      return 'N/A';
     }
-    return '${dateTime!.toLocal().toString().split('.')[0]}';
+    return dateTime.toLocal().toString().split('.')[0];
   }
 
   Color _getStateColor(String state) {
@@ -488,7 +472,7 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
   void _showEditDialog(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => EditTripScreen(
+        builder: (BuildContext context) => EditTripScreen(
           tripId: widget.tripId,
           onTripUpdated: _loadTripInfo,
         ),
@@ -498,23 +482,20 @@ class TripInfoScreenState extends State<CurrentTripInfoScreen> {
 }
 
 class TripStopInput {
-  String name;
-  String geofenceId;
-  final List<MapEntry<String, String>> metaData;
-
   TripStopInput({
     this.name = '',
     this.geofenceId = '',
     List<MapEntry<String, String>>? metaData,
   }) : metaData = metaData ?? [];
+  String name;
+  String geofenceId;
+  final List<MapEntry<String, String>> metaData;
 
-  TripStop toTripStop() {
-    return TripStop(
+  TripStop toTripStop() => TripStop(
       name: name,
       geofenceId: geofenceId,
       metaData: metaData.isNotEmpty
           ? Map<String, dynamic>.fromEntries(metaData)
           : null,
     );
-  }
 }

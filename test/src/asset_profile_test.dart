@@ -1,14 +1,14 @@
-import 'package:test/test.dart';
 import 'package:nb_asset_tracking_flutter/src/asset_profile.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('AssetProfile', () {
     test('creates instance with all properties', () {
-      final profile = AssetProfile(
+      final AssetProfile profile = AssetProfile(
         customId: 'custom123',
         name: 'Asset Name',
         description: 'Asset Description',
-        attributes: {'key': 'value'},
+        attributes: <String, String>{'key': 'value'},
       );
 
       expect(profile.customId, equals('custom123'));
@@ -19,14 +19,14 @@ void main() {
 
     group('toJson', () {
       test('converts to JSON correctly', () {
-        final profile = AssetProfile(
+        final AssetProfile profile = AssetProfile(
           customId: 'custom123',
           name: 'Asset Name',
           description: 'Asset Description',
-          attributes: {'key': 'value'},
+          attributes: <String, String>{'key': 'value'},
         );
 
-        final json = profile.toJson();
+        final Map<String, dynamic> json = profile.toJson();
 
         expect(json['customId'], equals('custom123'));
         expect(json['name'], equals('Asset Name'));
@@ -35,14 +35,14 @@ void main() {
       });
 
       test('encodes via NBEncode mixin correctly', () {
-        final profile = AssetProfile(
+        final AssetProfile profile = AssetProfile(
           customId: 'custom123',
           name: 'Asset Name',
           description: 'Asset Description',
-          attributes: {'key': 'value'},
+          attributes: <String, String>{'key': 'value'},
         );
 
-        final encoded = profile.encode();
+        final String encoded = profile.encode();
         expect(
           encoded,
           '{"customId":"custom123","description":"Asset Description",'
@@ -62,7 +62,7 @@ void main() {
         }
         ''';
 
-        final profile = AssetProfile.fromJson(jsonString);
+        final AssetProfile profile = AssetProfile.fromJson(jsonString);
 
         expect(profile.customId, equals('custom123'));
         expect(profile.name, equals('Asset Name'));
@@ -117,7 +117,7 @@ void main() {
         }
         ''';
 
-        final profile = AssetProfile.fromJson(jsonString);
+        final AssetProfile profile = AssetProfile.fromJson(jsonString);
 
         expect(profile.attributes['stringKey'], equals('value'));
         expect(profile.attributes['numKey'], equals(123));

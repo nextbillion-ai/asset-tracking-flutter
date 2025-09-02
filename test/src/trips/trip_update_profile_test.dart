@@ -1,11 +1,11 @@
-import 'package:test/test.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_update_profile.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_stop.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_update_profile.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('TripUpdateProfile', () {
     test('constructor creates instance with required values', () {
-      final profile = TripUpdateProfile(
+      final TripUpdateProfile profile = TripUpdateProfile(
         name: 'Test Profile',
       );
 
@@ -24,61 +24,61 @@ void main() {
     });
 
     test('constructor creates instance with all values', () {
-      final stops = [
+      final List<TripStop> stops = <TripStop>[
         TripStop(
           name: 'Stop 1',
           geofenceId: 'geo123',
-          metaData: {'key': 'value'},
+          metaData: <String, String>{'key': 'value'},
         )
       ];
 
-      final profile = TripUpdateProfile(
+      final TripUpdateProfile profile = TripUpdateProfile(
         name: 'Test Profile',
         description: 'Test Description',
-        attributes: {'attr1': 'value1'},
-        metaData: {'key': 'value'},
+        attributes: <String, String>{'attr1': 'value1'},
+        metaData: <String, String>{'key': 'value'},
         stops: stops,
       );
 
       expect(profile.name, equals('Test Profile'));
       expect(profile.description, equals('Test Description'));
-      expect(profile.attributes, equals({'attr1': 'value1'}));
-      expect(profile.metaData, equals({'key': 'value'}));
+      expect(profile.attributes, equals(<String, String>{'attr1': 'value1'}));
+      expect(profile.metaData, equals(<String, String>{'key': 'value'}));
       expect(profile.stops, equals(stops));
     });
 
     group('fromJson', () {
       test('creates instance from complete JSON', () {
-        final json = {
+        final Map<String, dynamic> json = <String, dynamic>{
           'name': 'Test Profile',
           'description': 'Test Description',
-          'attributes': {'attr1': 'value1'},
-          'metaData': {'key': 'value'},
-          'stops': [
-            {
+          'attributes': <String, String>{'attr1': 'value1'},
+          'metaData': <String, String>{'key': 'value'},
+          'stops': <Map<String, dynamic>>[
+            <String, dynamic>{
               'name': 'Stop 1',
               'geofenceId': 'geo123',
-              'metaData': {'key': 'value'},
+              'metaData': <String, String>{'key': 'value'},
             }
           ],
         };
 
-        final profile = TripUpdateProfile.fromJson(json);
+        final TripUpdateProfile profile = TripUpdateProfile.fromJson(json);
 
         expect(profile.name, equals('Test Profile'));
         expect(profile.description, equals('Test Description'));
-        expect(profile.attributes, equals({'attr1': 'value1'}));
-        expect(profile.metaData, equals({'key': 'value'}));
+        expect(profile.attributes, equals(<String, String>{'attr1': 'value1'}));
+        expect(profile.metaData, equals(<String, String>{'key': 'value'}));
         expect(profile.stops?.length, equals(1));
         expect(profile.stops?.first.name, equals('Stop 1'));
       });
 
       test('creates instance with minimal JSON', () {
-        final json = {
+        final Map<String, dynamic> json = <String, dynamic>{
           'name': 'Test Profile',
         };
 
-        final profile = TripUpdateProfile.fromJson(json);
+        final TripUpdateProfile profile = TripUpdateProfile.fromJson(json);
 
         expect(profile.name, equals('Test Profile'));
         expect(profile.description, isNull);
@@ -89,28 +89,28 @@ void main() {
     });
 
     test('toJson converts instance to correct JSON format', () {
-      final stops = [
+      final List<TripStop> stops = <TripStop>[
         TripStop(
           name: 'Stop 1',
           geofenceId: 'geo123',
-          metaData: {'key': 'value'},
+          metaData: <String, String>{'key': 'value'},
         )
       ];
 
-      final profile = TripUpdateProfile(
+      final TripUpdateProfile profile = TripUpdateProfile(
         name: 'Test Profile',
         description: 'Test Description',
-        attributes: {'attr1': 'value1'},
-        metaData: {'key': 'value'},
+        attributes: <String, String>{'attr1': 'value1'},
+        metaData: <String, String>{'key': 'value'},
         stops: stops,
       );
 
-      final json = profile.toJson();
+      final Map<String, dynamic> json = profile.toJson();
 
       expect(json['name'], equals('Test Profile'));
       expect(json['description'], equals('Test Description'));
-      expect(json['attributes'], equals({'attr1': 'value1'}));
-      expect(json['metaData'], equals({'key': 'value'}));
+      expect(json['attributes'], equals(<String, String>{'attr1': 'value1'}));
+      expect(json['metaData'], equals(<String, String>{'key': 'value'}));
       expect(json['stops'], isList);
       expect(json['stops']?.first['name'], equals('Stop 1'));
     });

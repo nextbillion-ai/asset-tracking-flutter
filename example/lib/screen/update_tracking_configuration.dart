@@ -19,10 +19,10 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
     with ToastMixin
     implements OnTrackingDataCallBack {
   bool bindAsset = false;
-  final assetTracking = AssetTracking();
-  String locationInfo = "";
-  String configInfo = "";
-  String assetId = "";
+  final AssetTracking assetTracking = AssetTracking();
+  String locationInfo = '';
+  String configInfo = '';
+  String assetId = '';
   bool isTracking = false;
 
   @override
@@ -33,126 +33,126 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
   }
 
   void initAssetTracking() {
-    assetTracking.initialize(apiKey: accessKey);
-    assetTracking.setFakeGpsConfig(allow: true);
-    assetTracking.addDataListener(this);
+    assetTracking..initialize(apiKey: accessKey)
+    ..setFakeGpsConfig(allow: true)
+    ..addDataListener(this);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ElevatedButton(
-              onPressed: assetId.isNotEmpty
-                  ? () async {
-                      var locationConfig = LocationConfig(
-                          trackingMode: TrackingMode.custom,
-                          smallestDisplacement: 40);
-                      await assetTracking.updateLocationConfig(
-                          config: locationConfig);
-                      var locationConfigResult =
-                          await assetTracking.getLocationConfig();
-                      setState(() {
-                        configInfo =
-                            "locationConfigInfo: ${jsonEncode(locationConfigResult.data)}";
-                      });
-                    }
-                  : null,
-              child: const Text("Update Location Config"),
-            ),
-            ElevatedButton(
-              onPressed: assetId.isNotEmpty
-                  ? () async {
-                      var androidNotificationConfig = AndroidNotificationConfig(
-                        channelId: "testChannelId",
-                        channelName: "newChannelName",
-                        content: "122",
-                        title: "12222",
-                      );
-                      var iOSNotificationConfig = IOSNotificationConfig();
-                      iOSNotificationConfig.showAssetEnableNotification = false;
-                      iOSNotificationConfig.showAssetDisableNotification = true;
-                      var assetEnableConfig = AssetEnableNotificationConfig(
-                          identifier: "iosIdentifier");
-                      assetEnableConfig.title =
-                          "New asset enable notification title";
-                      iOSNotificationConfig.assetEnableNotificationConfig =
-                          assetEnableConfig;
-
-                      if (Platform.isAndroid) {
-                        assetTracking.setAndroidNotificationConfig(
-                            config: androidNotificationConfig);
-                        var androidConfig =
-                            await assetTracking.getAndroidNotificationConfig();
-                        setState(() {
-                          configInfo = "notificationConfig: ${androidConfig}";
-                        });
-                      } else {
-                        assetTracking.setIOSNotificationConfig(
-                            config: iOSNotificationConfig);
-                        var iosConfig =
-                            await assetTracking.getIOSNotificationConfig();
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 0,
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ElevatedButton(
+                onPressed: assetId.isNotEmpty
+                    ? () async {
+                        final locationConfig = LocationConfig(
+                            trackingMode: TrackingMode.custom,
+                            smallestDisplacement: 40);
+                        await assetTracking.updateLocationConfig(
+                            config: locationConfig);
+                        final locationConfigResult =
+                            await assetTracking.getLocationConfig();
                         setState(() {
                           configInfo =
-                              "notificationConfig: ${jsonEncode(iosConfig.data)}";
+                              'locationConfigInfo: ${jsonEncode(locationConfigResult.data)}';
                         });
                       }
-                    }
-                  : null,
-              child: const Text("Update Notification Config"),
-            ),
-            ElevatedButton(
-              onPressed: assetId.isNotEmpty
-                  ? () async {
-                      var dataTrackingConfig = DataTrackingConfig(
-                          dataUploadingBatchSize: 15,
-                          dataUploadingBatchWindow: 30,
-                          dataStorageSize: 5000);
-                      await assetTracking.setDataTrackingConfig(
-                          config: dataTrackingConfig);
-                      var dataTrackingConfigInfo =
-                          await assetTracking.getDataTrackingConfig();
-                      setState(() {
-                        configInfo =
-                            "dataTrackingConfigInfo: ${jsonEncode(dataTrackingConfigInfo.data)}";
-                      });
-                    }
-                  : null,
-              child: const Text("Update DataTracking Config"),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 18.0),
-              child: Text(configInfo),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 28.0),
-              child: Text(locationInfo),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+                    : null,
+                child: const Text('Update Location Config'),
+              ),
+              ElevatedButton(
+                onPressed: assetId.isNotEmpty
+                    ? () async {
+                        final androidNotificationConfig =
+                            AndroidNotificationConfig(
+                          channelId: 'testChannelId',
+                          channelName: 'newChannelName',
+                          content: '122',
+                          title: '12222',
+                        );
+                        final IOSNotificationConfig iOSNotificationConfig =
+                            IOSNotificationConfig()
+                              ..showAssetEnableNotification = false
+                              ..showAssetDisableNotification = true;
+                        final assetEnableConfig = AssetEnableNotificationConfig(
+                            identifier: 'iosIdentifier')
+                          ..title = 'New asset enable notification title';
+                        iOSNotificationConfig.assetEnableNotificationConfig =
+                            assetEnableConfig;
 
-  void createAndBindAssetId() async {
-    AssetProfile profile = AssetProfile(
+                        if (Platform.isAndroid) {
+                          await assetTracking.setAndroidNotificationConfig(
+                              config: androidNotificationConfig);
+                          final androidConfig = await assetTracking
+                              .getAndroidNotificationConfig();
+                          setState(() {
+                            configInfo = 'notificationConfig: $androidConfig';
+                          });
+                        } else {
+                          await assetTracking.setIOSNotificationConfig(
+                              config: iOSNotificationConfig);
+                          final AssetResult<IOSNotificationConfig> iosConfig =
+                              await assetTracking.getIOSNotificationConfig();
+                          setState(() {
+                            configInfo =
+                                'notificationConfig: ${jsonEncode(iosConfig.data)}';
+                          });
+                        }
+                      }
+                    : null,
+                child: const Text('Update Notification Config'),
+              ),
+              ElevatedButton(
+                onPressed: assetId.isNotEmpty
+                    ? () async {
+                        final dataTrackingConfig = DataTrackingConfig(
+                            dataUploadingBatchSize: 15,
+                            dataUploadingBatchWindow: 30,
+                            dataStorageSize: 5000);
+                        await assetTracking.setDataTrackingConfig(
+                            config: dataTrackingConfig);
+                        final dataTrackingConfigInfo =
+                            await assetTracking.getDataTrackingConfig();
+                        setState(() {
+                          configInfo =
+                              'dataTrackingConfigInfo: ${jsonEncode(dataTrackingConfigInfo.data)}';
+                        });
+                      }
+                    : null,
+                child: const Text('Update DataTracking Config'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 18),
+                child: Text(configInfo),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 28),
+                child: Text(locationInfo),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Future<void> createAndBindAssetId() async {
+    final AssetProfile profile = AssetProfile(
         customId: const Uuid().v4().toString(),
-        name: "test asset",
-        description: "asset descriptions",
+        name: 'test asset',
+        description: 'asset descriptions',
         attributes: {});
-    AssetResult result = await assetTracking.createAsset(profile: profile);
+    final AssetResult result =
+        await assetTracking.createAsset(profile: profile);
     if (result.success) {
-      String assetID = result.data;
-      var assetResult = await assetTracking.bindAsset(customId: assetID);
+      final String assetID = result.data;
+      final assetResult = await assetTracking.bindAsset(customId: assetID);
       if (assetResult.success) {
-        showToast("Asset ${result.data} bind success");
+        showToast('Asset ${result.data} bind success');
         setState(() {
           assetId = assetResult.data;
           bindAsset = true;
@@ -171,15 +171,15 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
   @override
   void onLocationSuccess(NBLocation location) {
     setState(() {
-      locationInfo = "------- Location Info ------- \n"
-          "Provider: ${location.provider} \n"
-          "Latitude: ${location.latitude}\n"
-          "Longitude: ${location.longitude}\n"
-          "Altitude: ${location.altitude}\n"
-          "Accuracy: ${location.accuracy}\n"
-          "Speed: ${location.speed}\n"
-          "Bearing: ${location.heading}\n"
-          "Time: ${location.timestamp}\n";
+      locationInfo = '------- Location Info ------- \n'
+          'Provider: ${location.provider} \n'
+          'Latitude: ${location.latitude}\n'
+          'Longitude: ${location.longitude}\n'
+          'Altitude: ${location.altitude}\n'
+          'Accuracy: ${location.accuracy}\n'
+          'Speed: ${location.speed}\n'
+          'Bearing: ${location.heading}\n'
+          'Time: ${location.timestamp}\n';
     });
   }
 
@@ -194,15 +194,16 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
   void onTrackingStop(String message) {
     setState(() {
       isTracking = false;
-      locationInfo = "";
+      locationInfo = '';
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    assetTracking.removeDataListener(this);
-    assetTracking.stopTracking();
+    assetTracking
+      ..removeDataListener(this)
+      ..stopTracking();
   }
 
   @override

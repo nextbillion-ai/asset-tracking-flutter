@@ -9,6 +9,7 @@ export 'src/ios_notification_config.dart';
 export 'src/location_config.dart';
 export 'src/nb_asset_tracking_flutter.dart';
 export 'src/nb_location.dart';
+export 'src/trips/track_location.dart';
 export 'src/trips/trip_asset.dart';
 export 'src/trips/trip_info.dart';
 export 'src/trips/trip_profile.dart';

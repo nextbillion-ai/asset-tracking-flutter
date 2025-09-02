@@ -14,9 +14,9 @@ class AssetProfileScreen extends StatefulWidget {
 
 class AssetProfileScreenState extends State<AssetProfileScreen>
     with ToastMixin {
-  final assetTracking = AssetTracking();
-  String assetId = "";
-  String assetDetailInfo = "";
+  final AssetTracking assetTracking = AssetTracking();
+  String assetId = '';
+  String assetDetailInfo = '';
 
   @override
   void initState() {
@@ -24,8 +24,7 @@ class AssetProfileScreenState extends State<AssetProfileScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
       ),
@@ -37,16 +36,16 @@ class AssetProfileScreenState extends State<AssetProfileScreen>
             ElevatedButton(
               onPressed: assetId.isEmpty
                   ? () async {
-                      AssetProfile profile = AssetProfile(
+                      final AssetProfile profile = AssetProfile(
                           customId: const Uuid().v4().toString(),
-                          name: "test asset",
-                          description: "asset descriptions",
+                          name: 'test asset',
+                          description: 'asset descriptions',
                           attributes: {});
-                      AssetResult result =
+                      final AssetResult result =
                           await assetTracking.createAsset(profile: profile);
                       if (result.success) {
                         showToast(
-                            "Create asset successfully with asset id ${result.data}");
+                            'Create asset successfully with asset id ${result.data}');
                         setState(() {
                           assetId = result.data;
                         });
@@ -55,47 +54,47 @@ class AssetProfileScreenState extends State<AssetProfileScreen>
                       }
                     }
                   : null,
-              child: const Text("Create New Asset"),
+              child: const Text('Create New Asset'),
             ),
             ElevatedButton(
               onPressed: assetId.isNotEmpty
                   ? () async {
-                      var assetResult =
+                      final assetResult =
                           await assetTracking.bindAsset(customId: assetId);
                       if (assetResult.success) {
                         showToast(
-                            "Bind asset successfully with asset id ${assetResult.data}");
+                            'Bind asset successfully with asset id ${assetResult.data}');
                       } else {
                         showToast(assetResult.msg.toString());
                       }
                     }
                   : null,
-              child: const Text("Bind Asset"),
+              child: const Text('Bind Asset'),
             ),
             ElevatedButton(
               onPressed: assetId.isNotEmpty
                   ? () async {
-                      var assetProfile = AssetProfile(
+                      final AssetProfile assetProfile = AssetProfile(
                         customId: assetId,
-                        name: "new name",
-                        description: "new description",
-                        attributes: {"attribute1": "tester1"},
+                        name: 'new name',
+                        description: 'new description',
+                        attributes: {'attribute1': 'tester1'},
                       );
-                      var assetDetail = await assetTracking.updateAsset(
+                      final AssetResult<String> assetDetail = await assetTracking.updateAsset(
                           assetProfile: assetProfile);
                       if (assetDetail.success) {
-                        showToast("Update Asset Info successfully");
+                        showToast('Update Asset Info successfully');
                       } else {
                         showToast(assetDetail.msg.toString());
                       }
                     }
                   : null,
-              child: const Text("Update Asset Info"),
+              child: const Text('Update Asset Info'),
             ),
             ElevatedButton(
               onPressed: assetId.isNotEmpty
                   ? () async {
-                      var assetDetail = await assetTracking.getAssetDetail();
+                      final assetDetail = await assetTracking.getAssetDetail();
                       if (assetDetail.success) {
                         setState(() {
                           assetDetailInfo = jsonEncode(assetDetail.data);
@@ -105,14 +104,13 @@ class AssetProfileScreenState extends State<AssetProfileScreen>
                       }
                     }
                   : null,
-              child: const Text("Get Asset Detail"),
+              child: const Text('Get Asset Detail'),
             ),
             Text(assetDetailInfo)
           ],
         ),
       ),
     );
-  }
 
   @override
   void dispose() {

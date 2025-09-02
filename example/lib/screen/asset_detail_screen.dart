@@ -27,7 +27,7 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
         _errorMessage = null;
       });
 
-      final AssetResult result = await AssetTracking().getAssetDetail();
+      final AssetResult<AssetDetailInfo> result = await AssetTracking().getAssetDetail();
       if (result.success) {
         setState(() {
           _assetDetail = result.data;
@@ -39,7 +39,7 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
           _isLoading = false;
         });
       }
-    } catch (e) {
+    } on Exception catch (e) {
       setState(() {
         _errorMessage = 'Error loading asset details: $e';
         _isLoading = false;
@@ -50,8 +50,8 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
   void _navigateToEdit() {
     if (_assetDetail != null) {
       Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => EditAssetScreen(
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => EditAssetScreen(
             assetDetail: _assetDetail!,
             onAssetUpdated: _loadAssetDetail,
           ),
@@ -61,11 +61,10 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Asset Details'),
-        actions: [
+        actions: <Widget>[
           if (_assetDetail != null)
             IconButton(
               icon: const Icon(Icons.edit),
@@ -85,7 +84,7 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       Text(
                         _errorMessage!,
                         style: const TextStyle(color: Colors.red),
@@ -104,13 +103,13 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
                       child: Text('No asset details available'),
                     )
                   : SingleChildScrollView(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           _buildDetailCard(
                             'Basic Information',
-                            [
+                            <Widget>[
                               _buildDetailRow('ID', _assetDetail!.id ?? 'N/A'),
                               _buildDetailRow(
                                   'Device ID', _assetDetail!.deviceId ?? 'N/A'),
@@ -123,7 +122,7 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
                           const SizedBox(height: 16),
                           _buildDetailCard(
                             'Timestamps',
-                            [
+                            <Widget>[
                               _buildDetailRow(
                                 'Created At',
                                 _assetDetail!.createdAt != null
@@ -145,29 +144,25 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
                             ],
                           ),
                           if (_assetDetail!.attributes != null &&
-                              _assetDetail!.attributes!.isNotEmpty) ...[
+                              _assetDetail!.attributes!.isNotEmpty) ...<Widget>[
                             const SizedBox(height: 16),
                             _buildDetailCard(
                               'Attributes',
-                              _assetDetail!.attributes!.entries.map((entry) {
-                                return _buildDetailRow(
-                                    entry.key, entry.value.toString());
-                              }).toList(),
+                              _assetDetail!.attributes!.entries.map((MapEntry<String, dynamic> entry) => _buildDetailRow(
+                                    entry.key, entry.value.toString())).toList(),
                             ),
                           ],
                         ],
                       ),
                     ),
     );
-  }
 
-  Widget _buildDetailCard(String title, List<Widget> children) {
-    return Card(
+  Widget _buildDetailCard(String title, List<Widget> children) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
               title,
               style: const TextStyle(
@@ -181,14 +176,12 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
         ),
       ),
     );
-  }
 
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+  Widget _buildDetailRow(String label, String value) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           SizedBox(
             width: 100,
             child: Text(
@@ -208,5 +201,4 @@ class AssetDetailScreenState extends State<AssetDetailScreen> {
         ],
       ),
     );
-  }
 }

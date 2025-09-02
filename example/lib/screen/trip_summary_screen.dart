@@ -5,9 +5,9 @@ import 'package:nb_asset_tracking_flutter_example/screen/time_format.dart';
 import '../util/toast_mixin.dart';
 
 class TripSummaryScreen extends StatefulWidget {
-  final String tripId;
 
-  const TripSummaryScreen({super.key, required this.tripId});
+  const TripSummaryScreen({required this.tripId, super.key});
+  final String tripId;
 
   @override
   TripSummaryScreenState createState() => TripSummaryScreenState();
@@ -20,27 +20,26 @@ class TripSummaryScreenState extends State<TripSummaryScreen> with ToastMixin {
   @override
   void initState() {
     super.initState();
-    AssetTracking().getSummary(tripId: widget.tripId).then((value) {
+    AssetTracking().getSummary(tripId: widget.tripId).then((AssetResult<TripSummary> value) {
       setState(() {
         if (value.success) {
           tripSummary = value.data;
         } else {
-          showToast(value.msg ?? "");
-          errorMessage = value.msg ?? "";
+          showToast(value.msg ?? '');
+          errorMessage = value.msg ?? '';
         }
       });
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Trip Summary'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: tripSummary == null
               ? Center(
                   child: Text(errorMessage),
@@ -79,16 +78,16 @@ class TripSummaryScreenState extends State<TripSummaryScreen> with ToastMixin {
                     if (tripSummary!.stops != null) ...[
                       const Text('Stops:', style: TextStyle(fontSize: 18)),
                       ...tripSummary!.stops!
-                          .map((stop) => Text(stop.toString(),
+                          .map((TripStop stop) => Text(stop.toString(),
                               style: const TextStyle(fontSize: 18)))
-                          .toList(),
+                          ,
                     ],
                     if (tripSummary!.route != null) ...[
                       const Text('Route:', style: TextStyle(fontSize: 18)),
                       ...tripSummary!.route!
-                          .map((location) => Text(location.toString(),
+                          .map((TrackLocation location) => Text(location.toString(),
                               style: const TextStyle(fontSize: 18)))
-                          .toList(),
+                          ,
                     ],
                     Text('Asset: ${tripSummary!.asset.toString()}',
                         style: const TextStyle(fontSize: 18)),
@@ -106,5 +105,4 @@ class TripSummaryScreenState extends State<TripSummaryScreen> with ToastMixin {
         ),
       ),
     );
-  }
 }
