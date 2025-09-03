@@ -103,7 +103,7 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
     final AssetResult<String> result =
         await assetTracking.createAsset(profile: profile);
     if (result.success) {
-      final String assetID = result.data;
+      final String assetID = result.data ?? '';
       final AssetResult<String> assetResult =
           await assetTracking.bindAsset(customId: assetID);
       if (assetResult.success) {
@@ -112,7 +112,7 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
           return;
         }
         setState(() {
-          assetId = assetResult.data;
+          assetId = assetResult.data ?? '';
           bindAsset = true;
         });
       } else {
@@ -127,17 +127,17 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
   void onLocationFailure(String message) {}
 
   @override
-  void onLocationSuccess(NBLocation location) {
+  void onLocationSuccess(NBLocation? location) {
     setState(() {
       locationInfo = '------- Location Info ------- \n'
-          'Provider: ${location.provider} \n'
-          'Latitude: ${location.latitude}\n'
-          'Longitude: ${location.longitude}\n'
-          'Altitude: ${location.altitude}\n'
-          'Accuracy: ${location.accuracy}\n'
-          'Speed: ${location.speed}\n'
-          'Bearing: ${location.heading}\n'
-          'Time: ${location.timestamp}\n';
+          'Provider: ${location?.provider} \n'
+          'Latitude: ${location?.latitude}\n'
+          'Longitude: ${location?.longitude}\n'
+          'Altitude: ${location?.altitude}\n'
+          'Accuracy: ${location?.accuracy}\n'
+          'Speed: ${location?.speed}\n'
+          'Bearing: ${location?.heading}\n'
+          'Time: ${location?.timestamp}\n';
     });
   }
 

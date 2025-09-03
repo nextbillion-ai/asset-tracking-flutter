@@ -61,7 +61,7 @@ abstract class OnTrackingDataCallBack {
   ///   print('Accuracy: ${location.accuracy}m, Speed: ${location.speed}m/s');
   /// }
   /// ```
-  void onLocationSuccess(NBLocation location);
+  void onLocationSuccess(NBLocation? location);
 
   /// Called when location acquisition fails
   ///

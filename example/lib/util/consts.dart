@@ -1,4 +1,4 @@
-const String accessKey = "Your-Access-Key";
+const String accessKey = 'Your-Access-Key';
 
 const String keyOfBoundId = 'key_of_bind_id';
 const String keyOfFakeGpsFlag = 'key_of_fake_gps_flag';

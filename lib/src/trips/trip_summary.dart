@@ -46,11 +46,11 @@ class TripSummary {
       updatedAt: updatedTime == null
           ? null
           : DateTime.fromMillisecondsSinceEpoch(updatedTime * 1000),
-      stops: (json['stops'] as List<Map<String, dynamic>>?)
-          ?.map(TripStop.fromJson)
+      stops: (json['stops'] as List<dynamic>?)
+          ?.map((e) => TripStop.fromJson(e as Map<String, dynamic>))
           .toList(),
-      route: (json['route'] as List<Map<String, dynamic>>?)
-          ?.map(TrackLocation.fromJson)
+      route: (json['route'] as List<dynamic>?)
+          ?.map((e) => TrackLocation.fromJson(e as Map<String, dynamic>))
           .toList(),
       asset: TripAsset.fromJson(json['asset']),
       geometry: (json['geometry'] as List<String>?)

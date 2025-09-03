@@ -38,7 +38,7 @@ void main() {
           "speed": 5.0,
           "speedAccuracy": 1.0,
           "heading": 90.0,
-          "provider": 'gps',
+          "provider": "gps",
           "timestamp": 1234567890
         }
         ''';
@@ -81,7 +81,7 @@ void main() {
           "speed": 5,
           "speedAccuracy": 1,
           "heading": 90,
-          "provider": 'gps',
+          "provider": "gps",
           "timestamp": 1234567890
         }
         ''';

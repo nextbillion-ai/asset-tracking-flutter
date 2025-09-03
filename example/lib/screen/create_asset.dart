@@ -103,7 +103,7 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
 
       if (result.success) {
         showToast('Create asset successfully with asset id ${result.data}');
-        _bindIdController.text = result.data;
+        _bindIdController.text = result.data!;
       } else {
         showToast("Create asset failed: ${result.msg ?? ""}");
       }
@@ -132,7 +132,7 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
           await _assetTracking.bindAsset(customId: assetId);
       if (result.success) {
         showToast('Bind asset successfully with asset id ${result.data}');
-        await _saveData(result.data);
+        await _saveData(result.data!);
         if (mounted) {
           Navigator.of(context).pop();
         }

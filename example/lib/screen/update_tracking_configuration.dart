@@ -154,7 +154,7 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
       if (assetResult.success) {
         showToast('Asset ${result.data} bind success');
         setState(() {
-          assetId = assetResult.data;
+          assetId = assetResult.data ?? '';
           bindAsset = true;
         });
       } else {
@@ -169,17 +169,17 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
   void onLocationFailure(String message) {}
 
   @override
-  void onLocationSuccess(NBLocation location) {
+  void onLocationSuccess(NBLocation? location) {
     setState(() {
       locationInfo = '------- Location Info ------- \n'
-          'Provider: ${location.provider} \n'
-          'Latitude: ${location.latitude}\n'
-          'Longitude: ${location.longitude}\n'
-          'Altitude: ${location.altitude}\n'
-          'Accuracy: ${location.accuracy}\n'
-          'Speed: ${location.speed}\n'
-          'Bearing: ${location.heading}\n'
-          'Time: ${location.timestamp}\n';
+          'Provider: ${location?.provider} \n'
+          'Latitude: ${location?.latitude}\n'
+          'Longitude: ${location?.longitude}\n'
+          'Altitude: ${location?.altitude}\n'
+          'Accuracy: ${location?.accuracy}\n'
+          'Speed: ${location?.speed}\n'
+          'Bearing: ${location?.heading}\n'
+          'Time: ${location?.timestamp}\n';
     });
   }
 

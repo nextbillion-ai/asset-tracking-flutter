@@ -36,29 +36,34 @@ class MethodChannelNbAssetTrackingFlutter
       final String jsonString = call.arguments;
       final AssetResult<String> result =
           AssetResult<String>.fromJson(jsonString);
-      final NBLocation location = NBLocation.fromJson(result.data);
-      _resultCallback?.onLocationSuccess?.call(location);
+      try {
+        final NBLocation location = NBLocation.fromJson(result.data);
+        _resultCallback?.onLocationSuccess?.call(location);
+      } on Exception {
+        _resultCallback?.onLocationSuccess?.call(null);
+      }
+
     } else if (call.method == 'onLocationFailure') {
       final String jsonString = call.arguments;
       final AssetResult<String> result =
           AssetResult<String>.fromJson(jsonString);
-      _resultCallback?.onLocationFailure?.call(result.data);
+      _resultCallback?.onLocationFailure?.call(result.data ?? '');
     } else if (call.method == 'onTrackingStart') {
       final String jsonString = call.arguments;
       final AssetResult<String> result =
           AssetResult<String>.fromJson(jsonString);
-      _resultCallback?.onTrackingStart?.call(result.data);
+      _resultCallback?.onTrackingStart?.call(result.data ?? '');
     } else if (call.method == 'onTrackingStop') {
       final String jsonString = call.arguments;
       final AssetResult<String> result =
           AssetResult<String>.fromJson(jsonString);
-      _resultCallback?.onTrackingStop?.call(result.data);
+      _resultCallback?.onTrackingStop?.call(result.data ?? '');
     } else if (call.method == 'onTripStatusChanged') {
       final String jsonString = call.arguments;
       final AssetResult<Map<String, dynamic>> result =
           AssetResult<Map<String, dynamic>>.fromJson(jsonString);
-      final String tripId = result.data['tripId'] as String;
-      final String status = result.data['status'] as String;
+      final String tripId = result.data?['tripId'] as String? ?? '';
+      final String status = result.data?['status'] as String? ?? '';
       final TripState state = TripStateExtension.fromString(status);
       _resultCallback?.onTripStatusChanged?.call(tripId, state);
     }

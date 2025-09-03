@@ -16,7 +16,7 @@ class AndroidNotificationConfig with NBEncode {
     this.showLowBatteryNotification = true,
     this.lowBatteryNotificationConfig =
         LowBatteryNotificationConfig.defaultConfig,
-    this.showAssetIdTakenNotification = true,
+    this.showAssetDisableNotification = true,
     this.contentAssetDisable =
         'Asset tracking stop content', // Replace with actual default content
     this.assetIdTakenContent =
@@ -36,8 +36,8 @@ class AndroidNotificationConfig with NBEncode {
             json['showLowBatteryNotification'] as bool? ?? true,
         lowBatteryNotificationConfig: LowBatteryNotificationConfig.fromJson(
             jsonEncode(json['lowBatteryNotification'])),
-        showAssetIdTakenNotification:
-            json['showAssetIdTakenNotification'] as bool? ?? true,
+        showAssetDisableNotification:
+            json['showAssetDisableNotification'] as bool? ?? true,
         contentAssetDisable: json['contentAssetDisable'] as String? ??
             'Asset tracking stop content',
         assetIdTakenContent:
@@ -57,7 +57,7 @@ class AndroidNotificationConfig with NBEncode {
   String largeIcon;
   bool showLowBatteryNotification;
   LowBatteryNotificationConfig lowBatteryNotificationConfig;
-  bool showAssetIdTakenNotification;
+  bool showAssetDisableNotification;
   String contentAssetDisable;
   String assetIdTakenContent;
 
@@ -71,7 +71,7 @@ class AndroidNotificationConfig with NBEncode {
         'largeIcon': largeIcon,
         'showLowBatteryNotification': showLowBatteryNotification,
         'lowBatteryNotification': lowBatteryNotificationConfig.toJson(),
-        'showAssetIdTakenNotification': showAssetIdTakenNotification,
+        'showAssetDisableNotification': showAssetDisableNotification,
         'contentAssetDisable': contentAssetDisable,
         'assetIdTakenContent': assetIdTakenContent,
       };

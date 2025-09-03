@@ -78,7 +78,7 @@ class _MyAppState extends State<HomeScreen>
 
   void _setupStatusListeners() {
     assetTracking.isTracking().asStream().listen((AssetResult<bool> result) {
-      _isRunning = result.data;
+      _isRunning = result.data ?? false;
       updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
       if (kDebugMode) {
         print('_isRunning : ${result.data}');
@@ -89,7 +89,7 @@ class _MyAppState extends State<HomeScreen>
   void _setupTripListeners() {
     // Gets the current trip status. Unlike a typical stream, this only triggers once.
     assetTracking.isTripInProgress().asStream().listen((AssetResult<bool> result) {
-      _isTripRunning = result.data;
+      _isTripRunning = result.data ?? false;
       updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
     });
     // Gets the current trip id. Unlike a typical stream, this only triggers once.
@@ -134,7 +134,7 @@ class _MyAppState extends State<HomeScreen>
 
   Future<void> _initializeFakeGpsConfig() async {
     final AssetResult<bool> result = await assetTracking.getFakeGpsConfig();
-    final bool allow = sharedPreferences.getBool(keyOfFakeGpsFlag) ?? result.data;
+    final bool allow = sharedPreferences.getBool(keyOfFakeGpsFlag) ?? result.data ?? false;
 
     await assetTracking.setFakeGpsConfig(allow: allow);
     setState(() => isAllowMockLocation = allow);
@@ -220,21 +220,21 @@ class _MyAppState extends State<HomeScreen>
   }
 
   /// Checks if location services are enabled on the device
-  /// 
+  ///
   /// This method verifies that the device's location services are turned on
   /// before attempting to start tracking. If location services are disabled,
   /// it shows an appropriate message to guide the user.
-  /// 
+  ///
   /// Returns `true` if location services are enabled, `false` otherwise.
   Future<bool> _checkLocationServiceEnabled() async {
     try {
       final bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      
+
       if (!serviceEnabled) {
         _showLocationServiceDialog();
         return false;
       }
-      
+
       return true;
     } on Exception catch (e) {
       showToast('Error checking location service status: $e');
@@ -243,7 +243,7 @@ class _MyAppState extends State<HomeScreen>
   }
 
   /// Shows a dialog prompting user to enable location services
-  /// 
+  ///
   /// Displays a user-friendly dialog explaining why location services
   /// are needed and provides guidance on how to enable them.
   void _showLocationServiceDialog() {
@@ -423,7 +423,7 @@ class _MyAppState extends State<HomeScreen>
 
   Future<void> pushToCreateAsset() async {
     final AssetResult<bool> trackResult = await assetTracking.isTracking();
-    if (trackResult.data) {
+    if (trackResult.data ?? false) {
       showToast('Please stop tracking before creating a new asset');
       return;
     }
@@ -481,17 +481,17 @@ class _MyAppState extends State<HomeScreen>
   ///
   /// [location] The location data containing coordinates, accuracy, speed, etc.
   @override
-  void onLocationSuccess(NBLocation location) {
+  void onLocationSuccess(NBLocation? location) {
     if (_isRunning) {
       final String locationDetails = '------- Location Info ------- \n'
-          'Provider: ${location.provider}\n'
-          'Latitude: ${location.latitude}\n'
-          'Longitude: ${location.longitude}\n'
-          'Altitude: ${location.altitude}\n'
-          'Accuracy: ${location.accuracy}\n'
-          'Speed: ${location.speed}\n'
-          'Bearing: ${location.heading}\n'
-          'Time: ${location.timestamp}\n';
+          'Provider: ${location?.provider}\n'
+          'Latitude: ${location?.latitude}\n'
+          'Longitude: ${location?.longitude}\n'
+          'Altitude: ${location?.altitude}\n'
+          'Accuracy: ${location?.accuracy}\n'
+          'Speed: ${location?.speed}\n'
+          'Bearing: ${location?.heading}\n'
+          'Time: ${location?.timestamp}\n';
       _updateLocationInfo(locationDetails);
     }
   }
@@ -517,7 +517,7 @@ class _MyAppState extends State<HomeScreen>
     _isRunning = true;
     updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
     assetTracking.isTripInProgress().then((AssetResult<bool> value) {
-      _isTripRunning = value.data;
+      _isTripRunning = value.data ?? false;
       updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
     });
   }
