@@ -19,7 +19,8 @@ class _CreateAssetScreenState extends State<CreateAssetScreen> with ToastMixin {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _bindIdController = TextEditingController();
 
-  final List<MapEntry<String, String>> _attributes = <MapEntry<String, String>>[];
+  final List<MapEntry<String, String>> _attributes =
+      <MapEntry<String, String>>[];
 
   String _lastUsedAssetId = '';
   bool _isLoading = false;

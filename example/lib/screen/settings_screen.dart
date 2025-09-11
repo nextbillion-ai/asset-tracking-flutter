@@ -50,7 +50,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
 
   Future<void> _loadDataTrackingConfig() async {
     try {
-      final AssetResult<DataTrackingConfig> result = await AssetTracking().getDataTrackingConfig();
+      final AssetResult<DataTrackingConfig> result =
+          await AssetTracking().getDataTrackingConfig();
       if (result.success) {
         setState(() {
           _dataTrackingConfig = result.data;
@@ -63,7 +64,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
 
   Future<void> _loadLocationConfig() async {
     try {
-      final AssetResult<LocationConfig> result = await AssetTracking().getLocationConfig();
+      final AssetResult<LocationConfig> result =
+          await AssetTracking().getLocationConfig();
       if (result.success) {
         setState(() {
           _locationConfig = result.data;
@@ -89,7 +91,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
 
   Future<void> _loadDefaultConfig() async {
     try {
-      final AssetResult<DefaultConfig> result = await AssetTracking().getDefaultConfig();
+      final AssetResult<DefaultConfig> result =
+          await AssetTracking().getDefaultConfig();
       if (result.success) {
         setState(() {
           _defaultConfig = result.data;
@@ -103,14 +106,16 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
   Future<void> _loadNotificationConfigs() async {
     try {
       if (Platform.isAndroid) {
-        final AssetResult<AndroidNotificationConfig> result = await AssetTracking().getAndroidNotificationConfig();
+        final AssetResult<AndroidNotificationConfig> result =
+            await AssetTracking().getAndroidNotificationConfig();
         if (result.success) {
           setState(() {
             _androidNotificationConfig = result.data;
           });
         }
       } else {
-        final AssetResult<IOSNotificationConfig> result = await AssetTracking().getIOSNotificationConfig();
+        final AssetResult<IOSNotificationConfig> result =
+            await AssetTracking().getIOSNotificationConfig();
         if (result.success) {
           setState(() {
             _iosNotificationConfig = result.data;
@@ -124,299 +129,304 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        actions: <Widget>[
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
+        appBar: AppBar(
+          title: const Text('Settings'),
+          actions: <Widget>[
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              )
+            else
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: _loadConfigurations,
+                tooltip: 'Refresh',
               ),
-            )
-          else
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: _loadConfigurations,
-              tooltip: 'Refresh',
-            ),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _buildUserIdCard(),
-                  const SizedBox(height: 16),
-                  _buildDataTrackingConfigCard(),
-                  const SizedBox(height: 16),
-                  _buildLocationConfigCard(),
-                  const SizedBox(height: 16),
-                  _buildDefaultConfigCard(),
-                  const SizedBox(height: 16),
-                  _buildNotificationConfigCard(),
-                ],
+          ],
+        ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildUserIdCard(),
+                    const SizedBox(height: 16),
+                    _buildDataTrackingConfigCard(),
+                    const SizedBox(height: 16),
+                    _buildLocationConfigCard(),
+                    const SizedBox(height: 16),
+                    _buildDefaultConfigCard(),
+                    const SizedBox(height: 16),
+                    _buildNotificationConfigCard(),
+                  ],
+                ),
               ),
-            ),
-    );
+      );
 
   Widget _buildDataTrackingConfigCard() => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text(
-                  'Data Tracking Configuration',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Data Tracking Configuration',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: _showDataTrackingConfigDialog,
-                  tooltip: 'Edit Data Tracking Config',
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            if (_dataTrackingConfig != null) ...<Widget>[
-              _buildConfigItem('Base URL', _dataTrackingConfig!.baseUrl),
-              _buildConfigItem('Data Storage Size',
-                  _dataTrackingConfig!.dataStorageSize.toString()),
-              _buildConfigItem('Data Uploading Batch Size',
-                  _dataTrackingConfig!.dataUploadingBatchSize.toString()),
-              _buildConfigItem('Data Uploading Batch Window',
-                  _dataTrackingConfig!.dataUploadingBatchWindow.toString()),
-              _buildConfigItem(
-                  'Clear Local Data When Collision',
-                  _dataTrackingConfig!.shouldClearLocalDataWhenCollision
-                      .toString()),
-            ] else
-              const Text('No configuration available',
-                  style: TextStyle(color: Colors.grey)),
-          ],
-        ),
-      ),
-    );
-
-  Widget _buildLocationConfigCard() => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text(
-                  'Location Configuration',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: _showDataTrackingConfigDialog,
+                    tooltip: 'Edit Data Tracking Config',
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: _showLocationConfigDialog,
-                  tooltip: 'Edit Location Config',
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            if (_locationConfig != null) ...<Widget>[
-              _buildConfigItem('Tracking Mode',
-                  _locationConfig!.trackingMode?.toString() ?? 'N/A'),
-              _buildConfigItem('Interval (Android)',
-                  _locationConfig!.intervalForAndroid?.toString() ?? 'N/A'),
-              _buildConfigItem('Smallest Displacement',
-                  _locationConfig!.smallestDisplacement?.toString() ?? 'N/A'),
-              _buildConfigItem('Desired Accuracy',
-                  _locationConfig!.desiredAccuracy?.toString() ?? 'N/A'),
-              _buildConfigItem('Max Wait Time (Android)',
-                  _locationConfig!.maxWaitTimeForAndroid?.toString() ?? 'N/A'),
-              _buildConfigItem(
-                  'Fastest Interval (Android)',
-                  _locationConfig!.fastestIntervalForAndroid?.toString() ??
-                      'N/A'),
-              _buildConfigItem('Enable Stationary Check',
-                  _locationConfig!.enableStationaryCheck?.toString() ?? 'N/A'),
-            ] else
-              const Text('No configuration available',
-                  style: TextStyle(color: Colors.grey)),
-          ],
-        ),
-      ),
-    );
-
-  Widget _buildDefaultConfigCard() => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text(
-                  'Default Configuration',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: _showDefaultConfigDialog,
-                  tooltip: 'Edit Default Config',
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            if (_defaultConfig != null) ...<Widget>[
-              _buildConfigItem(
-                  'Enhance Service', _defaultConfig!.enhanceService.toString()),
-              _buildConfigItem(
-                  'Repeat Interval', _defaultConfig!.repeatInterval.toString()),
-              _buildConfigItem(
-                  'Worker Enabled', _defaultConfig!.workerEnabled.toString()),
-              _buildConfigItem('Crash Restart Enabled',
-                  _defaultConfig!.crashRestartEnabled.toString()),
-              _buildConfigItem('Work On Main Thread',
-                  _defaultConfig!.workOnMainThread.toString()),
-            ] else
-              const Text('No configuration available',
-                  style: TextStyle(color: Colors.grey)),
-          ],
-        ),
-      ),
-    );
-
-  Widget _buildNotificationConfigCard() => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '${Platform.isAndroid ? 'Android' : 'iOS'} Notification Configuration',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: _showNotificationConfigDialog,
-                  tooltip: 'Edit Notification Config',
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            if (Platform.isAndroid) ...<Widget>[
-              if (_androidNotificationConfig != null) ...<Widget>[
-                _buildConfigItem('Service ID',
-                    _androidNotificationConfig!.serviceId.toString()),
+                ],
+              ),
+              const SizedBox(height: 8),
+              if (_dataTrackingConfig != null) ...<Widget>[
+                _buildConfigItem('Base URL', _dataTrackingConfig!.baseUrl),
+                _buildConfigItem('Data Storage Size',
+                    _dataTrackingConfig!.dataStorageSize.toString()),
+                _buildConfigItem('Data Uploading Batch Size',
+                    _dataTrackingConfig!.dataUploadingBatchSize.toString()),
+                _buildConfigItem('Data Uploading Batch Window',
+                    _dataTrackingConfig!.dataUploadingBatchWindow.toString()),
                 _buildConfigItem(
-                    'Channel ID', _androidNotificationConfig!.channelId),
-                _buildConfigItem(
-                    'Channel Name', _androidNotificationConfig!.channelName),
-                _buildConfigItem('Title', _androidNotificationConfig!.title),
-                _buildConfigItem(
-                    'Content', _androidNotificationConfig!.content),
-                _buildConfigItem(
-                    'Small Icon', _androidNotificationConfig!.smallIcon),
-                _buildConfigItem(
-                    'Large Icon', _androidNotificationConfig!.largeIcon),
-                _buildConfigItem(
-                    'Show Low Battery Notification',
-                    _androidNotificationConfig!.showLowBatteryNotification
-                        .toString()),
-              ] else
-                const Text('No configuration available',
-                    style: TextStyle(color: Colors.grey)),
-            ] else ...<Widget>[
-              if (_iosNotificationConfig != null) ...<Widget>[
-                _buildConfigItem(
-                    'Show Asset Enable Notification',
-                    _iosNotificationConfig!.showAssetEnableNotification
-                        .toString()),
-                _buildConfigItem(
-                    'Show Asset Disable Notification',
-                    _iosNotificationConfig!.showAssetDisableNotification
+                    'Clear Local Data When Collision',
+                    _dataTrackingConfig!.shouldClearLocalDataWhenCollision
                         .toString()),
               ] else
                 const Text('No configuration available',
                     style: TextStyle(color: Colors.grey)),
             ],
-          ],
+          ),
         ),
-      ),
-    );
+      );
+
+  Widget _buildLocationConfigCard() => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Location Configuration',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: _showLocationConfigDialog,
+                    tooltip: 'Edit Location Config',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              if (_locationConfig != null) ...<Widget>[
+                _buildConfigItem('Tracking Mode',
+                    _locationConfig!.trackingMode?.toString() ?? 'N/A'),
+                _buildConfigItem('Interval (Android)',
+                    _locationConfig!.intervalForAndroid?.toString() ?? 'N/A'),
+                _buildConfigItem('Smallest Displacement',
+                    _locationConfig!.smallestDisplacement?.toString() ?? 'N/A'),
+                _buildConfigItem('Desired Accuracy',
+                    _locationConfig!.desiredAccuracy?.toString() ?? 'N/A'),
+                _buildConfigItem(
+                    'Max Wait Time (Android)',
+                    _locationConfig!.maxWaitTimeForAndroid?.toString() ??
+                        'N/A'),
+                _buildConfigItem(
+                    'Fastest Interval (Android)',
+                    _locationConfig!.fastestIntervalForAndroid?.toString() ??
+                        'N/A'),
+                _buildConfigItem(
+                    'Enable Stationary Check',
+                    _locationConfig!.enableStationaryCheck?.toString() ??
+                        'N/A'),
+              ] else
+                const Text('No configuration available',
+                    style: TextStyle(color: Colors.grey)),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildDefaultConfigCard() => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Default Configuration',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: _showDefaultConfigDialog,
+                    tooltip: 'Edit Default Config',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              if (_defaultConfig != null) ...<Widget>[
+                _buildConfigItem('Enhance Service',
+                    _defaultConfig!.enhanceService.toString()),
+                _buildConfigItem('Repeat Interval',
+                    _defaultConfig!.repeatInterval.toString()),
+                _buildConfigItem(
+                    'Worker Enabled', _defaultConfig!.workerEnabled.toString()),
+                _buildConfigItem('Crash Restart Enabled',
+                    _defaultConfig!.crashRestartEnabled.toString()),
+                _buildConfigItem('Work On Main Thread',
+                    _defaultConfig!.workOnMainThread.toString()),
+              ] else
+                const Text('No configuration available',
+                    style: TextStyle(color: Colors.grey)),
+            ],
+          ),
+        ),
+      );
+
+  Widget _buildNotificationConfigCard() => Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    '${Platform.isAndroid ? 'Android' : 'iOS'} Notification Configuration',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: _showNotificationConfigDialog,
+                    tooltip: 'Edit Notification Config',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              if (Platform.isAndroid) ...<Widget>[
+                if (_androidNotificationConfig != null) ...<Widget>[
+                  _buildConfigItem('Service ID',
+                      _androidNotificationConfig!.serviceId.toString()),
+                  _buildConfigItem(
+                      'Channel ID', _androidNotificationConfig!.channelId),
+                  _buildConfigItem(
+                      'Channel Name', _androidNotificationConfig!.channelName),
+                  _buildConfigItem('Title', _androidNotificationConfig!.title),
+                  _buildConfigItem(
+                      'Content', _androidNotificationConfig!.content),
+                  _buildConfigItem(
+                      'Small Icon', _androidNotificationConfig!.smallIcon),
+                  _buildConfigItem(
+                      'Large Icon', _androidNotificationConfig!.largeIcon),
+                  _buildConfigItem(
+                      'Show Low Battery Notification',
+                      _androidNotificationConfig!.showLowBatteryNotification
+                          .toString()),
+                ] else
+                  const Text('No configuration available',
+                      style: TextStyle(color: Colors.grey)),
+              ] else ...<Widget>[
+                if (_iosNotificationConfig != null) ...<Widget>[
+                  _buildConfigItem(
+                      'Show Asset Enable Notification',
+                      _iosNotificationConfig!.showAssetEnableNotification
+                          .toString()),
+                  _buildConfigItem(
+                      'Show Asset Disable Notification',
+                      _iosNotificationConfig!.showAssetDisableNotification
+                          .toString()),
+                ] else
+                  const Text('No configuration available',
+                      style: TextStyle(color: Colors.grey)),
+              ],
+            ],
+          ),
+        ),
+      );
 
   Widget _buildUserIdCard() => Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text(
-                  'User ID Configuration',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'User ID Configuration',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: _showUserIdDialog,
-                  tooltip: 'Edit User ID',
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            _buildConfigItem('User ID', _currentUserId ?? 'Not set'),
-          ],
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: _showUserIdDialog,
+                    tooltip: 'Edit User ID',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              _buildConfigItem('User ID', _currentUserId ?? 'Not set'),
+            ],
+          ),
         ),
-      ),
-    );
+      );
 
   Widget _buildConfigItem(String label, String value) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            width: 200,
-            child: Text(
-              '$label:',
-              style: const TextStyle(fontWeight: FontWeight.w500),
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 200,
+              child: Text(
+                '$label:',
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
             ),
-          ),
-          Expanded(
-            child: Text(value),
-          ),
-        ],
-      ),
-    );
+            Expanded(
+              child: Text(value),
+            ),
+          ],
+        ),
+      );
 
   void _showUserIdDialog() {
-    final TextEditingController userIdController = TextEditingController(text: _currentUserId ?? '');
+    final TextEditingController userIdController =
+        TextEditingController(text: _currentUserId ?? '');
 
     showDialog(
       context: context,
@@ -505,7 +515,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
               CheckboxListTile(
                 title: const Text('Clear Local Data When Collision'),
                 value: clearLocalData,
-                onChanged: (bool? value) => setState(() => clearLocalData = value!),
+                onChanged: (bool? value) =>
+                    setState(() => clearLocalData = value!),
               ),
             ],
           ),
@@ -564,16 +575,20 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
   }
 
   void _showDefaultConfigDialog() {
-    final TextEditingController enhanceServiceController = TextEditingController(
-        text: _defaultConfig?.enhanceService.toString() ?? 'true');
-    final TextEditingController repeatIntervalController = TextEditingController(
-        text: _defaultConfig?.repeatInterval.toString() ?? '1000');
+    final TextEditingController enhanceServiceController =
+        TextEditingController(
+            text: _defaultConfig?.enhanceService.toString() ?? 'true');
+    final TextEditingController repeatIntervalController =
+        TextEditingController(
+            text: _defaultConfig?.repeatInterval.toString() ?? '1000');
     final TextEditingController workerEnabledController = TextEditingController(
         text: _defaultConfig?.workerEnabled.toString() ?? 'true');
-    final TextEditingController crashRestartEnabledController = TextEditingController(
-        text: _defaultConfig?.crashRestartEnabled.toString() ?? 'true');
-    final TextEditingController workOnMainThreadController = TextEditingController(
-        text: _defaultConfig?.workOnMainThread.toString() ?? 'false');
+    final TextEditingController crashRestartEnabledController =
+        TextEditingController(
+            text: _defaultConfig?.crashRestartEnabled.toString() ?? 'true');
+    final TextEditingController workOnMainThreadController =
+        TextEditingController(
+            text: _defaultConfig?.workOnMainThread.toString() ?? 'false');
 
     showDialog(
       context: context,
@@ -745,7 +760,8 @@ class _SettingsScreenState extends State<SettingsScreen> with ToastMixin {
             onPressed: () async {
               final BuildContext dialogContext = context;
               try {
-                final AndroidNotificationConfig config = AndroidNotificationConfig(
+                final AndroidNotificationConfig config =
+                    AndroidNotificationConfig(
                   serviceId: int.tryParse(serviceIdController.text) ?? 1,
                   channelId: channelIdController.text,
                   channelName: channelNameController.text,

@@ -45,7 +45,8 @@ void main() {
         }
         ''';
 
-        final DataTrackingConfig config = DataTrackingConfig.fromJson(jsonString);
+        final DataTrackingConfig config =
+            DataTrackingConfig.fromJson(jsonString);
 
         expect(config.baseUrl, equals('https://custom.api.com'));
         expect(config.dataStorageSize, equals(1000));

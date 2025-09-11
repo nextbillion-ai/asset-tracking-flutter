@@ -50,7 +50,6 @@ mixin ToastMixin {
 }
 
 class _ToastWidget extends StatefulWidget {
-
   const _ToastWidget({required this.message});
   final String message;
 
@@ -101,42 +100,43 @@ class _ToastWidgetState extends State<_ToastWidget>
 
   @override
   Widget build(BuildContext context) => Positioned(
-      left: 20,
-      right: 20,
-      bottom: 40, // 40dp from bottom
-      child: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Text(
-                widget.message,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
+        left: 20,
+        right: 20,
+        bottom: 40, // 40dp from bottom
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: SlideTransition(
+            position: _slideAnimation,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
                 ),
-                textAlign: TextAlign.center,
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(
+                      0, 0, 0, 0.8), // Black with 0.8 opacity
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  widget.message,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
 }

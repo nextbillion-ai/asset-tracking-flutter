@@ -79,7 +79,8 @@ class _MyAppState extends State<HomeScreen>
   void _setupStatusListeners() {
     assetTracking.isTracking().asStream().listen((AssetResult<bool> result) {
       _isRunning = result.data ?? false;
-      updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
+      updateTrackingStatus(
+          isRunning: _isRunning, isTripInProgress: _isTripRunning);
       if (kDebugMode) {
         print('_isRunning : ${result.data}');
       }
@@ -88,9 +89,13 @@ class _MyAppState extends State<HomeScreen>
 
   void _setupTripListeners() {
     // Gets the current trip status. Unlike a typical stream, this only triggers once.
-    assetTracking.isTripInProgress().asStream().listen((AssetResult<bool> result) {
+    assetTracking
+        .isTripInProgress()
+        .asStream()
+        .listen((AssetResult<bool> result) {
       _isTripRunning = result.data ?? false;
-      updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
+      updateTrackingStatus(
+          isRunning: _isRunning, isTripInProgress: _isTripRunning);
     });
     // Gets the current trip id. Unlike a typical stream, this only triggers once.
     assetTracking.getActiveTripId().then((AssetResult<String?> result) {
@@ -134,15 +139,17 @@ class _MyAppState extends State<HomeScreen>
 
   Future<void> _initializeFakeGpsConfig() async {
     final AssetResult<bool> result = await assetTracking.getFakeGpsConfig();
-    final bool allow = sharedPreferences.getBool(keyOfFakeGpsFlag) ?? result.data ?? false;
+    final bool allow =
+        sharedPreferences.getBool(keyOfFakeGpsFlag) ?? result.data ?? false;
 
     await assetTracking.setFakeGpsConfig(allow: allow);
     setState(() => isAllowMockLocation = allow);
   }
 
   Future<void> _initializeTrackingMode() async {
-    final String trackingMode = sharedPreferences.getString(keyOfTrackingMode)
-        ?? TrackingMode.active.name;
+    final String trackingMode =
+        sharedPreferences.getString(keyOfTrackingMode) ??
+            TrackingMode.active.name;
     final TrackingMode mode = TrackingMode.fromString(trackingMode);
 
     await assetTracking.setLocationConfig(config: LocationConfig.config(mode));
@@ -157,7 +164,8 @@ class _MyAppState extends State<HomeScreen>
       return;
     }
 
-    final AssetResult<String> result = await assetTracking.bindAsset(customId: boundId);
+    final AssetResult<String> result =
+        await assetTracking.bindAsset(customId: boundId);
     if (!result.success) {
       showToast('bind asset failed: ${result.msg}');
       return;
@@ -184,7 +192,8 @@ class _MyAppState extends State<HomeScreen>
   ///
   /// [isRunning] Whether asset tracking is currently active
   /// [isTripInProgress] Whether a trip is currently in progress
-  void updateTrackingStatus({required bool isRunning, required bool isTripInProgress}) {
+  void updateTrackingStatus(
+      {required bool isRunning, required bool isTripInProgress}) {
     setState(() {
       _isRunning = isRunning;
       final String status = isRunning ? 'ON' : 'OFF';
@@ -297,7 +306,8 @@ class _MyAppState extends State<HomeScreen>
       return false;
     }
 
-    final AssetResult<String> result = await assetTracking.bindAsset(customId: boundId);
+    final AssetResult<String> result =
+        await assetTracking.bindAsset(customId: boundId);
     if (!result.success) {
       showToast('Bind asset failed: ${result.msg}');
       return false;
@@ -325,11 +335,10 @@ class _MyAppState extends State<HomeScreen>
 
   void configNotificationConfig() {
     if (Platform.isIOS) {
-      final IOSNotificationConfig iosNotificationConfig = IOSNotificationConfig()
-      ..showAssetEnableNotification =
-          enableTrackingStartedNotification
-      ..showAssetDisableNotification =
-          enableTrackingStopNotification;
+      final IOSNotificationConfig iosNotificationConfig =
+          IOSNotificationConfig()
+            ..showAssetEnableNotification = enableTrackingStartedNotification
+            ..showAssetDisableNotification = enableTrackingStopNotification;
       assetTracking.setIOSNotificationConfig(config: iosNotificationConfig);
     }
     // else {
@@ -371,55 +380,57 @@ class _MyAppState extends State<HomeScreen>
   void _navigateToSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (BuildContext context) => const SettingsScreen()),
+      MaterialPageRoute<void>(
+          builder: (BuildContext context) => const SettingsScreen()),
     );
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Asset Tracking Flutter'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: _navigateToSettings,
-            tooltip: 'Settings',
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildNotificationConfig(),
-              _buildMockLocationSwitch(),
-              _buildTrackingModeRadioButtons(),
-              _buildCustomTrackingConfig(),
-              _buildTrackingButtons(),
-              _buildTripButtons(),
-              _buildStatusInfo(),
-              _buildNavigationButtons(),
-              const SizedBox(
-                height: 16,
-              ),
-              // SizedBox(
-              //   width: double.infinity,
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       // Do something
-              //     },
-              //     child: const Text('View data uploaded logs'),
-              //   ),
-              // )
-            ],
+        appBar: AppBar(
+          title: const Text('Asset Tracking Flutter'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: _navigateToSettings,
+              tooltip: 'Settings',
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildNotificationConfig(),
+                _buildMockLocationSwitch(),
+                _buildTrackingModeRadioButtons(),
+                _buildCustomTrackingConfig(),
+                _buildTrackingButtons(),
+                _buildTripButtons(),
+                _buildStatusInfo(),
+                _buildNavigationButtons(),
+                const SizedBox(
+                  height: 16,
+                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       // Do something
+                //     },
+                //     child: const Text('View data uploaded logs'),
+                //   ),
+                // )
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-  bool customOptionAvailable() => !_isRunning && selectedOption == TrackingMode.custom;
+  bool customOptionAvailable() =>
+      !_isRunning && selectedOption == TrackingMode.custom;
 
   Future<void> pushToCreateAsset() async {
     final AssetResult<bool> trackResult = await assetTracking.isTracking();
@@ -515,10 +526,12 @@ class _MyAppState extends State<HomeScreen>
   @override
   void onTrackingStart(String message) {
     _isRunning = true;
-    updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
+    updateTrackingStatus(
+        isRunning: _isRunning, isTripInProgress: _isTripRunning);
     assetTracking.isTripInProgress().then((AssetResult<bool> value) {
       _isTripRunning = value.data ?? false;
-      updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
+      updateTrackingStatus(
+          isRunning: _isRunning, isTripInProgress: _isTripRunning);
     });
   }
 
@@ -531,7 +544,8 @@ class _MyAppState extends State<HomeScreen>
   @override
   void onTrackingStop(String message) {
     _isRunning = false;
-    updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
+    updateTrackingStatus(
+        isRunning: _isRunning, isTripInProgress: _isTripRunning);
   }
 
   // UI Widget builders
@@ -546,7 +560,8 @@ class _MyAppState extends State<HomeScreen>
           enableTrackingStartedNotification,
           (bool value) {
             setState(() => enableTrackingStartedNotification = value);
-            sharedPreferences.setBool(keyOfEnableTrackingStartedNotification, value);
+            sharedPreferences.setBool(
+                keyOfEnableTrackingStartedNotification, value);
           },
         ),
         _buildNotificationSwitch(
@@ -554,195 +569,219 @@ class _MyAppState extends State<HomeScreen>
           enableTrackingStopNotification,
           (bool value) {
             setState(() => enableTrackingStopNotification = value);
-            sharedPreferences.setBool(keyOfEnableTrackingStopNotification, value);
+            sharedPreferences.setBool(
+                keyOfEnableTrackingStopNotification, value);
           },
         ),
       ],
     );
   }
 
-  Widget _buildNotificationSwitch(String label, bool value, ValueChanged<bool> onChanged) => Row(
-      children: <Widget>[
-        Flexible(child: Text(label, style: const TextStyle(fontSize: 16))),
-        Transform.scale(
-          scale: 0.7,
-          child: Switch(
-            value: value,
-            onChanged: onChanged,
-            activeTrackColor: Colors.lightGreenAccent,
-            activeColor: Colors.green,
+  Widget _buildNotificationSwitch(
+          String label, bool value, ValueChanged<bool> onChanged) =>
+      Row(
+        children: <Widget>[
+          Flexible(child: Text(label, style: const TextStyle(fontSize: 16))),
+          Transform.scale(
+            scale: 0.7,
+            child: Switch(
+              value: value,
+              onChanged: onChanged,
+              activeTrackColor: Colors.lightGreenAccent,
+              activeColor: Colors.green,
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
 
   Widget _buildMockLocationSwitch() => Row(
-      children: <Widget>[
-        const Text('Allow mock location', style: TextStyle(fontSize: 16)),
-        Transform.scale(
-          scale: 0.7,
-          child: Switch(
-            value: isAllowMockLocation,
-            onChanged: (bool value) {
-              setState(() => isAllowMockLocation = value);
-              assetTracking.setFakeGpsConfig(allow: value);
-              sharedPreferences.setBool(keyOfFakeGpsFlag, value);
-            },
-            activeTrackColor: Colors.lightGreenAccent,
-            activeColor: Colors.green,
+        children: <Widget>[
+          const Text('Allow mock location', style: TextStyle(fontSize: 16)),
+          Transform.scale(
+            scale: 0.7,
+            child: Switch(
+              value: isAllowMockLocation,
+              onChanged: (bool value) {
+                setState(() => isAllowMockLocation = value);
+                assetTracking.setFakeGpsConfig(allow: value);
+                sharedPreferences.setBool(keyOfFakeGpsFlag, value);
+              },
+              activeTrackColor: Colors.lightGreenAccent,
+              activeColor: Colors.green,
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
 
   Widget _buildTrackingModeRadioButtons() {
-    const List<MapEntry<TrackingMode, String>> trackingModes = <MapEntry<TrackingMode, String>>[
-      MapEntry<TrackingMode, String>(TrackingMode.active, 'TRACKING_MODE_ACTIVE'),
-      MapEntry<TrackingMode, String>(TrackingMode.balanced, 'TRACKING_MODE_BALANCED'),
-      MapEntry<TrackingMode, String>(TrackingMode.passive, 'TRACKING_MODE_PASSIVE'),
-      MapEntry<TrackingMode, String>(TrackingMode.custom, 'TRACKING_MODE_CUSTOM'),
+    const List<MapEntry<TrackingMode, String>> trackingModes =
+        <MapEntry<TrackingMode, String>>[
+      MapEntry<TrackingMode, String>(
+          TrackingMode.active, 'TRACKING_MODE_ACTIVE'),
+      MapEntry<TrackingMode, String>(
+          TrackingMode.balanced, 'TRACKING_MODE_BALANCED'),
+      MapEntry<TrackingMode, String>(
+          TrackingMode.passive, 'TRACKING_MODE_PASSIVE'),
+      MapEntry<TrackingMode, String>(
+          TrackingMode.custom, 'TRACKING_MODE_CUSTOM'),
     ];
 
     return Column(
       children: trackingModes
-          .map<Widget>((MapEntry<TrackingMode, String> mode) => _buildTrackingModeRadio(mode.key, mode.value))
+          .map<Widget>((MapEntry<TrackingMode, String> mode) =>
+              _buildTrackingModeRadio(mode.key, mode.value))
           .toList(),
     );
   }
 
   Widget _buildTrackingModeRadio(TrackingMode mode, String title) => SizedBox(
-      height: 40,
-      child: RadioListTile<TrackingMode>(
-        title: Text(title, style: const TextStyle(fontSize: 15)),
-        value: mode,
-        groupValue: selectedOption,
-        onChanged: _isRunning ? null : (TrackingMode? value) => _onTrackingModeChanged(value!, mode),
-        contentPadding: EdgeInsets.zero,
-      ),
-    );
+        height: 40,
+        child: RadioListTile<TrackingMode>(
+          title: Text(title, style: const TextStyle(fontSize: 15)),
+          value: mode,
+          groupValue: selectedOption,
+          onChanged: _isRunning
+              ? null
+              : (TrackingMode? value) => _onTrackingModeChanged(value!, mode),
+          contentPadding: EdgeInsets.zero,
+        ),
+      );
 
   Widget _buildCustomTrackingConfig() => Padding(
-      padding: const EdgeInsets.only(left: 48, top: 15),
-      child: Row(
-        children: <Widget>[
-          if (Platform.isAndroid) _buildIntervalModeDropdown(),
-          Expanded(child: _buildIntervalTextField()),
-        ],
-      ),
-    );
+        padding: const EdgeInsets.only(left: 48, top: 15),
+        child: Row(
+          children: <Widget>[
+            if (Platform.isAndroid) _buildIntervalModeDropdown(),
+            Expanded(child: _buildIntervalTextField()),
+          ],
+        ),
+      );
 
   Widget _buildIntervalModeDropdown() => DropdownButton<CustomIntervalMode>(
-      value: selectedIntervalMode,
-      underline: Container(height: 1, color: Colors.grey),
-      items: const <DropdownMenuItem<CustomIntervalMode>>[
-        DropdownMenuItem<CustomIntervalMode>(
-          value: CustomIntervalMode.distanceBased,
-          child: Text('Distance based', style: TextStyle(fontSize: 15)),
-        ),
-        DropdownMenuItem<CustomIntervalMode>(
-          value: CustomIntervalMode.timeBased,
-          child: Text('Time based', style: TextStyle(fontSize: 15)),
-        ),
-      ],
-      alignment: AlignmentDirectional.topCenter,
-      onChanged: customOptionAvailable()
-          ? (CustomIntervalMode? value) => setState(() => selectedIntervalMode = value!)
-          : null,
-    );
-
-  Widget _buildIntervalTextField() => Container(
-      margin: const EdgeInsets.only(left: 8, right: 8),
-      height: 38,
-      child: TextField(
-        enabled: customOptionAvailable(),
-        controller: textEditingController,
-        maxLines: 1,
-        keyboardType: TextInputType.number,
-        style: TextStyle(
-          color: customOptionAvailable() ? Colors.black : Colors.grey.shade400,
-          fontSize: 16,
-        ),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
-          border: const OutlineInputBorder(),
-          hintText: selectedIntervalMode == CustomIntervalMode.distanceBased
-              ? 'Dist. in meters'
-              : 'Time in seconds',
-          hintStyle: const TextStyle(color: Colors.grey, fontSize: 15),
-        ),
-      ),
-    );
-
-  Widget _buildTrackingButtons() => Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Row(
-        children: <Widget>[
-          Expanded(child: _buildButton('START TRACKING', _isRunning ? null : startTracking)),
-          const SizedBox(width: 4),
-          Expanded(child: _buildButton('STOP TRACKING', _isRunning ? stopTracking : null)),
-        ],
-      ),
-    );
-
-  Widget _buildTripButtons() => Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Row(
-        children: <Widget>[
-          Expanded(child: _buildButton('START TRIP', _isTripRunning ? null : startTrip)),
-          const SizedBox(width: 4),
-          Expanded(child: _buildButton('END TRIP', _isTripRunning ? endTrip : null)),
-        ],
-      ),
-    );
-
-  Widget _buildButton(String text, VoidCallback? onPressed) => ElevatedButton(
-      onPressed: onPressed,
-      child: Text(text, style: const TextStyle(fontSize: 13)),
-    );
-
-  Widget _buildStatusInfo() => Padding(
-      padding: const EdgeInsets.only(top: 18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(trackingStatus),
-          const SizedBox(height: 16),
-          Text(locationInfo),
-          const SizedBox(height: 16),
-        ],
-      ),
-    );
-
-  Widget _buildNavigationButtons() => Column(
-      children: <Widget>[
-        _buildFullWidthButton('Create new Asset', pushToCreateAsset),
-        if (_isRunning) ...<Widget>[
-          const SizedBox(height: 8),
-          _buildFullWidthButton(
-            'View Asset Details',
-            pushToAssetDetail,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-            ),
+        value: selectedIntervalMode,
+        underline: Container(height: 1, color: Colors.grey),
+        items: const <DropdownMenuItem<CustomIntervalMode>>[
+          DropdownMenuItem<CustomIntervalMode>(
+            value: CustomIntervalMode.distanceBased,
+            child: Text('Distance based', style: TextStyle(fontSize: 15)),
+          ),
+          DropdownMenuItem<CustomIntervalMode>(
+            value: CustomIntervalMode.timeBased,
+            child: Text('Time based', style: TextStyle(fontSize: 15)),
           ),
         ],
-        _buildFullWidthButton('View Current Trip', pushToViewCurrentTrip),
-        _buildFullWidthButton('Trip History', pushToTripHistory),
-      ],
-    );
+        alignment: AlignmentDirectional.topCenter,
+        onChanged: customOptionAvailable()
+            ? (CustomIntervalMode? value) =>
+                setState(() => selectedIntervalMode = value!)
+            : null,
+      );
 
-  Widget _buildFullWidthButton(String text, VoidCallback onPressed, {ButtonStyle? style}) => SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: ElevatedButton(
-          onPressed: onPressed,
-          style: style,
-          child: Text(text),
+  Widget _buildIntervalTextField() => Container(
+        margin: const EdgeInsets.only(left: 8, right: 8),
+        height: 38,
+        child: TextField(
+          enabled: customOptionAvailable(),
+          controller: textEditingController,
+          maxLines: 1,
+          keyboardType: TextInputType.number,
+          style: TextStyle(
+            color:
+                customOptionAvailable() ? Colors.black : Colors.grey.shade400,
+            fontSize: 16,
+          ),
+          decoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+            border: const OutlineInputBorder(),
+            hintText: selectedIntervalMode == CustomIntervalMode.distanceBased
+                ? 'Dist. in meters'
+                : 'Time in seconds',
+            hintStyle: const TextStyle(color: Colors.grey, fontSize: 15),
+          ),
         ),
-      ),
-    );
+      );
+
+  Widget _buildTrackingButtons() => Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+                child: _buildButton(
+                    'START TRACKING', _isRunning ? null : startTracking)),
+            const SizedBox(width: 4),
+            Expanded(
+                child: _buildButton(
+                    'STOP TRACKING', _isRunning ? stopTracking : null)),
+          ],
+        ),
+      );
+
+  Widget _buildTripButtons() => Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+                child: _buildButton(
+                    'START TRIP', _isTripRunning ? null : startTrip)),
+            const SizedBox(width: 4),
+            Expanded(
+                child:
+                    _buildButton('END TRIP', _isTripRunning ? endTrip : null)),
+          ],
+        ),
+      );
+
+  Widget _buildButton(String text, VoidCallback? onPressed) => ElevatedButton(
+        onPressed: onPressed,
+        child: Text(text, style: const TextStyle(fontSize: 13)),
+      );
+
+  Widget _buildStatusInfo() => Padding(
+        padding: const EdgeInsets.only(top: 18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(trackingStatus),
+            const SizedBox(height: 16),
+            Text(locationInfo),
+            const SizedBox(height: 16),
+          ],
+        ),
+      );
+
+  Widget _buildNavigationButtons() => Column(
+        children: <Widget>[
+          _buildFullWidthButton('Create new Asset', pushToCreateAsset),
+          if (_isRunning) ...<Widget>[
+            const SizedBox(height: 8),
+            _buildFullWidthButton(
+              'View Asset Details',
+              pushToAssetDetail,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
+          _buildFullWidthButton('View Current Trip', pushToViewCurrentTrip),
+          _buildFullWidthButton('Trip History', pushToTripHistory),
+        ],
+      );
+
+  Widget _buildFullWidthButton(String text, VoidCallback onPressed,
+          {ButtonStyle? style}) =>
+      SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: ElevatedButton(
+            onPressed: onPressed,
+            style: style,
+            child: Text(text),
+          ),
+        ),
+      );
 
   // Helper methods
   void _onTrackingModeChanged(TrackingMode value, TrackingMode mode) {
@@ -802,8 +841,8 @@ class _MyAppState extends State<HomeScreen>
         case TripState.updated:
           break;
       }
-      updateTrackingStatus(isRunning: _isRunning, isTripInProgress: _isTripRunning);
+      updateTrackingStatus(
+          isRunning: _isRunning, isTripInProgress: _isTripRunning);
     });
   }
 }
-

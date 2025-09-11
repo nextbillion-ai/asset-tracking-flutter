@@ -7,8 +7,10 @@ import 'package:test/test.dart';
 void main() {
   group('TripInfo', () {
     test('constructor creates instance with required values', () {
-      final DateTime startedAt = DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000);
-      final DateTime createdAt = DateTime.fromMillisecondsSinceEpoch(1635731235 * 1000);
+      final DateTime startedAt =
+          DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000);
+      final DateTime createdAt =
+          DateTime.fromMillisecondsSinceEpoch(1635731235 * 1000);
 
       final TripInfo tripInfo = TripInfo(
         id: 'trip123',
@@ -78,7 +80,8 @@ void main() {
         expect(tripInfo.name, equals('Test Trip'));
         expect(tripInfo.description, equals('Test Description'));
         expect(tripInfo.metaData, equals(<String, String>{'key': 'value'}));
-        expect(tripInfo.attributes, equals(<String, String>{'attr1': 'value1'}));
+        expect(
+            tripInfo.attributes, equals(<String, String>{'attr1': 'value1'}));
         expect(tripInfo.startedAt,
             equals(DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000)));
         expect(tripInfo.endedAt,
@@ -90,7 +93,8 @@ void main() {
         expect(tripInfo.stops?.length, equals(1));
         expect(tripInfo.stops?.first.name, equals('Stop 1'));
         expect(tripInfo.stops?.first.geofenceId, equals('geo123'));
-        expect(tripInfo.stops?.first.metaData, equals(<String, String>{'key': 'value'}));
+        expect(tripInfo.stops?.first.metaData,
+            equals(<String, String>{'key': 'value'}));
         expect(tripInfo.route?.length, equals(1));
         expect(tripInfo.route?.first.location?.lat, equals(1.0));
       });

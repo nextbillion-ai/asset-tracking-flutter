@@ -76,9 +76,10 @@ void main() {
         timestamp: DateTime.now().millisecondsSinceEpoch,
       );
 
-      mockCallback.onLocationSuccess = (NBLocation loc) {
+      mockCallback.onLocationSuccess = (NBLocation? loc) {
         callbackCalled = true;
-        expect(loc.latitude, location.latitude);
+        expect(loc, isNotNull);
+        expect(loc!.latitude, location.latitude);
         expect(loc.longitude, location.longitude);
       };
 

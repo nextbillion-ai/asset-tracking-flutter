@@ -42,7 +42,6 @@ class MethodChannelNbAssetTrackingFlutter
       } on Exception {
         _resultCallback?.onLocationSuccess?.call(null);
       }
-
     } else if (call.method == 'onLocationFailure') {
       final String jsonString = call.arguments;
       final AssetResult<String> result =

@@ -31,7 +31,6 @@ class NBLocation {
     );
   }
 
-
   final num latitude;
   final num longitude;
   final num accuracy;
@@ -43,16 +42,16 @@ class NBLocation {
   final num timestamp;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-    'latitude': latitude,
-    'longitude': longitude,
-    'accuracy': accuracy,
-    'altitude': altitude,
-    'speed': speed,
-    'speedAccuracy': speedAccuracy,
-    'heading': heading,
-    'provider': provider,
-    'timestamp': timestamp,
-  };
+        'latitude': latitude,
+        'longitude': longitude,
+        'accuracy': accuracy,
+        'altitude': altitude,
+        'speed': speed,
+        'speedAccuracy': speedAccuracy,
+        'heading': heading,
+        'provider': provider,
+        'timestamp': timestamp,
+      };
 
   String toJson() => jsonEncode(toMap());
 }

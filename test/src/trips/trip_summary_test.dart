@@ -117,7 +117,8 @@ void main() {
     });
 
     test('toJson converts instance to correct JSON format', () {
-      final DateTime startedAt = DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000);
+      final DateTime startedAt =
+          DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000);
       final TripAsset asset = TripAsset(
         id: 'asset123',
         deviceId: 'device123',

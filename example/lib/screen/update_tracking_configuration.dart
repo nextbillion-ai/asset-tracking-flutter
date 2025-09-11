@@ -33,9 +33,10 @@ class UpdateConfigurationExampleState extends State<UpdateConfigurationExample>
   }
 
   void initAssetTracking() {
-    assetTracking..initialize(apiKey: accessKey)
-    ..setFakeGpsConfig(allow: true)
-    ..addDataListener(this);
+    assetTracking
+      ..initialize(apiKey: accessKey)
+      ..setFakeGpsConfig(allow: true)
+      ..addDataListener(this);
   }
 
   @override

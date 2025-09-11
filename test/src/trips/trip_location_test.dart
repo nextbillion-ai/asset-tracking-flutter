@@ -17,7 +17,10 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from valid JSON', () {
-        final Map<String, dynamic> json = <String, double>{'lat': 45.0, 'lon': -122.0};
+        final Map<String, dynamic> json = <String, double>{
+          'lat': 45.0,
+          'lon': -122.0
+        };
         final TripLocation location = TripLocation.fromJson(json);
         expect(location.lat, equals(45.0));
         expect(location.lon, equals(-122.0));

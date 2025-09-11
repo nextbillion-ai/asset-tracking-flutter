@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 
 class TripStopInput {
-
   TripStopInput({
     this.name = '',
     this.geofenceId = '',
@@ -13,18 +12,18 @@ class TripStopInput {
   final List<MapEntry<String, String>> metaData;
 
   TripStop toTripStop() => TripStop(
-      name: name,
-      geofenceId: geofenceId,
-      metaData: metaData.isNotEmpty
-          ? Map<String, dynamic>.fromEntries(metaData)
-          : null,
-    );
+        name: name,
+        geofenceId: geofenceId,
+        metaData: metaData.isNotEmpty
+            ? Map<String, dynamic>.fromEntries(metaData)
+            : null,
+      );
 }
 
 class EditTripScreen extends StatefulWidget {
-
   const EditTripScreen({
-    required this.tripId, super.key,
+    required this.tripId,
+    super.key,
     this.onTripUpdated,
   });
   final String tripId;
@@ -40,7 +39,8 @@ class EditTripScreenState extends State<EditTripScreen> {
   bool _isLoading = false;
 
   // Attributes key-value pairs
-  final List<MapEntry<String, String>> _attributes = <MapEntry<String, String>>[];
+  final List<MapEntry<String, String>> _attributes =
+      <MapEntry<String, String>>[];
 
   // MetaData key-value pairs
   final List<MapEntry<String, String>> _metaData = <MapEntry<String, String>>[];
@@ -120,7 +120,9 @@ class EditTripScreenState extends State<EditTripScreen> {
     if (_stops.isEmpty) {
       return null;
     }
-    return _stops.map<TripStop>((TripStopInput stopInput) => stopInput.toTripStop()).toList();
+    return _stops
+        .map<TripStop>((TripStopInput stopInput) => stopInput.toTripStop())
+        .toList();
   }
 
   Future<void> _updateTrip() async {
@@ -205,384 +207,397 @@ class EditTripScreenState extends State<EditTripScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Trip'),
-        actions: <Widget>[
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
+        appBar: AppBar(
+          title: const Text('Edit Trip'),
+          actions: <Widget>[
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
               ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name (optional)',
+                    hintText: 'Enter trip name',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description (optional)',
+                    hintText: 'Enter trip description',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 16),
+                // Attributes Section
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            const Text(
+                              'Attributes (optional)',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: _addAttribute,
+                              tooltip: 'Add Attribute',
+                            ),
+                          ],
+                        ),
+                        if (_attributes.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              'No attributes added',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ..._attributes.asMap().entries.map(
+                            (MapEntry<int, MapEntry<String, String>> entry) {
+                          final int index = entry.key;
+                          final MapEntry<String, String> attribute =
+                              entry.value;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Key',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (String value) =>
+                                        _updateAttribute(
+                                            index, value, attribute.value),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Value',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (String value) =>
+                                        _updateAttribute(
+                                            index, attribute.key, value),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () => _removeAttribute(index),
+                                  tooltip: 'Remove Attribute',
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // MetaData Section
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            const Text(
+                              'Meta Data (optional)',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: _addMetaData,
+                              tooltip: 'Add Meta Data',
+                            ),
+                          ],
+                        ),
+                        if (_metaData.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              'No meta data added',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ..._metaData.asMap().entries.map(
+                            (MapEntry<int, MapEntry<String, String>> entry) {
+                          final int index = entry.key;
+                          final MapEntry<String, String> metaData = entry.value;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Key',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (String value) =>
+                                        _updateMetaData(
+                                            index, value, metaData.value),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Value',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (String value) =>
+                                        _updateMetaData(
+                                            index, metaData.key, value),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () => _removeMetaData(index),
+                                  tooltip: 'Remove Meta Data',
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Stops Section
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            const Text(
+                              'Stops (optional)',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: _addStop,
+                              tooltip: 'Add Stop',
+                            ),
+                          ],
+                        ),
+                        if (_stops.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              'No stops added',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ..._stops
+                            .asMap()
+                            .entries
+                            .map((MapEntry<int, TripStopInput> entry) {
+                          final int index = entry.key;
+                          final TripStopInput stop = entry.value;
+                          return _buildStopInput(index, stop);
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _updateTrip,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text(
+                          'Update Trip',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                ),
+              ],
             ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
+          ),
+        ),
+      );
+
+  Widget _buildStopInput(int index, TripStopInput stop) => Card(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Stop ${index + 1}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => _removeStop(index),
+                    tooltip: 'Remove Stop',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
               TextField(
-                controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: 'Name (optional)',
-                  hintText: 'Enter trip name',
+                  labelText: 'Name',
                   border: OutlineInputBorder(),
                 ),
+                onChanged: (String value) {
+                  stop.name = value;
+                  _updateStop(index, stop);
+                },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               TextField(
-                controller: _descriptionController,
                 decoration: const InputDecoration(
-                  labelText: 'Description (optional)',
-                  hintText: 'Enter trip description',
+                  labelText: 'Geofence ID',
                   border: OutlineInputBorder(),
                 ),
-                maxLines: 3,
+                onChanged: (String value) {
+                  stop.geofenceId = value;
+                  _updateStop(index, stop);
+                },
               ),
-              const SizedBox(height: 16),
-              // Attributes Section
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text(
-                            'Attributes (optional)',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: _addAttribute,
-                            tooltip: 'Add Attribute',
-                          ),
-                        ],
-                      ),
-                      if (_attributes.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            'No attributes added',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ..._attributes.asMap().entries.map((MapEntry<int, MapEntry<String, String>> entry) {
-                        final int index = entry.key;
-                        final MapEntry<String, String> attribute = entry.value;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Key',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (String value) => _updateAttribute(
-                                      index, value, attribute.value),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Value',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (String value) => _updateAttribute(
-                                      index, attribute.key, value),
-                                ),
-                              ),
-                              IconButton(
-                                icon:
-                                    const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => _removeAttribute(index),
-                                tooltip: 'Remove Attribute',
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                    ],
+              const SizedBox(height: 8),
+              // MetaData for this stop
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    'Meta Data (optional)',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add, size: 20),
+                    onPressed: () {
+                      stop.metaData.add(const MapEntry<String, String>('', ''));
+                      _updateStop(index, stop);
+                    },
+                    tooltip: 'Add Meta Data',
+                  ),
+                ],
+              ),
+              if (stop.metaData.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    'No meta data added',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              // MetaData Section
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              ...stop.metaData
+                  .asMap()
+                  .entries
+                  .map((MapEntry<int, MapEntry<String, String>> metaEntry) {
+                final int metaIndex = metaEntry.key;
+                final MapEntry<String, String> metaData = metaEntry.value;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text(
-                            'Meta Data (optional)',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      Expanded(
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'Key',
+                            border: OutlineInputBorder(),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: _addMetaData,
-                            tooltip: 'Add Meta Data',
-                          ),
-                        ],
-                      ),
-                      if (_metaData.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            'No meta data added',
-                            style: TextStyle(color: Colors.grey),
-                          ),
+                          onChanged: (String value) {
+                            stop.metaData[metaIndex] =
+                                MapEntry<String, String>(value, metaData.value);
+                            _updateStop(index, stop);
+                          },
                         ),
-                      ..._metaData.asMap().entries.map((MapEntry<int, MapEntry<String, String>> entry) {
-                        final int index = entry.key;
-                        final MapEntry<String, String> metaData = entry.value;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Key',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (String value) => _updateMetaData(
-                                      index, value, metaData.value),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Value',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (String value) => _updateMetaData(
-                                      index, metaData.key, value),
-                                ),
-                              ),
-                              IconButton(
-                                icon:
-                                    const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => _removeMetaData(index),
-                                tooltip: 'Remove Meta Data',
-                              ),
-                            ],
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'Value',
+                            border: OutlineInputBorder(),
                           ),
-                        );
-                      }),
+                          onChanged: (String value) {
+                            stop.metaData[metaIndex] =
+                                MapEntry<String, String>(metaData.key, value);
+                            _updateStop(index, stop);
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete,
+                            color: Colors.red, size: 20),
+                        onPressed: () {
+                          stop.metaData.removeAt(metaIndex);
+                          _updateStop(index, stop);
+                        },
+                        tooltip: 'Remove Meta Data',
+                      ),
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Stops Section
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text(
-                            'Stops (optional)',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: _addStop,
-                            tooltip: 'Add Stop',
-                          ),
-                        ],
-                      ),
-                      if (_stops.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            'No stops added',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ..._stops.asMap().entries.map((MapEntry<int, TripStopInput> entry) {
-                        final int index = entry.key;
-                        final TripStopInput stop = entry.value;
-                        return _buildStopInput(index, stop);
-                      }),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _updateTrip,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Update Trip',
-                        style: TextStyle(fontSize: 16),
-                      ),
-              ),
+                );
+              }),
             ],
           ),
         ),
-      ),
-    );
-
-  Widget _buildStopInput(int index, TripStopInput stop) => Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                Text(
-                  'Stop ${index + 1}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => _removeStop(index),
-                  tooltip: 'Remove Stop',
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (String value) {
-                stop.name = value;
-                _updateStop(index, stop);
-              },
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Geofence ID',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (String value) {
-                stop.geofenceId = value;
-                _updateStop(index, stop);
-              },
-            ),
-            const SizedBox(height: 8),
-            // MetaData for this stop
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                const Text(
-                  'Meta Data (optional)',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add, size: 20),
-                  onPressed: () {
-                    stop.metaData.add(const MapEntry<String, String>('', ''));
-                    _updateStop(index, stop);
-                  },
-                  tooltip: 'Add Meta Data',
-                ),
-              ],
-            ),
-            if (stop.metaData.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: Text(
-                  'No meta data added',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ),
-            ...stop.metaData.asMap().entries.map((MapEntry<int, MapEntry<String, String>> metaEntry) {
-              final int metaIndex = metaEntry.key;
-              final MapEntry<String, String> metaData = metaEntry.value;
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Row(
-                                          children: <Widget>[
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Key',
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (String value) {
-                          stop.metaData[metaIndex] =
-                              MapEntry<String, String>(value, metaData.value);
-                          _updateStop(index, stop);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          labelText: 'Value',
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (String value) {
-                          stop.metaData[metaIndex] =
-                              MapEntry<String, String>(metaData.key, value);
-                          _updateStop(index, stop);
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.delete, color: Colors.red, size: 20),
-                      onPressed: () {
-                        stop.metaData.removeAt(metaIndex);
-                        _updateStop(index, stop);
-                      },
-                      tooltip: 'Remove Meta Data',
-                    ),
-                  ],
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
-    );
+      );
 }
