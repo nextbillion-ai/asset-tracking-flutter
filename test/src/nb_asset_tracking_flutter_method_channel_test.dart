@@ -1,19 +1,20 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:nb_asset_tracking_flutter/src/nb_asset_tracking_flutter_method_channel.dart';
-import 'package:nb_asset_tracking_flutter/src/native_result_callback.dart';
-import 'package:nb_asset_tracking_flutter/src/nb_location.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_state.dart';
-import 'package:nb_asset_tracking_flutter/src/default_config.dart';
-import 'package:nb_asset_tracking_flutter/src/location_config.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_profile.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_update_profile.dart';
-import 'package:nb_asset_tracking_flutter/src/data_tracking_config.dart';
 import 'package:nb_asset_tracking_flutter/src/android_notification_config.dart';
+import 'package:nb_asset_tracking_flutter/src/data_tracking_config.dart';
+import 'package:nb_asset_tracking_flutter/src/default_config.dart';
 import 'package:nb_asset_tracking_flutter/src/ios_notification_config.dart';
+import 'package:nb_asset_tracking_flutter/src/location_config.dart';
+import 'package:nb_asset_tracking_flutter/src/native_result_callback.dart';
+import 'package:nb_asset_tracking_flutter/src/nb_asset_tracking_flutter_method_channel.dart';
+import 'package:nb_asset_tracking_flutter/src/nb_location.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_profile.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_state.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_update_profile.dart';
 
 @GenerateNiceMocks([MockSpec<MethodChannel>()])
 import 'nb_asset_tracking_flutter_method_channel_test.mocks.dart';
@@ -44,11 +45,11 @@ void main() {
   });
 
   test('initialize returns expected value', () async {
-    const key = 'test_key';
+    const String key = 'test_key';
     when(mockMethodChannel.invokeMethod('initialize', key))
         .thenAnswer((_) async => 'success');
 
-    final result = await platform.initialize(key: key);
+    final String result = await platform.initialize(key: key);
     expect(result, 'success');
     verify(mockMethodChannel.invokeMethod('initialize', key)).called(1);
   });
@@ -75,9 +76,10 @@ void main() {
         timestamp: DateTime.now().millisecondsSinceEpoch,
       );
 
-      mockCallback.onLocationSuccess = (NBLocation loc) {
+      mockCallback.onLocationSuccess = (NBLocation? loc) {
         callbackCalled = true;
-        expect(loc.latitude, location.latitude);
+        expect(loc, isNotNull);
+        expect(loc!.latitude, location.latitude);
         expect(loc.longitude, location.longitude);
       };
 

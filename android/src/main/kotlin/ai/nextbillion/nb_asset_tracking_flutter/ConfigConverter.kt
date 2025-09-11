@@ -48,7 +48,7 @@ object ConfigConverter {
             largeIcon = getDrawableResourceId(context, tempConfig.largeIcon ?: ""),
             showLowBatteryNotification = tempConfig.showLowBatteryNotification,
             lowBatteryNotification = tempConfig.lowBatteryNotification,
-            showAssetIdTakenNotification = tempConfig.showAssetIdTakenNotification,
+            showAssetDisableNotification = tempConfig.showAssetDisableNotification,
             contentAssetDisable = tempConfig.contentAssetDisable ?: "",
             assetIdTakenContent = tempConfig.assetIdTakenContent ?: ""
         )
@@ -65,7 +65,7 @@ object ConfigConverter {
             largeIcon = getDrawableNameByResourceId(context, config.largeIcon),
             showLowBatteryNotification = config.showLowBatteryNotification,
             lowBatteryNotification = config.lowBatteryNotification,
-            showAssetIdTakenNotification = config.showAssetIdTakenNotification,
+            showAssetDisableNotification = config.showAssetDisableNotification,
             contentAssetDisable = config.contentAssetDisable ?: "",
             assetIdTakenContent = config.assetIdTakenContent ?: ""
         )

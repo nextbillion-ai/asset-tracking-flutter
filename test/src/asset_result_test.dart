@@ -1,11 +1,10 @@
-import 'package:test/test.dart';
-import 'package:nb_asset_tracking_flutter/src/asset_detail_info.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('AssetResult', () {
     test('creates instance with all properties', () {
-      final result = AssetResult<String>(
+      final AssetResult<String> result = AssetResult<String>(
         success: true,
         data: 'test data',
         msg: 'Success message',
@@ -26,13 +25,15 @@ void main() {
         }
         ''';
 
-        final result = AssetResult<AssetProfile>.fromJson(jsonString);
+        final AssetResult<AssetProfile> result =
+            AssetResult<AssetProfile>.fromJson(jsonString);
 
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));
         expect(result.data, isA<AssetProfile>());
-        expect(result.data.customId, equals('custom123'));
-        expect(result.data.name, equals('Asset Name'));
+        expect(result.data, isNotNull);
+        expect(result.data!.customId, equals('custom123'));
+        expect(result.data!.name, equals('Asset Name'));
       });
 
       test('parses AssetDetailInfo type correctly', () {
@@ -44,13 +45,15 @@ void main() {
         }
         ''';
 
-        final result = AssetResult<AssetDetailInfo>.fromJson(jsonString);
+        final AssetResult<AssetDetailInfo> result =
+            AssetResult<AssetDetailInfo>.fromJson(jsonString);
 
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));
         expect(result.data, isA<AssetDetailInfo>());
-        expect(result.data.id, equals('123'));
-        expect(result.data.name, equals('Asset Name'));
+        expect(result.data, isNotNull);
+        expect(result.data!.id, equals('123'));
+        expect(result.data!.name, equals('Asset Name'));
       });
 
       test('parses DataTrackingConfig type correctly', () {
@@ -67,11 +70,12 @@ void main() {
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));
         expect(result.data, isA<DataTrackingConfig>());
-        expect(result.data.baseUrl, equals('https://custom.api.com'));
-        expect(result.data.dataStorageSize, equals(5000));
-        expect(result.data.dataUploadingBatchSize, equals(30));
-        expect(result.data.dataUploadingBatchWindow, equals(20));
-        expect(result.data.shouldClearLocalDataWhenCollision, isTrue);
+        expect(result.data, isNotNull);
+        expect(result.data!.baseUrl, equals('https://custom.api.com'));
+        expect(result.data!.dataStorageSize, equals(5000));
+        expect(result.data!.dataUploadingBatchSize, equals(30));
+        expect(result.data!.dataUploadingBatchWindow, equals(20));
+        expect(result.data!.shouldClearLocalDataWhenCollision, isTrue);
       });
 
       test('parses LocationConfig type correctly', () {
@@ -88,10 +92,11 @@ void main() {
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));
         expect(result.data, isA<LocationConfig>());
-        expect(result.data.trackingMode, equals(TrackingMode.balanced));
-        expect(result.data.intervalForAndroid, equals(60));
-        expect(result.data.smallestDisplacement, equals(10.0));
-        expect(result.data.desiredAccuracy, equals(DesiredAccuracy.high));
+        expect(result.data, isNotNull);
+        expect(result.data!.trackingMode, equals(TrackingMode.balanced));
+        expect(result.data!.intervalForAndroid, equals(60));
+        expect(result.data!.smallestDisplacement, equals(10.0));
+        expect(result.data!.desiredAccuracy, equals(DesiredAccuracy.high));
       });
 
       test('handles simple types correctly', () {
@@ -103,7 +108,8 @@ void main() {
         }
         ''';
 
-        final result = AssetResult<String>.fromJson(jsonString);
+        final AssetResult<String> result =
+            AssetResult<String>.fromJson(jsonString);
 
         expect(result.success, isTrue);
         expect(result.msg, equals('Success'));

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 
 class EditAssetScreen extends StatefulWidget {
-  final AssetDetailInfo assetDetail;
-  final VoidCallback? onAssetUpdated;
-
   const EditAssetScreen({
-    super.key,
     required this.assetDetail,
+    super.key,
     this.onAssetUpdated,
   });
+  final AssetDetailInfo assetDetail;
+  final VoidCallback? onAssetUpdated;
 
   @override
   State<EditAssetScreen> createState() => _EditAssetScreenState();
@@ -29,12 +28,10 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
   }
 
   void _initializeData() {
-    // 填充原始数据
     _customIdController.text = widget.assetDetail.id ?? '';
     _nameController.text = widget.assetDetail.name ?? '';
     _descriptionController.text = widget.assetDetail.description ?? '';
 
-    // 转换 attributes 为可编辑的格式
     if (widget.assetDetail.attributes != null) {
       widget.assetDetail.attributes!.forEach((key, value) {
         _attributes.add(MapEntry(key, value.toString()));
@@ -106,20 +103,26 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
           await AssetTracking().updateAsset(assetProfile: profile);
 
       if (result.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Asset updated successfully')),
-        );
-        widget.onAssetUpdated?.call();
-        Navigator.of(context).pop();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Asset updated successfully')),
+          );
+          widget.onAssetUpdated?.call();
+          Navigator.of(context).pop();
+        }
       } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to update asset: ${result.msg}')),
+          );
+        }
+      }
+    } on Exception catch (e) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update asset: ${result.msg}')),
+          SnackBar(content: Text('Error updating asset: $e')),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating asset: $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -128,196 +131,195 @@ class _EditAssetScreenState extends State<EditAssetScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Asset'),
-        actions: [
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            )
-          else
-            TextButton(
-              onPressed: _updateAsset,
-              child: const Text('Save'),
-            ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Custom ID Section
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Custom ID *',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _customIdController,
-                      decoration: const InputDecoration(
-                        labelText: 'Custom ID',
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter custom ID',
-                      ),
-                    ),
-                  ],
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Edit Asset'),
+          actions: [
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
+              )
+            else
+              TextButton(
+                onPressed: _updateAsset,
+                child: const Text('Save'),
               ),
-            ),
-            const SizedBox(height: 16),
-
-            // Name Section
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Name (optional)',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter asset name',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Description Section
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Description (optional)',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _descriptionController,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter asset description',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Attributes Section
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Attributes (optional)',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: _addAttribute,
-                          tooltip: 'Add Attribute',
-                        ),
-                      ],
-                    ),
-                    if (_attributes.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'No attributes added',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ..._attributes.asMap().entries.map((entry) {
-                      final int index = entry.key;
-                      final MapEntry<String, String> attribute = entry.value;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Key',
-                                  border: OutlineInputBorder(),
-                                ),
-                                onChanged: (value) => _updateAttribute(
-                                    index, value, attribute.value),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: TextField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Value',
-                                  border: OutlineInputBorder(),
-                                ),
-                                onChanged: (value) => _updateAttribute(
-                                    index, attribute.key, value),
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _removeAttribute(index),
-                              tooltip: 'Remove Attribute',
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
-      ),
-    );
-  }
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Custom ID Section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Custom ID *',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _customIdController,
+                        decoration: const InputDecoration(
+                          labelText: 'Custom ID',
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter custom ID',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Name Section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Name (optional)',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Name',
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter asset name',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Description Section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Description (optional)',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _descriptionController,
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter asset description',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Attributes Section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Attributes (optional)',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: _addAttribute,
+                            tooltip: 'Add Attribute',
+                          ),
+                        ],
+                      ),
+                      if (_attributes.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            'No attributes added',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ..._attributes.asMap().entries.map((entry) {
+                        final int index = entry.key;
+                        final MapEntry<String, String> attribute = entry.value;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Key',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onChanged: (value) => _updateAttribute(
+                                      index, value, attribute.value),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Value',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onChanged: (value) => _updateAttribute(
+                                      index, attribute.key, value),
+                                ),
+                              ),
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () => _removeAttribute(index),
+                                tooltip: 'Remove Attribute',
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }

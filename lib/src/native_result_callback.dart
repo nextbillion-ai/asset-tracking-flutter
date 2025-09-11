@@ -10,7 +10,7 @@ class NativeResultCallback {
     this.onTrackingStop,
     this.onTripStatusChanged,
   });
-  void Function(NBLocation)? onLocationSuccess;
+  void Function(NBLocation?)? onLocationSuccess;
   void Function(String)? onLocationFailure;
   void Function(String)? onTrackingStart;
   void Function(String)? onTrackingStop;

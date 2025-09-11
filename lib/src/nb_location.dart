@@ -13,21 +13,24 @@ class NBLocation {
     required this.timestamp,
   });
 
-  // Factory method to create FlutterLocation from a map
-  factory NBLocation.fromJson(String jsonString) {
+  factory NBLocation.fromJson(String? jsonString) {
+    if (jsonString == null || jsonString.isEmpty) {
+      throw ArgumentError('JSON string cannot be null or empty');
+    }
     final Map<String, dynamic> map = jsonDecode(jsonString);
     return NBLocation(
-      latitude: map['latitude'] ?? 0.0,
-      longitude: map['longitude'] ?? 0.0,
-      accuracy: map['accuracy'] ?? 0.0,
-      altitude: map['altitude'] ?? 0.0,
-      speed: map['speed'] ?? 0.0,
-      speedAccuracy: map['speedAccuracy'] ?? 0.0,
-      heading: map['heading'] ?? 0.0,
+      latitude: (map['latitude'] ?? 0.0).toDouble(),
+      longitude: (map['longitude'] ?? 0.0).toDouble(),
+      accuracy: (map['accuracy'] ?? 0.0).toDouble(),
+      altitude: (map['altitude'] ?? 0.0).toDouble(),
+      speed: (map['speed'] ?? 0.0).toDouble(),
+      speedAccuracy: (map['speedAccuracy'] ?? 0.0).toDouble(),
+      heading: (map['heading'] ?? 0.0).toDouble(),
       provider: map['provider'] ?? '',
-      timestamp: map['timestamp'] ?? 0,
+      timestamp: (map['timestamp'] ?? 0) as int,
     );
   }
+
   final num latitude;
   final num longitude;
   final num accuracy;

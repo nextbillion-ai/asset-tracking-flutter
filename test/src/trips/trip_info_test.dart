@@ -1,16 +1,18 @@
-import 'package:test/test.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_info.dart';
-import 'package:nb_asset_tracking_flutter/src/trips/trip_stop.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/track_location.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_info.dart';
 import 'package:nb_asset_tracking_flutter/src/trips/trip_location.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_stop.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('TripInfo', () {
     test('constructor creates instance with required values', () {
-      final startedAt = DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000);
-      final createdAt = DateTime.fromMillisecondsSinceEpoch(1635731235 * 1000);
+      final DateTime startedAt =
+          DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000);
+      final DateTime createdAt =
+          DateTime.fromMillisecondsSinceEpoch(1635731235 * 1000);
 
-      final tripInfo = TripInfo(
+      final TripInfo tripInfo = TripInfo(
         id: 'trip123',
         assetId: 'asset123',
         state: 'active',
@@ -36,32 +38,32 @@ void main() {
 
     group('fromJson', () {
       test('creates instance from complete JSON', () {
-        final json = {
+        final Map<String, dynamic> json = <String, dynamic>{
           'id': 'trip123',
           'asset_id': 'asset123',
           'state': 'active',
           'name': 'Test Trip',
           'description': 'Test Description',
-          'meta_data': {'key': 'value'},
-          'attributes': {'attr1': 'value1'},
+          'meta_data': <String, String>{'key': 'value'},
+          'attributes': <String, String>{'attr1': 'value1'},
           'started_at': 1635731234,
           'ended_at': 1635731235,
           'created_at': 1635731236,
           'updated_at': 1635731237,
-          'stops': [
-            {
+          'stops': <Map<String, dynamic>>[
+            <String, dynamic>{
               'name': 'Stop 1',
               'geofenceId': 'geo123',
-              'metaData': {'key': 'value'},
+              'metaData': <String, String>{'key': 'value'},
             }
           ],
-          'route': [
-            {
+          'route': <Map<String, dynamic>>[
+            <String, dynamic>{
               'accuracy': 10.0,
               'altitude': 100.0,
               'bearing': 45.0,
-              'location': {'lat': 1.0, 'lon': 2.0},
-              'meta_data': {'key': 'value'},
+              'location': <String, double>{'lat': 1.0, 'lon': 2.0},
+              'meta_data': <String, String>{'key': 'value'},
               'speed': 60.0,
               'timestamp': 1635731234,
               'battery_level': 80,
@@ -70,15 +72,16 @@ void main() {
           ],
         };
 
-        final tripInfo = TripInfo.fromJson(json);
+        final TripInfo tripInfo = TripInfo.fromJson(json);
 
         expect(tripInfo.id, equals('trip123'));
         expect(tripInfo.assetId, equals('asset123'));
         expect(tripInfo.state, equals('active'));
         expect(tripInfo.name, equals('Test Trip'));
         expect(tripInfo.description, equals('Test Description'));
-        expect(tripInfo.metaData, equals({'key': 'value'}));
-        expect(tripInfo.attributes, equals({'attr1': 'value1'}));
+        expect(tripInfo.metaData, equals(<String, String>{'key': 'value'}));
+        expect(
+            tripInfo.attributes, equals(<String, String>{'attr1': 'value1'}));
         expect(tripInfo.startedAt,
             equals(DateTime.fromMillisecondsSinceEpoch(1635731234 * 1000)));
         expect(tripInfo.endedAt,
@@ -90,13 +93,14 @@ void main() {
         expect(tripInfo.stops?.length, equals(1));
         expect(tripInfo.stops?.first.name, equals('Stop 1'));
         expect(tripInfo.stops?.first.geofenceId, equals('geo123'));
-        expect(tripInfo.stops?.first.metaData, equals({'key': 'value'}));
+        expect(tripInfo.stops?.first.metaData,
+            equals(<String, String>{'key': 'value'}));
         expect(tripInfo.route?.length, equals(1));
         expect(tripInfo.route?.first.location?.lat, equals(1.0));
       });
 
       test('handles empty or null values correctly', () {
-        final json = {
+        final Map<String, dynamic> json = <String, dynamic>{
           'id': '',
           'asset_id': '',
           'state': '',
@@ -105,7 +109,7 @@ void main() {
           'created_at': 1635731235,
         };
 
-        final tripInfo = TripInfo.fromJson(json);
+        final TripInfo tripInfo = TripInfo.fromJson(json);
 
         expect(tripInfo.id, equals(''));
         expect(tripInfo.assetId, equals(''));

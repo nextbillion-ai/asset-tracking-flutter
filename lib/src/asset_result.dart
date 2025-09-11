@@ -9,6 +9,14 @@ class AssetResult<T> {
   factory AssetResult.fromJson(String jsonString) {
     final Map<String, dynamic> json = jsonDecode(jsonString);
     final dynamic data = json['data'];
+    if (data == null || (data is String && data.isEmpty)) {
+      return AssetResult<T>(
+        success: json['success'] as bool,
+        data: null,
+        msg: json['msg'] as String?,
+      );
+    }
+
     late T entity;
     if (T == AssetProfile) {
       entity = AssetProfile.fromJson(data) as T;
@@ -53,7 +61,7 @@ class AssetResult<T> {
   }
 
   bool success;
-  T data;
+  T? data;
   String? msg;
 }
 

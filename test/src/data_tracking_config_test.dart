@@ -1,11 +1,11 @@
-import 'package:test/test.dart';
-import 'package:nb_asset_tracking_flutter/src/data_tracking_config.dart';
 import 'package:nb_asset_tracking_flutter/src/constants.dart';
+import 'package:nb_asset_tracking_flutter/src/data_tracking_config.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('DataTrackingConfig', () {
     test('creates instance with default values', () {
-      final config = DataTrackingConfig();
+      final DataTrackingConfig config = DataTrackingConfig();
 
       expect(config.baseUrl, equals(Constants.defaultBaseUrl));
       expect(config.dataStorageSize, equals(Constants.defaultDataStorageSize));
@@ -18,7 +18,7 @@ void main() {
     });
 
     test('creates instance with custom values', () {
-      final config = DataTrackingConfig(
+      final DataTrackingConfig config = DataTrackingConfig(
         baseUrl: 'https://custom.api.com',
         dataStorageSize: 1000,
         dataUploadingBatchSize: 50,
@@ -45,7 +45,8 @@ void main() {
         }
         ''';
 
-        final config = DataTrackingConfig.fromJson(jsonString);
+        final DataTrackingConfig config =
+            DataTrackingConfig.fromJson(jsonString);
 
         expect(config.baseUrl, equals('https://custom.api.com'));
         expect(config.dataStorageSize, equals(1000));
@@ -62,7 +63,7 @@ void main() {
       });
 
       test('throws TypeError when required fields are missing', () {
-        const jsonString = '{}';
+        const String jsonString = '{}';
 
         expect(
           () => DataTrackingConfig.fromJson(jsonString),

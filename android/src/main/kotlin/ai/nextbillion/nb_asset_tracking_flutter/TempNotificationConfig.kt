@@ -85,7 +85,7 @@ data class TempNotificationConfig(
     /**
      * A flag to determine whether display the asset id taken notification
      */
-    val showAssetIdTakenNotification: Boolean = true,
+    val showAssetDisableNotification: Boolean = true,
 
     /**
      * The content of the notification view when tracking stop

@@ -11,7 +11,7 @@ analyzer:
 
   # Exclude files from analysis
   exclude:
-    - "example/**"
+#    - "example/**"
     - "test/**"
 
 linter:
@@ -44,7 +44,7 @@ linter:
     always_declare_return_types: true
     always_put_control_body_on_new_line: true
     always_put_required_named_parameters_first: true
-    always_specify_types: true
+    always_specify_types: false
     annotate_overrides: true
     avoid_annotating_with_dynamic: true
     avoid_bool_literals_in_conditional_expressions: true
@@ -138,7 +138,7 @@ linter:
     slash_for_doc_comments: true
     sort_child_properties_last: true
     sort_constructors_first: true
-    sort_pub_dependencies: true
+    sort_pub_dependencies: false
     sort_unnamed_constructors_first: true
     type_annotate_public_apis: true
     type_init_formals: true

@@ -376,7 +376,7 @@ class AssetTracking {
   /// tracking status changes, and trip status changes.
   void _initNativeCallbacks() {
     _nativeCallbacks = NativeResultCallback(
-      onLocationSuccess: (NBLocation location) {
+      onLocationSuccess: (NBLocation? location) {
         for (final OnTrackingDataCallBack listener in _listeners) {
           listener.onLocationSuccess.call(location);
         }
