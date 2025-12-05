@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.2.2] - 2024-12-10
+## [2.2.2] - 2025-12-10
 
 ### Changed
 - **iOS Native SDK**: Upgraded to version 1.3.1 for improved location data reliability
@@ -12,11 +12,10 @@
 - **Data synchronization**: Enhanced location data queue management to prevent data loss during network interruptions
 - **Network resilience**: Strengthened location tracking reliability in poor or intermittent network conditions
 
-## [2.2.1] - 2024-12-05
-### Changed
-- **Build system**: Upgraded Gradle from 8.2.1 → 8.6 with related Kotlin version upgrades
+## [2.2.1] - 2025-10-23
+* Remove `org.jlleitschuh.gradle.ktlint` in android plugin
 
-## [2.2.0] - 2024-09-11
+## [2.2.0] - 2025-09-11
 
 ### Breaking Changes
 - **Java toolchain upgrade**: Upgraded from Java 1.8 to Java 11 for better performance and compatibility (cdec4a5)
@@ -45,7 +44,7 @@
 - **Code documentation**: Improved inline documentation and comments
 - **Better error handling**: Enhanced exception handling with specific exception types
 
-## [2.1.1] - 2024-08-15
+## [2.1.1] - 2025-08-15
 
 ### Changed
 - **Kotlin version**: Updated from 1.7.20 to 1.8.10 to resolve Flutter compatibility warnings
