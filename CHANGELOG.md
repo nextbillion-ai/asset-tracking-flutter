@@ -1,4 +1,21 @@
 # Changelog
+
+## [2.2.2] - 2024-12-10
+
+### Changed
+- **iOS Native SDK**: Upgraded to version 1.3.1 for improved location data reliability
+- **Android Native SDK**: Upgraded to version 2.2.3 for enhanced data persistence
+
+### Fixed
+- **Location data persistence**: Fixed critical issue where location data was lost and not uploaded during prolonged periods without network connectivity
+- **Offline data handling**: Improved data buffering and retry mechanism for offline scenarios
+- **Data synchronization**: Enhanced location data queue management to prevent data loss during network interruptions
+- **Network resilience**: Strengthened location tracking reliability in poor or intermittent network conditions
+
+## [2.2.1] - 2024-12-05
+### Changed
+- **Build system**: Upgraded Gradle from 8.2.1 → 8.6 with related Kotlin version upgrades
+
 ## [2.2.0] - 2024-09-11
 
 ### Breaking Changes
