@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.0] - 2026-01-08
+
+### Changed
+- **Android Native SDK**: Upgraded to version 2.3.0 for 16kb alignment
+- **Update android minSdkVersion from 21 to 23
+
 ## [2.2.2] - 2025-12-10
 
 ### Changed
