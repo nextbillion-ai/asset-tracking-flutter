@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.4.0] - 2026-03-03
+
+### Changed
+- **Android Native SDK**: Upgraded to version 2.3.1 for enhanced system compatibility
+- **Kotlin version**: Upgraded from 1.9.25 to 2.2.0 for improved language features and compatibility
+- **16 KB page size support**: Added support for 16 KB memory page alignment for newer Android devices and kernel configurations
+- **MMKV library**: Pinned MMKV version to 1.3.16 for stable 32-bit and 64-bit architecture support
+- **ABI compatibility**: Optimized native library packaging for improved Application Binary Interface (ABI) compatibility across different Android architectures
+
+### Technical Details
+- **Kotlin compatibility**: Upgraded Kotlin Gradle Plugin to 2.2.0 to resolve metadata version conflicts
+- **Memory alignment**: Ensures compatibility with Android 15+ devices using 16 KB page size
+- **Architecture support**: Improved compatibility across ARM64-v8a, ARMv7, x86, and x86_64 architectures
+- **Native packaging**: Enhanced native library bundling for better cross-device compatibility
+- **MMKV stability**: Locked MMKV dependency to prevent version conflicts in multi-architecture builds
+
+### Deprecated API Fixes
+- **Switch widget**: Updated `activeColor` to `thumbColor` with `WidgetStatePropertyAll`
+- **Analysis options**: Removed deprecated lint rules (`invariant_booleans`, `prefer_equal_for_default_values`) for Dart 3.0+ compatibility
+
 ## [2.3.0] - 2026-01-08
 
 ### Changed
