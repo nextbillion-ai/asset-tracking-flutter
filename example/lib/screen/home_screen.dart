@@ -588,7 +588,7 @@ class _MyAppState extends State<HomeScreen>
               value: value,
               onChanged: onChanged,
               activeTrackColor: Colors.lightGreenAccent,
-              activeColor: Colors.green,
+              thumbColor: const WidgetStatePropertyAll<Color>(Colors.green),
             ),
           ),
         ],
@@ -607,7 +607,7 @@ class _MyAppState extends State<HomeScreen>
                 sharedPreferences.setBool(keyOfFakeGpsFlag, value);
               },
               activeTrackColor: Colors.lightGreenAccent,
-              activeColor: Colors.green,
+              thumbColor: const WidgetStatePropertyAll<Color>(Colors.green),
             ),
           ),
         ],
@@ -636,10 +636,13 @@ class _MyAppState extends State<HomeScreen>
 
   Widget _buildTrackingModeRadio(TrackingMode mode, String title) => SizedBox(
         height: 40,
+        // ignore: deprecated_member_use
         child: RadioListTile<TrackingMode>(
           title: Text(title, style: const TextStyle(fontSize: 15)),
           value: mode,
+          // ignore: deprecated_member_use
           groupValue: selectedOption,
+          // ignore: deprecated_member_use
           onChanged: _isRunning
               ? null
               : (TrackingMode? value) => _onTrackingModeChanged(value!, mode),
