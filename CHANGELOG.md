@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.4.1] - 2026-03-12
+- Upgrade iOS native SDK to 1.3.2
+- Fix tracking stopping after switching to another app (e.g. Google Maps) even with background permission enabled
+- Fix intermittent startup failure with `kCLErrorDomain Code: 0`
+
 ## [2.4.0] - 2026-03-03
 
 ### Changed
