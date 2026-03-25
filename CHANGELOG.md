@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.5.0] - 2026-03-25
+- Upgrade iOS native SDK to 1.4.0 and upgrade Android native SDK to 2.4.0
+- API-SECURITY enhancement Supported,Starting from this version, you can configure security restrictions for Android and iOS apps at [https://console.nextbillion.ai/credentials](Starting from this version, you can configure security restrictions for Android and iOS apps at https://console.nextbillion.ai/credentials.).
+
 ## [2.4.1] - 2026-03-12
 - Upgrade iOS native SDK to 1.3.2
 - Fix tracking stopping after switching to another app (e.g. Google Maps) even with background permission enabled
