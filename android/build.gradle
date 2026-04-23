@@ -89,13 +89,3 @@ def static getGitRevision() {
     def ref = process.text.trim()
     return ref
 }
-
-ktlint {
-    android = true
-    verbose = true
-    filter {
-        exclude { element ->
-            element.file.path.contains("build/")
-        }
-    }
-}

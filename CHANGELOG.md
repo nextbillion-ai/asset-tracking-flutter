@@ -1,4 +1,6 @@
 # Changelog
+## [2.5.1] - 2026-04-23
+- Remove ktlint in the build configuration
 
 ## [2.5.0] - 2026-03-25
 - Upgrade iOS native SDK to 1.4.0 and upgrade Android native SDK to 2.4.0
