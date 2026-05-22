@@ -1,4 +1,8 @@
 # Changelog
+## [2.6.0] - 2026-05-22
+- Upgrade iOS and Android native SDK dependencies
+- Replace MMKV with SQLite in native SDK storage layer
+
 ## [2.5.1] - 2026-04-23
 - Remove ktlint in the build configuration
 
