@@ -1,4 +1,8 @@
 # Changelog
+
+## [2.6.1] - 2026-05-22
+- Updated the Android Native SDK to v2.4.2, resolving a crash related to `Gson().fromJson in AssetApiService.kt`.
+- 
 ## [2.6.0] - 2026-05-22
 - Upgrade iOS and Android native SDK dependencies
 - Replace MMKV with SQLite in native SDK storage layer
