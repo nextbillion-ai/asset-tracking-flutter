@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.6.2] - 2026-7-29
+- Updated the Android Native SDK to v2.4.3, resolving a crash related to `SecurityException` exception.
+- 
 ## [2.6.1] - 2026-05-22
 - Updated the Android Native SDK to v2.4.2, resolving a crash related to `Gson().fromJson in AssetApiService.kt`.
 - 
